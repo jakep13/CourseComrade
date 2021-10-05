@@ -1,5 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
+import LogIn from './components/LogIn Component/LogIn';
+import Card from './Global Components/Card.jsx';
 
 function App() {
   return (
