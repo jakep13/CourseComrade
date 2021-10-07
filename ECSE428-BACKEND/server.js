@@ -13,14 +13,6 @@ const sessions = require('express-session')
 const {User} = require('./models/user')
 //for testing here is a trial username and password
 
-
-//dict of username -> cookie 
-var sess = {}
-    //when login add to dict
-    //when logout remove from dict
-
-var session; //used to save a session 
-
 const PORT = process.env.PORT;
 const URI = process.env.URI;
 console.log(PORT);
@@ -63,7 +55,7 @@ app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 
 app.get('/', (req, res)=>{
-    session = req.session;
+    var session = req.session;
     if(session.userid){
         res.send("you are logged in" + session.userid + " " + JSON.stringify(session))
     }else{
@@ -93,8 +85,7 @@ app.get('/logout', (req,res)=> {
 })
 
 
-app.post('/create', (req, res) => {
-
+app.post('/createAccount', (req, res) => {
     var newUser = new User({username: req.body.username , password: req.body.password })
 
     newUser.save(function(err, doc) {
@@ -102,6 +93,36 @@ app.post('/create', (req, res) => {
         else res.send("user created successfully")
         console.log("User registered successfully!");
     })
+})
+
+app.post('/deleteAccount', (req, res) => {
+    User.deleteOne({username: req.session.userid});
+    req.session.destroy();
+    res.send("account deleted");
+})
+
+app.post('addCourse', (req,res) => {
+
+
+
+
+})
+
+app.post('removeCourse', (req, res) => {
+
+    
+
+
+
+
+})
+
+//get all events of logged in user
+app.get('userCourses' , (req, res) => {
+
+
+
+
 })
 
 
