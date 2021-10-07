@@ -2,7 +2,24 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config({path: './.env'});
 const env = require('env');
-var cors = require('cors')
+var cors = require('cors');
+const exphbs = require('express-handlebars')
+const passport = require('passport')
+const localStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
+const { deserializeUser } = require("passport");
+const cookieParser = require('cookie-parser')
+const sessions = require('express-session')
+const {User} = require('./models/user')
+//for testing here is a trial username and password
+
+
+//dict of username -> cookie 
+var sess = {}
+    //when login add to dict
+    //when logout remove from dict
+
+var session; //used to save a session 
 
 const PORT = process.env.PORT;
 const URI = process.env.URI;
@@ -11,7 +28,26 @@ console.log(PORT);
 const atlas_uri = process.env.DB_URI
 mongoose.connect(atlas_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+var db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "connection error:"))
+
+db.once("open", function() {
+    console.log("Connection Succesful!")
+})
+
 const app = express();
+
+const oneDay = 1000 * 60 * 60 * 24; //max time for a cookie before expiration
+
+app.use(sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false 
+}));
+
+app.use(cookieParser()); //add the cookie parser middleware
 
 // const corsOptions ={
 //     origin:'http://localhost:3000', 
@@ -23,17 +59,55 @@ app.use(cors({
     origin: '*' //access-control-allow-credentials:true
 }));
 
-// app.use(postRoutes);
-app.get("/", (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Max-Age", "1800");
-    res.setHeader("Access-Control-Allow-Headers", "content-type");
-    res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" );
-    res.send("WOW TIME TO PLAY");
-    res.status(200);
-});
+app.use(express.urlencoded({extended: false}))
+app.use(express.json());
 
+app.get('/', (req, res)=>{
+    session = req.session;
+    if(session.userid){
+        res.send("you are logged in" + session.userid + " " + JSON.stringify(session))
+    }else{
+        res.send("go to hell")
+    }
+})
+
+app.post('/login', async (req, res) => {
+    //find the corresponding user to authenticate the password with
+    const cur = await User.findOne({username: req.body.username})
+    console.log(JSON.stringify(cur));
+    //authenticate the password
+    if(cur!= null && req.body.password == cur.password){
+        session = req.session;
+        session.userid = req.body.username;
+        // console.log(req.session)
+        res.send("here you are all logged in wow")
+    } else {
+        // res.send(JSON.stringify(req))
+        res.send("we got it: " + JSON.stringify(req.body) )
+    }
+})
+
+app.get('/logout', (req,res)=> {
+    req.session.destroy();
+    res.redirect('/');
+})
+
+
+app.post('/create', (req, res) => {
+
+    var newUser = new User({username: req.body.username , password: req.body.password })
+
+    newUser.save(function(err, doc) {
+        if(err) res.status(403);
+        else res.send("user created successfully")
+        console.log("User registered successfully!");
+    })
+})
+
+
+app.get("/", (req, res) => {
+//    res.render("index", {title: "Home"}) //render from template 
+});
 
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT}`)
