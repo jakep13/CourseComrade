@@ -29,7 +29,9 @@ function auth(username, password) {
     // Redirect
         console.log(result)
         console.log("we made it into this b")
-        axios.get('http://localhost:3100/', config)
+        axios.get('http://localhost:3100/', config).then((result)=>{
+            console.log(result)
+        })
         
     })
     .catch((err) => {
@@ -59,7 +61,7 @@ function Login() {
         placeholder="password" 
         onChange={ e => setMessage2(e.target.value)}/>
 
-        <Button variant = "primary" size = "lg" onClick= {auth(message1, message2)} >
+        <Button variant = "primary" size = "lg" onClick= {()=> {auth(message1, message2) }} >
             Login
         </Button>
 
