@@ -11,7 +11,6 @@ const { deserializeUser } = require("passport");
 const cookieParser = require('cookie-parser')
 const sessions = require('express-session')
 const {User} = require('./models/user')
-//for testing here is a trial username and password
 
 const PORT = process.env.PORT;
 const URI = process.env.URI;
@@ -33,7 +32,7 @@ const app = express();
 const oneDay = 1000 * 60 * 60 * 24; //max time for a cookie before expiration
 
 app.use(sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: "thisismysecrctesdfewe212keyfhrgfgrfrty84fwir767",
     saveUninitialized:true,
     cookie: { maxAge: oneDay },
     resave: false 
@@ -62,6 +61,18 @@ app.get('/', (req, res)=>{
         res.send("go to hell")
     }
 })
+
+const auth = (req, res, next) => {
+    console.log(JSON.stringify(req.session) ) 
+    if(req.session==null || req.session.userid==null ){
+        console.log("not logged in")
+        res.status(405); //tell them to login
+        res.send("wow");
+    }else{
+        console.log("ALL GOOD - logged in")
+        next();
+    }
+}
 
 app.post('/login', async (req, res) => {
     //find the corresponding user to authenticate the password with
@@ -95,20 +106,21 @@ app.post('/createAccount', (req, res) => {
     })
 })
 
-app.post('/deleteAccount', (req, res) => {
+app.post('/deleteAccount', auth, (req, res) => {
     User.deleteOne({username: req.session.userid});
     req.session.destroy();
-    res.send("account deleted");
+    res.send("account deleted " + req.session.userid);
 })
 
-app.post('addCourse', (req,res) => {
+app.post('addCourse', auth, (req,res) => {
 
 
 
 
 })
 
-app.post('removeCourse', (req, res) => {
+app.post('removeCourse', auth, (req, res) => {
+
 
     
 
@@ -118,11 +130,9 @@ app.post('removeCourse', (req, res) => {
 })
 
 //get all events of logged in user
-app.get('userCourses' , (req, res) => {
-
-
-
-
+app.get('userCourses' ,  auth, async (req, res) => {
+    const cur_user = await User.findOne({username: req.session.userid});
+    res.send(cur_user.courses);
 })
 
 
