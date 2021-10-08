@@ -46,8 +46,11 @@ app.use(cookieParser()); //add the cookie parser middleware
 //     optionSuccessStatus:200
 // }
 
+//uncomment this
+
 app.use(cors({
-    origin: '*' //access-control-allow-credentials:true
+    origin: 'http://localhost:3000', //access-control-allow-credentials:true
+    credentials: true
 }));
 
 app.use(express.urlencoded({extended: false}))
@@ -123,10 +126,6 @@ app.post('removeCourse', auth, (req, res) => {
 
 
     
-
-
-
-
 })
 
 //get all events of logged in user
