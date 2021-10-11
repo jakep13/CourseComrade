@@ -29,12 +29,12 @@ db.once("open", function() {
 
 const app = express();
 
-const oneDay = 1000 * 60 * 60 * 24; //max time for a cookie before expiration
+const SESSION_LIFE = 1000 * 60 * 60 * 24; //max time for a cookie before expiration
 
 app.use(sessions({
     secret: "thisismysecrctesdfewe212keyfhrgfgrfrty84fwir767",
     saveUninitialized:true,
-    cookie: { maxAge: oneDay },
+    cookie: { maxAge: SESSION_LIFE },
     resave: false 
 }));
 
@@ -45,8 +45,6 @@ app.use(cookieParser()); //add the cookie parser middleware
 //     credentials:true,            //access-control-allow-credentials:true
 //     optionSuccessStatus:200
 // }
-
-//uncomment this
 
 app.use(cors({
     origin: 'http://localhost:3000', //access-control-allow-credentials:true
