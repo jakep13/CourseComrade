@@ -1,0 +1,17 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  row-gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  height: 20px;
+  border: 3px solid rgba(193, 200, 228, 1);
+  background-color: transparent;
+  display: flex;
+  width: 230px;
+}

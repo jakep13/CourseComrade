@@ -1,0 +1,41 @@
+.button-container {
+  border-radius: 50px;
+  border: 3px solid rgba(86, 128, 233, 1); /*2*/
+  background-color: transparent;
+  //background:rgba(86,128,233,1);
+  padding-right: 7px;
+  padding-left: 8px;
+  width: 200px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-align: center;
+  color: rgba(86, 128, 233, 1);
+  margin: 5px;
+
+  &:hover {
+    border: 3px solid rgba(193, 200, 228, 1);
+    background: rgb(86, 128, 233);
+    background: linear-gradient(
+      86deg,
+      rgba(86, 128, 233, 1) 2%,
+      rgba(193, 200, 228, 1) 100%
+    );
+    color: white;
+  }
+  .button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .text-wrapper {
+      display: block;
+      text-overflow: ellipsis;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+}
