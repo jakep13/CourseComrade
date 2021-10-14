@@ -53,10 +53,10 @@ export default function Form( {buttonText}) {
                 onChange={e => setMessage1(e.target.value)}
             />
         
-            <input type="text" 
+            <input type="password" 
                 className="input-container font-body text-body"
                 value={message2} 
-                placeholder="Password " 
+                placeholder="Password" 
                 onChange={e => setMessage2(e.target.value)}
             />
 
