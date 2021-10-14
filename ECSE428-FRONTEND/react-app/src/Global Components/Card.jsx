@@ -1,15 +1,10 @@
 import React from 'react';
-import Form from '../components/Authentication Component/Form';
+import CreateAccountForm from '../components/Authentication Component/CreateAccountForm';
+import LogInForm from '../components/Authentication Component/LogInForm';
 import '../styles/Global Components/Card.scss';
 import Button from './Button';
 
-export default function Card({
-    welcomeTitle,
-    subTitle,
-    buttonOptions,
-    form,
-    formButton,
-}) {
+export default function Card(props) {
     return (
         <div className="card-container">
             <div className="card-wrapper">
@@ -17,18 +12,19 @@ export default function Card({
                 </div>   
                 <div className="content">
                     <div className="header">
-                        <div className=" font-title text-title"> {welcomeTitle}</div>
-                        <div className=" font-title font-body card-subtitle" style={{maxWidth:"300px"}}>{subTitle} </div>
+                        <div className=" font-title text-title"> {props.welcomeTitle}</div>
+                        <div className=" font-title font-body card-subtitle" style={{maxWidth:"300px"}}>{props.subTitle} </div>
                     </div>
 
-                    {buttonOptions ? (buttonOptions.map(items =>{
-                        return(
-                            <div classname="btn-container">
-                                <Button text={items}/>
-                            </div>
-                        )
-                    })) : <></>}
-                    {form ? <Form buttonText={formButton}/> : <></>}
+                    {(props.form === 'authentication' && props.options) && props.options.map((items) => {
+                        return (
+                        <div classname="btn-container">
+                            <Button text={items}/>
+                        </div>)
+                    }) 
+                   }
+                    {props.form === 'login' && <LogInForm />}
+                    {props.form === 'createAccount' && <CreateAccountForm/>}
                 </div>
             </div>
         </div>

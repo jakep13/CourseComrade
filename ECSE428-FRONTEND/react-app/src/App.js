@@ -10,9 +10,12 @@ import CreateAccount from './components/Authentication Component/CreateAccount';
 
 
 function App() {
-  const bootstrap = require('bootstrap') ;
+
+  //token used for auth???
+  const [token, setToken] = useState();
   const [userState, setUserState] = useState();
-  const [logout, setLogOut] = useState(false);
+
+ 
   return (
     <UserContext.Provider value={{ user: userState }}>
       <div className='App'>

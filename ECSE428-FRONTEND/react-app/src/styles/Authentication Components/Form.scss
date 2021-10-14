@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   width: 300px;
   row-gap: 10px;
   margin-bottom: 20px;
@@ -14,4 +15,24 @@
   background-color: transparent;
   display: flex;
   width: 230px;
+}
+
+.input-container-error {
+  height: 20px;
+  border: 3px solid red;
+  background-color: transparent;
+  display: flex;
+  width: 230px;
+}
+
+.no-error {
+  display: none;
+}
+
+.text-error {
+  max-width: 240px;
+  color: red;
+  font-size: 16px;
+  font-weight: 500;
+  display: block;
 }

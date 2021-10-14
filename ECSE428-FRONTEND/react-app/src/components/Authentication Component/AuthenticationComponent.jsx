@@ -9,9 +9,10 @@ export default function AuthenticationComponent() {
     return (
         <div>
             <Card
-                welcomeTitle={"Welcome to CourseComerade"}
-                subTitle={" Select your method of authentication to have access to the application"}
-                buttonOptions={authenticationOptions}
+                welcomeTitle="Welcome to CourseComerade"
+                subTitle=" Select your method of authentication to have access to the application"
+                form="authentication"
+                options={authenticationOptions}
             />
         </div>
     )

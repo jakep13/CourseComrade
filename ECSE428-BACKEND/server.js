@@ -58,8 +58,9 @@ app.get('/', (req, res)=>{
     var session = req.session;
     if(session.userid){
         res.send("you are logged in" + session.userid + " " + JSON.stringify(session))
-    }else{
-        res.send("go to hell")
+    } else {
+        res.status(404);
+        res.send("go to hell");
     }
 })
 

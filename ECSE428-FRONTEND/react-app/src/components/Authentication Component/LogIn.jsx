@@ -6,10 +6,9 @@ export default function LogIn() {
     return (
         <div>
             <Card
-                welcomeTitle={"Enter Username & Password"}
-                subTitle={" You must have an account to access this application. If you do not have an account, create one now!"}
-                form={true}
-                formButton={"LogIn"}
+                welcomeTitle="Enter Username & Password"
+                subTitle=" You must have an account to access this application. If you do not have an account, create one now!"
+                form="login"
             />
         </div>
     )

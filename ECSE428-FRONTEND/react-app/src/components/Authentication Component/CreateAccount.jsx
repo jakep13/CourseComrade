@@ -7,8 +7,7 @@ export default function CreateAccount() {
             <Card
                 welcomeTitle={"Create your Account"}
                 subTitle={" Please select a username and password"}
-                form={true}
-                formButton={"Create Account"}
+                form="createAccount"
             />
         </div>
     )
