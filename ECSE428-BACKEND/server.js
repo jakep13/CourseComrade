@@ -113,21 +113,21 @@ app.post('/deleteAccount', auth, (req, res) => {
     res.send("account deleted " + req.session.userid);
 })
 
-app.post('addCourse', auth, (req,res) => {
+app.post('/addCourse', auth, (req,res) => {
 
 
 
 
 })
 
-app.post('removeCourse', auth, (req, res) => {
+app.post('/removeCourse', auth, (req, res) => {
 
 
     
 })
 
 //get all events of logged in user
-app.get('userCourses' ,  auth, async (req, res) => {
+app.get('/userCourses' ,  auth, async (req, res) => {
     const cur_user = await User.findOne({username: req.session.userid});
     res.send(cur_user.courses);
 })
