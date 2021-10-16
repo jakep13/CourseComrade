@@ -23,7 +23,7 @@ export default function LogInForm() {
 
     let [wrongUsername, setWrongUsername] = useState(false);
     let [wrongPassword, setWrongPassword] = useState(false);
-    const [noAccount, setNoAccount] = useState(false);
+    let [noAccount, setNoAccount] = useState(false);
 
     function auth(username, password) {
         const params = new URLSearchParams()
