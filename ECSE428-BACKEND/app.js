@@ -116,11 +116,14 @@ app.post('/deleteAccount', auth, (req, res) => {
         //find User, and add course to list
 
 app.post('/addCourse', auth, async (req , res) => {
-
-    // var usr = await User.findOne({ username : req.session.userid})
     
-    // console.log(typeof(usr.courses))
+    var new_course = await Course.findOne({ code : req.body.course});
 
+    //if course doesn't exist we populate it 
+    // if(new_course == null){
+    //     new_course = new Course({code : req.body.course})
+    //     new_course.save();
+    // }
 
     User.findOneAndUpdate( 
         {username: req.session.userid}, 
@@ -133,23 +136,24 @@ app.post('/addCourse', auth, async (req , res) => {
             else res.send("success - course added")
             console.log("course added successfully!");
         })
-
-
-    // usr.save().then( r => {
-
-    //     if(r == usr ){
-    //         res.send("course added succkmy")
-    //     } else {
-    //         res.status(403);
-    //         res.send("cesar is the man -- we fucked up")
-    //     }
-
-    // })
 })
 
 
 
 app.post('/removeCourse', auth, (req, res) => {
+
+    User.findOneAndUpdate( 
+        {username: req.session.userid}, 
+        {$pull : {courses : req.body.course} },
+        function(err, doc) {
+            if(err){
+                 res.status(403);
+                 res.send("failure - course cannot be REMOVED ");
+            }
+            else res.send("success - course REMOVED")
+            console.log("course REMOVED!!!! successfully!");
+        })
+
 
 
 
