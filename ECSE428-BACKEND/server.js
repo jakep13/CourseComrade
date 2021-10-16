@@ -98,6 +98,7 @@ app.get('/logout', (req,res)=> {
 
 
 app.post('/createAccount', (req, res) => {
+
     var newUser = new User({username: req.body.username , password: req.body.password })
 
     newUser.save(function(err, doc) {
@@ -112,6 +113,16 @@ app.post('/deleteAccount', auth, (req, res) => {
     req.session.destroy();
     res.send("account deleted " + req.session.userid);
 })
+
+deleteAccount = (username, password) => {
+    var usr = User.findOne({username: username})
+    if (usr.password === password) {
+        User.deleteOne({username: username});
+        return true; 
+    }else{
+        return false;
+    }
+}
 
 app.post('/addCourse', auth, (req,res) => {
 
