@@ -117,21 +117,34 @@ app.post('/deleteAccount', auth, (req, res) => {
 
 app.post('/addCourse', auth, async (req , res) => {
 
-    const usr = await User.findOne({ username : req.session.userid})
+    // var usr = await User.findOne({ username : req.session.userid})
     
-    console.log(typeof(usr.courses))
+    // console.log(typeof(usr.courses))
 
 
-    usr.save( ).then( r => {
+    User.findOneAndUpdate( 
+        {username: req.session.userid}, 
+        {$push : {courses : req.body.course} },
+        function(err, doc) {
+            if(err){
+                 res.status(403);
+                 res.send("failure - course cannot be added ");
+            }
+            else res.send("success - course added")
+            console.log("course added successfully!");
+        })
 
-        if(r == usr ){
-            res.send("course added succkmy")
-        } else {
-            res.status(403);
-            res.send("cesar is the man -- we fucked up")
-        }
 
-    })
+    // usr.save().then( r => {
+
+    //     if(r == usr ){
+    //         res.send("course added succkmy")
+    //     } else {
+    //         res.status(403);
+    //         res.send("cesar is the man -- we fucked up")
+    //     }
+
+    // })
 })
 
 
