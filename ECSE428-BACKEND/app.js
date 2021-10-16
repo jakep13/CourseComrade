@@ -38,7 +38,6 @@ app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 
 
-
 app.get('/', (req, res)=>{
     var session = req.session;
     if(session.userid){

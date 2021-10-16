@@ -5,7 +5,6 @@ Feature: Create New Student Account
     So that I can see which courses I will have the most friends in and let my comrades more easily see the courses I am taking.
 
     Scenario Outline: Create Student Account (Normal Flow)
-        Given a student with username <username>
         When the student <username> wants to create an account with CourseComrade with the password <password> which matches the verification password <verif_password> and consists of at least six characters of which at least one is a digit/letter.
         Then a new student account will be created with the username <username>
         Then a new user with username <username> will be populated into the system with the given password <password>
@@ -16,7 +15,6 @@ Feature: Create New Student Account
 
 
     Scenario Outline: Attempt to Create a student account with invalid Password format (Error Flow)
-        Given a student with username <username>
         When the student <username> wants to create an account with the password <password> and a matching verification password <verif_password>
         Then a resulting "invalid password" message is issued
         Examples:
@@ -25,7 +23,6 @@ Feature: Create New Student Account
             | "broski_13" | "123920"   | "123920"       |
 
     Scenario Outline: Attempt to Create a student account with password which doesn't match the verification password (Error Flow)
-        Given a student with username <username>
         When the student <username> wants to create an account with the password <password> and a non-matching verification password <verif_password>
         Then a resulting "please enter your password twice" message is issued
         Examples:
