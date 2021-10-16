@@ -1,5 +1,5 @@
-const supertest = require( "supertest" );
+const supertest = require("supertest");
 
-const app = require( "../../app" );
+const app = require("../../app");
 
-exports.module = supertest(app) 
+exports.module = supertest(app)

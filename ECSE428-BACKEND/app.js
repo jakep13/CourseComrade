@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv").config({path: './.env'});
+const dotenv = require("dotenv").config({ path: './.env' });
 const env = require('env');
 var cors = require('cors');
 const exphbs = require('express-handlebars')
@@ -10,8 +10,8 @@ const bcrypt = require('bcrypt');
 const { deserializeUser } = require("passport");
 const cookieParser = require('cookie-parser')
 const sessions = require('express-session')
-const {User} = require('./models/user')
-const {Course} = require('./models/course')
+const { User } = require('./models/user')
+const { Course } = require('./models/course')
 
 const PORT = process.env.PORT;
 const URI = process.env.URI;
@@ -22,9 +22,9 @@ const SESSION_LIFE = 1000 * 60 * 60 * 24; //max time for a cookie before expirat
 
 app.use(sessions({
     secret: "thisismysecrctesdfewe212keyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,
+    saveUninitialized: true,
     cookie: { maxAge: SESSION_LIFE },
-    resave: false 
+    resave: false
 }));
 
 app.use(cookieParser()); //add the cookie parser middleware
@@ -35,26 +35,26 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     var session = req.session;
-    if(session.userid){
+    if (session.userid) {
         res.send("you are logged in" + session.userid + " " + JSON.stringify(session))
-    }else{
+    } else {
         res.send("go to hell")
     }
 })
 
 const auth = (req, res, next) => {
-    console.log(JSON.stringify(req.session) ) 
-    if(req.session==null || req.session.userid==null ){
+    console.log(JSON.stringify(req.session))
+    if (req.session == null || req.session.userid == null) {
         console.log("not logged in")
         res.status(405); //tell them to login
         res.send("wow");
-    }else{
+    } else {
         console.log("ALL GOOD - logged in")
         next();
     }
@@ -62,21 +62,23 @@ const auth = (req, res, next) => {
 
 app.post('/login', async (req, res) => {
     //find the corresponding user to authenticate the password with
-    const cur = await User.findOne({username: req.body.username})
+    const cur = await User.findOne({ username: req.body.username })
     console.log(JSON.stringify(cur));
     //authenticate the password
-    if(cur!= null && req.body.password == cur.password){
+    if (cur != null && req.body.password == cur.password) {
         session = req.session;
         session.userid = req.body.username;
         // console.log(req.session)
-        res.send("here you are all logged in wow")
+        res.status(200)
+        res.send("logged in")
     } else {
         // res.send(JSON.stringify(req))
-        res.send("we got it: " + JSON.stringify(req.body) )
+        res.status(666)
+        res.send("we got it: " + JSON.stringify(req.body))
     }
 })
 
-app.get('/logout', (req,res)=> {
+app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 })
@@ -84,17 +86,17 @@ app.get('/logout', (req,res)=> {
 
 app.post('/createAccount', (req, res) => {
 
-    var newUser = new User({username: req.body.username , password: req.body.password })
+    var newUser = new User({ username: req.body.username, password: req.body.password })
 
-    newUser.save(function(err, doc) {
-        if(err) res.status(403);
+    newUser.save(function (err, doc) {
+        if (err) res.status(403);
         else res.send("user created successfully")
         console.log("User registered successfully!");
     })
 })
 
 app.post('/deleteAccount', auth, (req, res) => {
-    User.deleteOne({username: req.session.userid});
+    User.deleteOne({ username: req.session.userid });
     req.session.destroy();
     res.send("account deleted " + req.session.userid);
 })
@@ -110,21 +112,21 @@ app.post('/deleteAccount', auth, (req, res) => {
 // }
 
 //user wants to add COMP250, 
-    //is it in the courses collection, 
-        //if not, don't add it to user
-    // if it is
-        //find User, and add course to list
+//is it in the courses collection, 
+//if not, don't add it to user
+// if it is
+//find User, and add course to list
 
-app.post('/addCourse', auth, async (req , res) => {
+app.post('/addCourse', auth, async (req, res) => {
 
-    const usr = await User.findOne({ username : req.session.userid})
-    
-    console.log(typeof(usr.courses))
+    const usr = await User.findOne({ username: req.session.userid })
+
+    console.log(typeof (usr.courses))
 
 
-    usr.save( ).then( r => {
+    usr.save().then(r => {
 
-        if(r == usr ){
+        if (r == usr) {
             res.send("course added succkmy")
         } else {
             res.status(403);
@@ -141,7 +143,7 @@ app.post('/removeCourse', auth, (req, res) => {
 
 
 
-    
+
 })
 
 app.post('/populateCourse', (req, res) => {
@@ -150,8 +152,8 @@ app.post('/populateCourse', (req, res) => {
 })
 
 //get all events of logged in user
-app.get('/userCourses' ,  auth, async (req, res) => {
-    const cur_user = await User.findOne({username: req.session.userid});
+app.get('/userCourses', auth, async (req, res) => {
+    const cur_user = await User.findOne({ username: req.session.userid });
     res.send(cur_user.courses);
 })
 
