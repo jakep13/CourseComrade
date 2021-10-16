@@ -1,17 +1,4 @@
-sudo: false
-
 language: node_js
 
 node_js:
   - "stable"
-# script:
-#   - gulp travis
-
-install:
-  - npm ci
-
-script:
-  - npm test
-
-notifications:
-  email: false
