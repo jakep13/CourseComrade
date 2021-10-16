@@ -108,6 +108,12 @@ deleteAccount = (username, password) => {
     }
 }
 
+//user wants to add COMP250, 
+    //is it in the courses collection, 
+        //if not, don't add it to user
+    // if it is
+        //find User, and add course to list
+
 app.post('/addCourse', auth, (req,res) => {
 
 
@@ -119,16 +125,17 @@ app.post('/removeCourse', auth, (req, res) => {
     
 })
 
+app.post('/populateCourse', (req, res) => {
+
+
+})
+
 //get all events of logged in user
 app.get('/userCourses' ,  auth, async (req, res) => {
     const cur_user = await User.findOne({username: req.session.userid});
     res.send(cur_user.courses);
 })
 
-
-app.get("/", (req, res) => {
-//    res.render("index", {title: "Home"}) //render from template 
-});
 
 
 module.exports = app;
