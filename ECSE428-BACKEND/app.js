@@ -11,6 +11,7 @@ const { deserializeUser } = require("passport");
 const cookieParser = require('cookie-parser')
 const sessions = require('express-session')
 const {User} = require('./models/user')
+const {Course} = require('./models/course')
 
 const PORT = process.env.PORT;
 const URI = process.env.URI;
@@ -98,15 +99,15 @@ app.post('/deleteAccount', auth, (req, res) => {
     res.send("account deleted " + req.session.userid);
 })
 
-deleteAccount = (username, password) => {
-    var usr = User.findOne({username: username})
-    if (usr.password === password) {
-        User.deleteOne({username: username});
-        return true; 
-    }else{
-        return false;
-    }
-}
+// deleteAccount = (username, password) => {
+//     var usr = User.findOne({username: username})
+//     if (usr.password === password) {
+//         User.deleteOne({username: username});
+//         return true; 
+//     }else{
+//         return false;
+//     }
+// }
 
 //user wants to add COMP250, 
     //is it in the courses collection, 
@@ -114,12 +115,30 @@ deleteAccount = (username, password) => {
     // if it is
         //find User, and add course to list
 
-app.post('/addCourse', auth, (req,res) => {
+app.post('/addCourse', auth, async (req , res) => {
+
+    const usr = await User.findOne({ username : req.session.userid})
+    
+    console.log(typeof(usr.courses))
 
 
+    usr.save( ).then( r => {
+
+        if(r == usr ){
+            res.send("course added succkmy")
+        } else {
+            res.status(403);
+            res.send("cesar is the man -- we fucked up")
+        }
+
+    })
 })
 
+
+
 app.post('/removeCourse', auth, (req, res) => {
+
+
 
 
     
