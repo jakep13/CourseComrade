@@ -1,7 +1,101 @@
+@import "../fonts.scss";
+
 .card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: max-content;
+
+  .card-wrapper {
+    margin-bottom: 5px;
+    box-shadow: 1px 1px 5px 2px gray;
     display: flex;
-    justify-self: center;
-    align-self: center;
-    background-color: red;
-    border: 5px solid black;
+    flex-direction: row;
+    justify-content: center;
+
+    .vertical-banner {
+      display: flex;
+      width: 20px;
+      flex-direction: row !important;
+      background: linear-gradient(
+        86deg,
+        rgba(86, 128, 233, 1) 2%,
+        rgba(132, 206, 235, 1) 79%,
+        rgba(193, 200, 228, 1) 100%
+      );
+    }
+
+    .content {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .header {
+        padding-top: 5%;
+        line-height: 20px;
+        margin-bottom: 20px;
+        max-width: 250px;
+
+        .card-subtitle {
+          font-size: 14px;
+          font-weight: 300px;
+          line-height: 21px;
+          margin-top: 5px;
+        }
+      }
+    }
+  }
 }
+
+/*.card-wrapper {
+  width: 420px;
+  margin-bottom: 5px;
+  box-shadow: 1px 1px 5px 2px gray;
+  display: flex;
+  flex-direction: row;
+  height: 200px;
+}
+
+.vertical-banner {
+  display: flex;
+  flex-direction: row !important;
+  margin-right: 20px;
+  background: rgb(86, 128, 233);
+  background: linear-gradient(
+    86deg,
+    rgba(86, 128, 233, 1) 2%,
+    rgba(132, 206, 235, 1) 79%,
+    rgba(193, 200, 228, 1) 100%
+  );
+}
+
+
+.left-column {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.content {
+  margin-top: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+
+.button-container {
+  display: flex;
+  width: 70%;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+/**#5680E9
+#84ceeb
+#5ab9ea
+#C1C8E4
+#8860d0**/

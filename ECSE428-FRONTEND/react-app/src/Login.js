@@ -1,12 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
-import LogIn from './components/LogIn Component/LogIn';
+import LogIn from './components/Authentication Component/LogIn';
 import Card from './Global Components/Card.jsx';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button'
-const axios = require('axios')
 
+
+const axios = require('axios')
 
 const config = 
 {

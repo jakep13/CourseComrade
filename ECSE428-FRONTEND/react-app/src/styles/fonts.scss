@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap");
+
+//Font Variables
+$headers: "Oswald"; // for titles
+$body: "Lato";
+
+.font-title {
+  font-family: $headers;
+  text-align: start;
+}
+
+.font-body {
+  font-family: $body;
+  text-align: start;
+}
+
+.text-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.text-subtitle {
+  font-size: 16px;
+  font-weight: 200;
+}
+
+.text-body {
+  font-size: 14px;
+  font-weight: 200;
+}
