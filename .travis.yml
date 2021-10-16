@@ -3,5 +3,6 @@ node_js:
   - "12"
 script:
   - echo '*// UPDATED build starting //****'
+  - cd ECSE428-BACKEND
   - npm install
   - npm test
