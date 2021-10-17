@@ -12,16 +12,12 @@ const feature = loadFeature(
 
 
 defineFeature(feature, (test) => {
-  let cookies;
-  let mainUsername = "";
   let responseMessage = "";
   let responseStatus = "";
 
   afterEach(() => {
-    cookies = null;
     responseMessage = "";
     responseStatus = "";
-    mainUsername = "";
   });
 
   test('Create Student Account (Normal Flow)', ({ when, then }) => {

@@ -83,31 +83,22 @@ app.get('/logout', (req, res) => {
 
 
 app.post('/createAccount', (req, res) => {
-    // const verif_password = req.body.verif_password || req.body.password;
+    const verif_password = req.body.verif_password || req.body.password;
 
-    // const pass_regex = /^(?=.*\d)[a-zA-Z0-9!@#$%^&*]{6,}$/;
-    // let charExists = false;
-    // let numExists = false;
-    // req.body.password.foreach(c => {
-    //     charExists = charExists || c.match(/[a-z]/i)
-    //     numExists = numExists || /^\d+$/.test(c)
-    // });
-    // const valid = charExists && numExists && req.body.password.length > 6;
-    // console.log("BITCH\n\n\n\n\n")
-    // console.log(valid, req.body.password)
-    // if (!valid) {
-    //     res.status(400).send({ message: "invalid password" });
-    // } else if (req.body.password === verif_password) {
-    var newUser = new User({ username: req.body.username, password: req.body.password })
+    const pass_regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9<>!@#$%^_&*]{6,}$/;
+    if (!pass_regex.test(req.body.password)) {
+        res.status(400).send({ message: "invalid password" });
+    } else if (req.body.password === verif_password) {
+        var newUser = new User({ username: req.body.username, password: req.body.password })
 
-    newUser.save(function (err, doc) {
-        if (err) res.status(403).send({ message: "user not created" });
-        else res.send({ message: "user created successfully" })
-    })
-    // } else {
-    //     res.status(400).send({ message: "please enter your password twice" });
-    // }
-})
+        newUser.save(function (err, doc) {
+            if (err) res.status(403).send({ message: "username already taken" });
+            else res.send({ message: "user created successfully" })
+        })
+    } else {
+        res.status(400).send({ message: "please enter your password twice" });
+    }
+});
 
 app.post('/deleteAccount', auth, async (req, res) => {
 

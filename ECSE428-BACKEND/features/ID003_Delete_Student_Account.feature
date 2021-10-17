@@ -13,7 +13,7 @@ Feature: Delete Student Account
             | username  | password      | input_password |
             | big_suze  | iLikeCheese66 | iLikeCheese66  |
             | bob123    | CompSux11     | CompSux11      |
-            | test_user | IDK1          | IDK1           |
+            | test_user | IDKqqq1       | IDKqqq1        |
 
 
 
