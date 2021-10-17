@@ -1,5 +1,5 @@
 import react, { useState } from 'react';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserContext } from './components/Context Component/Context';
 import AuthenticationComponent from './components/Authentication Component/AuthenticationComponent';
 import dashboard from './components/Dashboard Component/dashboard';
@@ -16,11 +16,11 @@ function App() {
   const [token, setToken] = useState();
   const [userState, setUserState] = useState();
 
- 
+
   return (
     <UserContext.Provider value={{ user: userState }}>
       <div className='App'>
-      <Header/>
+        <Header />
         <div className="content-margin">
           <Router>
             <Switch>
@@ -32,7 +32,7 @@ function App() {
             </Switch>
           </Router>
         </div>
-     
+
       </div>
     </UserContext.Provider>
 
