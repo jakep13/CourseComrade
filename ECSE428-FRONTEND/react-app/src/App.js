@@ -8,7 +8,7 @@ import LogIn from './components/Authentication Component/LogIn';
 import CreateAccount from './components/Authentication Component/CreateAccount';
 import deleteAccount from './components/Settings Component/DeleteAccount';
 import Dashboard1 from './components/Dashboard Component/Dashboard1';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
