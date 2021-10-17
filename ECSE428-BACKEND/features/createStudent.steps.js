@@ -25,7 +25,6 @@ defineFeature(feature, (test) => {
       const res = await req.post("/createAccount").send({ username, password, verif_password });
       responseStatus = res.statusCode;
       responseMessage = res.body.message;
-      console.log(responseMessage)
     });
 
     then(/^a new student account will be created with the username (.*)$/, async (arg0) => {
