@@ -9,9 +9,7 @@ Feature: Log In as Student
     Student should successfully log in.
 
     Given a student account with <username> and <password> exists
-    When student enters a valid username <username>
-    And student enters corresponding valid password <password>
-    And student requests to log in
+    When student enters a valid username <username> and a corresponding valid password <password>
     Then student should be successfully logged in
     Examples:
       | username      | password           |
@@ -24,7 +22,7 @@ Feature: Log In as Student
     Student should not be logged in and see an error message.
 
     Given a student account with <username> and <password> exists
-    When student enters a wrong username <input_username> and student enters valid password <password>
+    When student enters a wrong username <input_username> and a valid password <password>
     Then student should not be logged in
     And student should see the error message "login failed: incorrect username or password"
     Examples:

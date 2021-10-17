@@ -63,12 +63,12 @@ const auth = (req, res, next) => {
 app.post('/login', async (req, res) => {
     //find the corresponding user to authenticate the password with
     const cur = await User.findOne({ username: req.body.username })
-    console.log(JSON.stringify(cur));
+
     //authenticate the password
     if (cur != null && req.body.password == cur.password) {
         session = req.session;
         session.userid = req.body.username;
-        // console.log(req.session)
+
         res.status(200).send({
             message: "logged in"
         });
