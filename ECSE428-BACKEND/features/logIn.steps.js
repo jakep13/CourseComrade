@@ -10,7 +10,7 @@ const feature = loadFeature(
 let responseMessage = "";
 let responseStatus = "";
 
-defineFeature(feature, (test) => {
+defineFeature(feature, (test, background) => {
   let loggedIn = false;
 
   afterEach(() => {
@@ -20,7 +20,6 @@ defineFeature(feature, (test) => {
   test('Attempt to log in with invalid username (Error Flow)', ({ given, when, and, then }) => {
     given(/^a student account with (.*) and (.*) exists$/, async (username, password) => {
       const user = await req.post("/createAccount").send({ username, password });
-      console.log("\n\n\n\n\n\n\n FUCKING PLEASE \n\n\n\n\n");
     });
 
     when(/^student enters a wrong username (.*) and student enters valid password (.*)$/, async (input_username, password) => {
@@ -29,44 +28,43 @@ defineFeature(feature, (test) => {
         password
       });
       responseStatus = res.statusCode;
-      // responseMessage = res.;
+      responseMessage = res.body.message;
 
-      loggedIn = true;
+      loggedIn = responseStatus === 200;
     });
 
     then('student should not be logged in', () => {
-      expect(true).toBe(false);
+      expect(loggedIn).toBe(false);
     });
 
-    and(/^student should see the error message "(.*)"$/, (arg0) => {
-      expect(true).toBe(false);
+    and(/^student should see the error message "(.*)"$/, (errorMsg) => {
+      expect(errorMsg).toBe(responseMessage);
     });
   });
 
 
   test('Attempt to log in with invalid password (Error Flow)', ({ given, when, and, then }) => {
-    given(/^a student account with (.*) and (.*) exists$/, (arg0, arg1) => {
-      pending();
+    given(/^a student account with (.*) and (.*) exists$/, async (username, password) => {
+      const user = await req.post("/createAccount").send({ username, password });
     });
 
-    when(/^student enters valid username (.*)$/, (arg0) => {
-      pending();
+    when(/^student enters valid username (.*) and a wrong password (.*)$/, async (username, input_password) => {
+      const res = await req.post("/login").send({
+        username,
+        password: input_password
+      });
+      responseStatus = res.statusCode;
+      responseMessage = res.body.message;
+
+      loggedIn = responseStatus === 200;
     });
 
-    and(/^student enters a wrong password (.*)$/, (arg0) => {
-      pending();
+    then('student should not be logged in', () => {
+      expect(loggedIn).toBe(false);
     });
 
-    and('student requests to log in', () => {
-      pending();
-    });
-
-    then('student should be not be logged in', () => {
-      pending();
-    });
-
-    and(/^student should see the error message "(.*)"$/, (arg0) => {
-      pending();
+    and(/^student should see the error message "(.*)"$/, (errorMsg) => {
+      expect(errorMsg).toBe(responseMessage);
     });
   });
 

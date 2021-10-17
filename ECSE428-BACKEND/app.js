@@ -31,7 +31,7 @@ app.use(cookieParser()); //add the cookie parser middleware
 
 
 app.use(cors({
-    origin: ['http://localhost:3000','http://localhost:3100'], //access-control-allow-credentials:true
+    origin: ['http://localhost:3000', 'http://localhost:3100'], //access-control-allow-credentials:true
     credentials: true
 }));
 
@@ -69,12 +69,13 @@ app.post('/login', async (req, res) => {
         session = req.session;
         session.userid = req.body.username;
         // console.log(req.session)
-        res.status(200)
-        res.send("logged in")
+        res.status(200).send({
+            message: "logged in"
+        });
     } else {
-        // res.send(JSON.stringify(req))
-        res.status(666)
-        res.send("we got it: " + JSON.stringify(req.body))
+        res.status(400).send({
+            message: 'login failed: incorrect username or password'
+        });
     }
 })
 

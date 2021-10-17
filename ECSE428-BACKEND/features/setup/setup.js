@@ -1,6 +1,6 @@
 const database = require("./test_database")
 
-beforeAll( async () => {
+beforeAll(async () => {
 
     const a = await database.connect();
     console.log("just connected")
