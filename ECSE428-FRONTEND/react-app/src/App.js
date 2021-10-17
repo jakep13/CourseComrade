@@ -7,6 +7,7 @@ import './App.css';
 import Header from './Global Components/Header';
 import LogIn from './components/Authentication Component/LogIn';
 import CreateAccount from './components/Authentication Component/CreateAccount';
+import deleteAccount from './components/Settings Component/DeleteAccount';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
               <Route exact path="/Log In" component={LogIn}></Route>
               <Route exact path="/Create Account" component={CreateAccount}></Route>
               <Route exact path="/your-dashboard" component={dashboard}></Route>
+              <Route exact path="/deleteAccount" component={deleteAccount}></Route>
             </Switch>
           </Router>
         </div>
