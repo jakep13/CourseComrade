@@ -42,9 +42,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
     var session = req.session;
     if (session.userid) {
-        res.send("you are logged in" + session.userid + " " + JSON.stringify(session))
+        res.status(200).send({ message: "you are logged in" + session.userid + " " + JSON.stringify(session) })
     } else {
-        res.send("go to hell")
+        res.status(400).send({ message: "you are not logged in" })
     }
 })
 
@@ -53,7 +53,7 @@ const auth = (req, res, next) => {
     if (req.session == null || req.session.userid == null) {
         console.log("not logged in")
         res.status(405); //tell them to login
-        res.send("wow");
+        res.send({ message: "wow" });
     } else {
         console.log("ALL GOOD - logged in")
         next();
@@ -89,15 +89,15 @@ app.post('/createAccount', (req, res) => {
     var newUser = new User({ username: req.body.username, password: req.body.password })
 
     newUser.save(function (err, doc) {
-        if (err) res.status(403).send("user not created");
-        else res.send("user created successfully")
+        if (err) res.status(403).send({ message: "user not created" });
+        else res.send({ message: "user created successfully" })
     })
 })
 
 app.post('/deleteAccount', auth, (req, res) => {
     User.deleteOne({ username: req.session.userid });
     req.session.destroy();
-    res.send("account deleted " + req.session.userid);
+    res.send({ message: "account deleted " + req.session.userid });
 })
 
 // deleteAccount = (username, password) => {
@@ -132,10 +132,9 @@ app.post('/addCourse', auth, async (req, res) => {
         function (err, doc) {
             if (err) {
                 res.status(403);
-                res.send("failure - course cannot be added ");
+                res.send({ message: "failure - course cannot be added " });
             }
-            else res.send("success - course added")
-            console.log("course added successfully!");
+            else res.send({ message: "success - course added" })
         })
 })
 
@@ -149,17 +148,10 @@ app.post('/removeCourse', auth, (req, res) => {
         function (err, doc) {
             if (err) {
                 res.status(403);
-                res.send("failure - course cannot be REMOVED ");
+                res.send({ message: "failure - course cannot be REMOVED" });
             }
-            else res.send("success - course REMOVED")
-            console.log("course REMOVED!!!! successfully!");
+            else res.send({ message: "success - course REMOVED" })
         })
-
-
-
-
-
-
 })
 
 app.post('/populateCourse', (req, res) => {
