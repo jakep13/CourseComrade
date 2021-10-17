@@ -23,8 +23,6 @@ defineFeature(feature, (test) => {
       const res = await req.post("/deleteAccount").send({ username });
       responseStatus = res.statusCode;
       responseMessage = res.body.message;
-
-      console.log(responseStatus)
     });
 
     then(/^the student account with the username (.*) will be deleted from the system$/, async (username) => {
@@ -39,6 +37,7 @@ defineFeature(feature, (test) => {
     });
   });
 })
+
 
 
 

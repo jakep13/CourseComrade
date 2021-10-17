@@ -49,12 +49,13 @@ app.get('/', (req, res) => {
 })
 
 const auth = (req, res, next) => {
+    console.log(JSON.stringify(req.session))
     if (req.session == null || req.session.userid == null) {
         console.log("not logged in")
         res.status(405); //tell them to login
-        res.send({ message: "not logged in" });
+        res.send({ message: "wow" });
     } else {
-        console.log("logged in")
+        console.log("ALL GOOD - logged in")
         next();
     }
 }
@@ -96,7 +97,7 @@ app.post('/createAccount', (req, res) => {
 app.post('/deleteAccount', auth, (req, res) => {
     User.deleteOne({ username: req.session.userid });
     req.session.destroy();
-    res.status(400).send({ message: "account deleted " + req.session.userid });
+    res.send({ message: "account deleted " + req.session.userid });
 })
 
 // deleteAccount = (username, password) => {
@@ -117,7 +118,7 @@ app.post('/deleteAccount', auth, (req, res) => {
 
 app.post('/addCourse', auth, async (req, res) => {
 
-    var new_course = await Course.findOne({ code: req.body.code, name: req.body.name });
+    var new_course = await Course.findOne({ code: req.body.course });
 
     //if course doesn't exist we populate it 
     // if(new_course == null){
@@ -127,25 +128,29 @@ app.post('/addCourse', auth, async (req, res) => {
 
     User.findOneAndUpdate(
         { username: req.session.userid },
-        { $push: { courses: req.body.code } },
+        { $push: { courses: req.body.course } },
         function (err, doc) {
             if (err) {
-                res.status(403).send({ message: "failure - course cannot be added " });
-            } else {
-                res.status(200).send({ message: "success - course added" });
+                res.status(403);
+                res.send({ message: "failure - course cannot be added " });
             }
+            else res.send({ message: "success - course added" })
         })
 })
 
+
+
 app.post('/removeCourse', auth, (req, res) => {
+
     User.findOneAndUpdate(
         { username: req.session.userid },
-        { $pull: { courses: req.body.code } },
+        { $pull: { courses: req.body.course } },
         function (err, doc) {
             if (err) {
-                res.status(403).send({ message: "cannot delete unregistered course" });
+                res.status(403);
+                res.send({ message: "failure - course cannot be REMOVED" });
             }
-            else res.send({ message: "course deleted" })
+            else res.send({ message: "success - course REMOVED" })
         })
 })
 
@@ -157,7 +162,7 @@ app.post('/populateCourse', (req, res) => {
 //get all events of logged in user
 app.get('/userCourses', auth, async (req, res) => {
     const cur_user = await User.findOne({ username: req.session.userid });
-    res.send({ courses: cur_user.courses });
+    res.send(cur_user.courses);
 })
 
 
