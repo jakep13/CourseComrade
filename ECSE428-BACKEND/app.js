@@ -97,7 +97,7 @@ app.post('/createAccount', (req, res) => {
 app.post('/deleteAccount', auth, (req, res) => {
     User.deleteOne({ username: req.session.userid });
     req.session.destroy();
-    res.send({ message: "account deleted " + req.session.userid });
+    res.status(400).send({ message: "account deleted " + req.session.userid });
 })
 
 // deleteAccount = (username, password) => {
