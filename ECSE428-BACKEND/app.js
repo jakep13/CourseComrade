@@ -86,13 +86,11 @@ app.get('/logout', (req, res) => {
 
 
 app.post('/createAccount', (req, res) => {
-
     var newUser = new User({ username: req.body.username, password: req.body.password })
 
     newUser.save(function (err, doc) {
-        if (err) res.status(403);
+        if (err) res.status(403).send("user not created");
         else res.send("user created successfully")
-        console.log("User registered successfully!");
     })
 })
 

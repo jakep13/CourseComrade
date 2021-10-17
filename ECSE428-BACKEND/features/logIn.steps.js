@@ -45,7 +45,7 @@ defineFeature(feature, (test) => {
 
   test('Attempt to log in with invalid password (Error Flow)', ({ given, when, and, then }) => {
     given(/^a student account with (.*) and (.*) exists$/, async (username, password) => {
-      // const user = await req.post("/createAccount").send({ username, password });
+      const user = await req.post("/createAccount").send({ username, password });
     });
 
     when(/^student enters valid username (.*) and a wrong password (.*)$/, async (username, input_password) => {
@@ -71,7 +71,7 @@ defineFeature(feature, (test) => {
 
   test('Log in with valid credentials (Normal Flow)', ({ given, when, and, then }) => {
     given(/^a student account with (.*) and (.*) exists$/, async (username, password) => {
-      // const user = await req.post("/createAccount").send({ username, password });
+      const user = await req.post("/createAccount").send({ username, password });
     });
 
     when(/^student enters a valid username (.*) and a corresponding valid password (.*)$/, async (username, password) => {
