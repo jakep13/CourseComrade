@@ -132,16 +132,22 @@ app.post('/addCourse', auth, async (req, res) => {
     //     new_course.save();
     // }
 
-    User.findOneAndUpdate(
-        { username: req.session.userid },
-        { $push: { courses: req.body.course } },
-        function (err, doc) {
-            if (err) {
-                res.status(403);
-                res.send({ message: "failure - course cannot be added " });
-            }
-            else res.send({ message: "success - course added" })
-        })
+    const course_regex = new RegExp('^[A-Z]{4}[0-9]{3}$');
+    if (course_regex.test(req.body.course)) {
+        User.findOneAndUpdate(
+            { username: req.session.userid },
+            { $push: { courses: req.body.course } },
+            function (err, doc) {
+                if (err) {
+                    res.status(403);
+                    res.send({ message: "failure - course cannot be added " });
+                }
+                else res.send({ message: "success - course added" })
+            })
+    } else {
+        res.status(402);
+        res.send({ message: "failure - incorrect course format " });
+    }
 })
 
 

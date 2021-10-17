@@ -11,16 +11,16 @@ Feature: Add Class to User Profile
         When student <username> registers for class <course> on CourseComrade
         Then <course> should be added to student <username> profile
         Examples:
-            | username    | course    |
-            | "big_suze"  | "COMP551" |
-            | "bob123"    | "ECSE321" |
-            | "test_user" | "COMP330" |
+            | username  | course  |
+            | big_suze  | COMP551 |
+            | bob123    | ECSE321 |
+            | test_user | COMP330 |
 
     Scenario Outline: Attempt to register for an invalid course (Error Flow)
         When student <username> registers for an invalid class <course> on CourseComrade
         Then  a resulting "invalid course input" error message is issued
         Examples:
-            | username    | course   |
-            | "big_suze"  | "COMP11" |
-            | "bob123"    | "C112"   |
-            | "test_user" | "10202"  |
+            | username  | course |
+            | big_suze  | COMP11 |
+            | bob123    | C112   |
+            | test_user | 10202  |
