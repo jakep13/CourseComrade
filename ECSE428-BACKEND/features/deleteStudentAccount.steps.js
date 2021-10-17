@@ -16,7 +16,6 @@ defineFeature(feature, (test) => {
     given(/^student with (.*) and (.*) exists and is logged in$/, async (username, password) => {
       const user = await req.post("/createAccount").send({ username, password });
       const res = await req.post("/login").send({ username, password });
-      console.log(res.body.message)
       expect(res.statusCode).toBe(200);
     });
 
