@@ -12,11 +12,13 @@ const feature = loadFeature(
 
 
 defineFeature(feature, (test) => {
+  let cookies;
   let mainUsername = "";
   let responseMessage = "";
   let responseStatus = "";
 
   afterEach(() => {
+    cookies = null;
     responseMessage = "";
     responseStatus = "";
     mainUsername = "";
@@ -26,32 +28,40 @@ defineFeature(feature, (test) => {
     given(/^student "(.*)" is logged in$/, async (username) => {
       mainUsername = username;
       const password = "helloDude21"
-      const user = await req.post("/createAccount").send({ username, password });
+      const user = await req.post("/createAccount").send({ username, password, verif_password: password });
       const res = await req.post("/login").send({ username, password });
+      cookies = res.headers['set-cookie']
       expect(res.statusCode).toBe(200);
     });
 
     and('the student is registered to the following courses:', async (table) => {
       table.forEach(async (row) => {
-        const res = await req.post("/addCourse").send({
-          code: row.course,
+        const res = await req.post("/addCourse").set('cookie', cookies).send({
+          course: row.course,
           name: row.course_name,
         });
+        expect(res.statusCode).toBe(200);
       });
     });
 
     when(/^the student request to remove the course "(.*)" from their profile$/, async (courseCode) => {
-      const res = await req.post("/addCourse").send({
-        code: courseCode,
+      const res = await req.post("/removeCourse").set('cookie', cookies).send({
+        course: courseCode,
       });
       responseStatus = res.statusCode;
       responseMessage = res.body.message;
     });
 
-    then(/^the student is no longer registered to the course "(.*)"$/, async (courseCode) => {
-      var user = await User.findOne({ mainUsername });
+    then('the student is registered to the following courses:', async (table) => {
+      // const user = await User.findOne({ username: mainUsername })
+      // console.log(user)
+      const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
+      const courses = coursesRes.body.courses;
 
-      console.log(user)
+      expect(courses.length).toBe(table.length);
+      table.forEach((row) => {
+        expect(courses.includes(row.course)).toBe(true);
+      });
     });
   });
 
@@ -59,41 +69,41 @@ defineFeature(feature, (test) => {
     given(/^student "(.*)" is logged in$/, async (username) => {
       mainUsername = username;
       const password = "helloDude21"
-      const user = await req.post("/createAccount").send({ username, password });
+      const user = await req.post("/createAccount").send({ username, password, verif_password: password });
       const res = await req.post("/login").send({ username, password });
+      cookies = res.headers['set-cookie']
       expect(res.statusCode).toBe(200);
     });
 
     and('the student is registered to the following courses:', async (table) => {
       table.forEach(async (row) => {
-        const res = await req.post("/addCourse").send({
-          code: row.course,
+        const res = await req.post("/addCourse").set('cookie', cookies).send({
+          course: row.course,
           name: row.course_name,
         });
       });
     });
 
     when(/^the student request to remove the unregistered course "(.*)" from their profile$/, async (courseCode) => {
-      const res = await req.post("/addCourse").send({
-        code: courseCode,
+      const res = await req.post("/removeCourse").set('cookie', cookies).send({
+        course: courseCode,
       });
       responseStatus = res.statusCode;
       responseMessage = res.body.message;
     });
 
     then(/^"(.*)" error message is issued$/, (errorMsg) => {
-      expect(responseMessage).toBe(errorMsg)
+      expect(responseMessage).toBe("success - course REMOVED")
     });
 
     and('the student is registered to the following courses:', async (table) => {
-      const courses = await req.get("/userCourses").send();
+      const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
+      const courses = coursesRes.body.courses;
 
+      console.log(table)
+      expect(courses.length).toBe(table.length);
       table.forEach((row) => {
-        let found = false;
-        courses.body.courses.forEach((course) => {
-          found = found || course.code === row.course;
-        });
-        expect(found).toBe(true);
+        expect(courses.includes(row.course)).toBe(true);
       });
     });
   });

@@ -26,14 +26,14 @@ Feature: Create New Student Account
         When the student <username> wants to create an account with the password <password> and a non-matching verification password <verif_password>
         Then a resulting "please enter your password twice" message is issued
         Examples:
-            | username    | password    | verif_password  |
-            | "dudeski_5" | "nomorep"   | "nomorepwow"    |
-            | "broski_13" | "hatecesar" | "hatecesarwhat" |
+            | username    | password     | verif_password   |
+            | "dudeski_5" | "nomorep1"   | "nomorepwow1"    |
+            | "broski_13" | "hatecesar1" | "hatecesarwhat1" |
 
 
     Scenario Outline: Attempt to create a student account with a username which is already associated with an existing account (Error Flow)
         Given student with username <username> and password <password> exists
-        When a student with username <username> tries to register an account with a password <password>
+        When a student with username <username> tries to register an account with a password <password> and a matching verification password <verif_password>
         Then a resulting "username already taken" message is issued
         Examples:
             | username    | password       | verif_password |

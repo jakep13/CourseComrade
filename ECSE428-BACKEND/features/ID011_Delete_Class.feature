@@ -11,7 +11,9 @@ Feature: Delete Class From Student Account
             | ECSE429 | Software Validation            |
             | ECSE428 | Software Engineering Practices |
         When the student request to remove the course "ECSE428" from their profile
-        Then the student is no longer registered to the course "ECSE428"
+        Then the student is registered to the following courses:
+            | course  | course_name         |
+            | ECSE429 | Software Validation |
 
     Scenario: Delete Unregistered Class From Student Account (Error Flow)
         Given student "big_suze" is logged in

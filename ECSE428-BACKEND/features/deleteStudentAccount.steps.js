@@ -16,14 +16,14 @@ let responseStatus = "";
 defineFeature(feature, (test) => {
   test('Successfully Delete Student Account (Normal Flow)', ({ given, when, then, and }) => {
     given(/^student with (.*) and (.*) exists and is logged in$/, async (username, password) => {
-      const user = await req.post("/createAccount").send({ username, password });
+      const user = await req.post("/createAccount").send({ username, password, verif_password: password });
       const res = await req.post("/login").send({ username, password });
       cookies = res.headers['set-cookie']
       expect(res.statusCode).toBe(200);
     });
 
     when(/^the student (.*) deletes their account$/, async (username) => {
-      const res =  await req.post("/deleteAccount").set('cookie', cookies).send();
+      const res = await req.post("/deleteAccount").set('cookie', cookies).send();
       responseMessage = res.body.message;
     });
 

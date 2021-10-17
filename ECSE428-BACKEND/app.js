@@ -49,13 +49,10 @@ app.get('/', (req, res) => {
 })
 
 const auth = (req, res, next) => {
-    console.log(JSON.stringify(req.session))
     if (req.session == null || req.session.userid == null) {
-        console.log("not logged in")
         res.status(405); //tell them to login
-        res.send({ message: "cannot delete unregistered course" });
+        res.send({ message: "not logged in" });
     } else {
-        console.log("ALL GOOD - logged in")
         next();
     }
 }
@@ -86,19 +83,37 @@ app.get('/logout', (req, res) => {
 
 
 app.post('/createAccount', (req, res) => {
+    // const verif_password = req.body.verif_password || req.body.password;
+
+    // const pass_regex = /^(?=.*\d)[a-zA-Z0-9!@#$%^&*]{6,}$/;
+    // let charExists = false;
+    // let numExists = false;
+    // req.body.password.foreach(c => {
+    //     charExists = charExists || c.match(/[a-z]/i)
+    //     numExists = numExists || /^\d+$/.test(c)
+    // });
+    // const valid = charExists && numExists && req.body.password.length > 6;
+    // console.log("BITCH\n\n\n\n\n")
+    // console.log(valid, req.body.password)
+    // if (!valid) {
+    //     res.status(400).send({ message: "invalid password" });
+    // } else if (req.body.password === verif_password) {
     var newUser = new User({ username: req.body.username, password: req.body.password })
 
     newUser.save(function (err, doc) {
         if (err) res.status(403).send({ message: "user not created" });
         else res.send({ message: "user created successfully" })
     })
+    // } else {
+    //     res.status(400).send({ message: "please enter your password twice" });
+    // }
 })
 
 app.post('/deleteAccount', auth, async (req, res) => {
 
-    User.deleteOne({username:req.session.userid}).then(function(){
+    User.deleteOne({ username: req.session.userid }).then(function () {
         console.log("Data deleted\n"); // Success
-    }).catch(function(error){
+    }).catch(function (error) {
         console.log(error); // Failure
     });
 
@@ -153,6 +168,11 @@ app.post('/addCourse', auth, async (req, res) => {
 
 
 app.post('/removeCourse', auth, (req, res) => {
+    // let user = await User.findOne({ username: req.session.userid })
+    // console.log(user)
+    // console.log(req.body.course)
+    // let registeredCourses = user.courses;
+
 
     User.findOneAndUpdate(
         { username: req.session.userid },
@@ -164,6 +184,8 @@ app.post('/removeCourse', auth, (req, res) => {
             }
             else res.send({ message: "success - course REMOVED" })
         })
+
+
 })
 
 app.post('/populateCourse', (req, res) => {
@@ -174,7 +196,9 @@ app.post('/populateCourse', (req, res) => {
 //get all events of logged in user
 app.get('/userCourses', auth, async (req, res) => {
     const cur_user = await User.findOne({ username: req.session.userid });
-    res.send(cur_user.courses);
+    res.send({
+        courses: cur_user.courses
+    });
 })
 
 
