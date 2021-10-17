@@ -3,7 +3,8 @@ import CreateAccountForm from '../components/Authentication Component/CreateAcco
 import LogInForm from '../components/Authentication Component/LogInForm';
 import DeleteAccountForm from '../components/Settings Component/DeleteAccountForm';
 import '../styles/Global Components/Card.scss';
-import Button from './Button';
+import CustomizedButton from './CustomizedButton';
+
 
 export default function Card(props) {
     return (
@@ -20,7 +21,7 @@ export default function Card(props) {
                     {(props.form === 'authentication' && props.options) && props.options.map((items) => {
                         return (
                         <div classname="btn-container">
-                            <Button text={items}/>
+                            <CustomizedButton text={items}/>
                         </div>)
                     }) 
                    }

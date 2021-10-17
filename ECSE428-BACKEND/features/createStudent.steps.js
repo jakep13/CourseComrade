@@ -7,7 +7,7 @@ const { Course } = require('./../models/course')
 const req = supertest(app)
 
 const feature = loadFeature(
-  "./features/Create-Student-Account.feature"
+  "./features/ID001_Create_Student_Account.feature"
 );
 
 
@@ -25,7 +25,6 @@ defineFeature(feature, (test) => {
       const res = await req.post("/createAccount").send({ username, password, verif_password });
       responseStatus = res.statusCode;
       responseMessage = res.body.message;
-      console.log(responseMessage)
     });
 
     then(/^a new student account will be created with the username (.*)$/, async (arg0) => {

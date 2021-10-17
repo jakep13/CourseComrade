@@ -4,8 +4,7 @@ import Card from '../../Global Components/Card';
 import '../../styles/Authentication Components/Form.scss';
 import '../../styles/fonts.scss'
 import '../../styles/Global Components/Button.scss'
-import Button from '../../Global Components/Button';
-import DeleteAccountForm from './DeleteAccountForm';
+import Button from '../../Global Components/CustomizedButton';
 
 
 
@@ -16,9 +15,14 @@ export default function deleteAccount() {
                 welcomeTitle="Delete Account"
                 subTitle="You won't be able to reactivate your account and your profile will be deleted permanently."
                 
-                form="deleteAccount"
+                //form="deleteAccount"
                 
-            />  
+            />
+            <button onclick="this.props.deleteAccount()">
+            Delete Account
+            </button>
+                
+          
         </div>
     )
 }

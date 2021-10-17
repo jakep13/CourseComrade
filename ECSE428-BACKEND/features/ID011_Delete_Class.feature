@@ -6,24 +6,13 @@ Feature: Delete Class From Student Account
 
     Scenario: Delete Class From Student Account (Normal Flow)
         Given student "big_suze" is logged in
-        And the student is registered to the following courses:
-            | course  | course_name                    |
-            | ECSE429 | Software Validation            |
-            | ECSE428 | Software Engineering Practices |
+        And the student is registered to "ECSE428"
         When the student request to remove the course "ECSE428" from their profile
-        Then the student is registered to the following courses:
-            | course  | course_name         |
-            | ECSE429 | Software Validation |
+        Then the student is registered to no courses
 
     Scenario: Delete Unregistered Class From Student Account (Error Flow)
         Given student "big_suze" is logged in
-        And the student is registered to the following courses:
-            | course  | course_name                    |
-            | ECSE429 | Software Validation            |
-            | ECSE428 | Software Engineering Practices |
+        And the student is registered to "ECSE428"
         When the student request to remove the unregistered course "COMP332" from their profile
-        Then "cannot delete unregistered course" error message is issued
-        And the student is registered to the following courses:
-            | course  | course_name                    |
-            | ECSE429 | Software Validation            |
-            | ECSE428 | Software Engineering Practices |
+        Then "failure - cannot delete unregistered course" error message is issued
+        And the student is registered to "ECSE428"
