@@ -25,7 +25,11 @@ export default function Card(props) {
                     }) 
                    }
                     {props.form === 'login' && <LogInForm />}
-                    {props.form === 'createAccount' && <CreateAccountForm/>}
+                    {props.form === 'createAccount' && <CreateAccountForm />}
+                    {props.form === 'deleteAccount' &&
+                        <div classname="btn-container">
+                            <CustomizedButton text="Delete Account" />
+                        </div>}
                 </div>
             </div>
         </div>
