@@ -156,14 +156,11 @@ app.post('/addCourse', auth, async (req, res) => {
     }
 })
 
-
-
 app.post('/removeCourse', auth, (req, res) => {
     // let user = await User.findOne({ username: req.session.userid })
     // console.log(user)
     // console.log(req.body.course)
     // let registeredCourses = user.courses;
-
 
     User.findOneAndUpdate(
         { username: req.session.userid },
@@ -171,12 +168,10 @@ app.post('/removeCourse', auth, (req, res) => {
         function (err, doc) {
             if (err) {
                 res.status(403);
-                res.send({ message: "failure - course cannot be REMOVED" });
+                return res.send({ message: "failing" });
             }
-            else res.send({ message: "success - course REMOVED" })
+            return res.send({ message: "failure - cannot delete unregistered course" });
         })
-
-
 })
 
 app.post('/populateCourse', (req, res) => {

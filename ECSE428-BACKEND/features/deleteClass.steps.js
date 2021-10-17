@@ -34,34 +34,22 @@ defineFeature(feature, (test) => {
       expect(res.statusCode).toBe(200);
     });
 
-    and('the student is registered to the following courses:', async (table) => {
-      table.forEach(async (row) => {
-        const res = await req.post("/addCourse").set('cookie', cookies).send({
-          course: row.course,
-          name: row.course_name,
-        });
-        expect(res.statusCode).toBe(200);
-      });
+    and(/^the student is registered to "(.*)"$/, async (course) => {
+      const res = await req.post("/addCourse").set('cookie', cookies).send({ course });
+      expect(res.statusCode).toBe(200);
     });
 
-    when(/^the student request to remove the course "(.*)" from their profile$/, async (courseCode) => {
-      const res = await req.post("/removeCourse").set('cookie', cookies).send({
-        course: courseCode,
-      });
+    when(/^the student request to remove the course "(.*)" from their profile$/, async (course) => {
+      const res = await req.post("/removeCourse").set('cookie', cookies).send({ course });
       responseStatus = res.statusCode;
       responseMessage = res.body.message;
     });
 
-    then('the student is registered to the following courses:', async (table) => {
-      // const user = await User.findOne({ username: mainUsername })
-      // console.log(user)
+    then('the student is registered to no courses', async () => {
       const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
       const courses = coursesRes.body.courses;
 
-      expect(courses.length).toBe(table.length);
-      table.forEach((row) => {
-        expect(courses.includes(row.course)).toBe(true);
-      });
+      expect(courses.length).toBe(0);
     });
   });
 
@@ -75,38 +63,114 @@ defineFeature(feature, (test) => {
       expect(res.statusCode).toBe(200);
     });
 
-    and('the student is registered to the following courses:', async (table) => {
-      table.forEach(async (row) => {
-        const res = await req.post("/addCourse").set('cookie', cookies).send({
-          course: row.course,
-          name: row.course_name,
-        });
-      });
+    and(/^the student is registered to "(.*)"$/, async (course) => {
+      const res = await req.post("/addCourse").set('cookie', cookies).send({ course });
+      expect(res.statusCode).toBe(200);
     });
 
-    when(/^the student request to remove the unregistered course "(.*)" from their profile$/, async (courseCode) => {
-      const res = await req.post("/removeCourse").set('cookie', cookies).send({
-        course: courseCode,
-      });
+    when(/^the student request to remove the unregistered course "(.*)" from their profile$/, async (course) => {
+      const res = await req.post("/removeCourse").set('cookie', cookies).send({ course });
       responseStatus = res.statusCode;
       responseMessage = res.body.message;
     });
 
     then(/^"(.*)" error message is issued$/, (errorMsg) => {
-      expect(responseMessage).toBe("success - course REMOVED")
+      expect(responseMessage).toBe(errorMsg)
     });
 
-    and('the student is registered to the following courses:', async (table) => {
+    and(/^the student is registered to "(.*)"$/, async (course) => {
       const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
       const courses = coursesRes.body.courses;
 
-      console.log(table)
-      expect(courses.length).toBe(table.length);
-      table.forEach((row) => {
-        expect(courses.includes(row.course)).toBe(true);
-      });
+      expect(courses.length).toBe(1);
+      expect(courses.includes(course)).toBe(true);
     });
   });
+
+  // test('Delete Class From Student Account (Normal Flow)', ({ given, and, when, then }) => {
+  //   given(/^student "(.*)" is logged in$/, async (username) => {
+  // mainUsername = username;
+  // const password = "helloDude21"
+  // const user = await req.post("/createAccount").send({ username, password, verif_password: password });
+  // const res = await req.post("/login").send({ username, password });
+  // cookies = res.headers['set-cookie']
+  // expect(res.statusCode).toBe(200);
+  //   });
+
+  //   and('the student is registered to the following courses:', async (table) => {
+  //     table.forEach(async (row) => {
+  //       const res = await req.post("/addCourse").set('cookie', cookies).send({
+  //         course: row.course,
+  //         name: row.course_name,
+  //       });
+  //       expect(res.statusCode).toBe(200);
+  //     });
+  //   });
+
+  //   when(/^the student request to remove the course "(.*)" from their profile$/, async (courseCode) => {
+  //     const res = await req.post("/removeCourse").set('cookie', cookies).send({
+  //       course: courseCode,
+  //     });
+  //     responseStatus = res.statusCode;
+  //     responseMessage = res.body.message;
+  //   });
+
+  //   then('the student is registered to the following courses:', async (table) => {
+  //     let user = await User.findOne({ username: mainUsername })
+  //     user = await User.findOne({ username: mainUsername })
+  //     console.log(user)
+  //     const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
+  //     const courses = coursesRes.body.courses;
+
+  //     expect(courses.length).toBe(table.length);
+  //     table.forEach((row) => {
+  //       expect(courses.includes(row.course)).toBe(true);
+  //     });
+  //   });
+  // });
+
+  // test('Delete Unregistered Class From Student Account (Error Flow)', ({ given, and, when, then }) => {
+  //   given(/^student "(.*)" is logged in$/, async (username) => {
+  //     mainUsername = username;
+  //     const password = "helloDude21"
+  //     const user = await req.post("/createAccount").send({ username, password, verif_password: password });
+  //     const res = await req.post("/login").send({ username, password });
+  //     cookies = res.headers['set-cookie']
+  //     expect(res.statusCode).toBe(200);
+  //   });
+
+  //   and('the student is registered to the following courses:', async (table) => {
+  //     table.forEach(async (row) => {
+  //       const res = await req.post("/addCourse").set('cookie', cookies).send({
+  //         course: row.course,
+  //         name: row.course_name,
+  //       });
+  //     });
+  //   });
+
+  //   when(/^the student request to remove the unregistered course "(.*)" from their profile$/, async (courseCode) => {
+  //     const res = await req.post("/removeCourse").set('cookie', cookies).send({
+  //       course: courseCode,
+  //     });
+  //     responseStatus = res.statusCode;
+  //     responseMessage = res.body.message;
+  //   });
+
+  //   then(/^"(.*)" error message is issued$/, (errorMsg) => {
+  //     expect(responseMessage).toBe(errorMsg)
+  //   });
+
+  //   and('the student is registered to the following courses:', async (table) => {
+  //     const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
+  //     const courses = coursesRes.body.courses;
+
+  //     console.log(table)
+  //     expect(courses.length).toBe(table.length);
+  //     table.forEach((row) => {
+  //       expect(courses.includes(row.course)).toBe(true);
+  //     });
+  //   });
+  // });
 })
 
 
