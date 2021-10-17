@@ -8,6 +8,8 @@ const feature = loadFeature(
   "./features/ID003_Delete_Student_Account.feature"
 );
 
+var cookies;
+
 let responseMessage = "";
 let responseStatus = "";
 
@@ -16,12 +18,13 @@ defineFeature(feature, (test) => {
     given(/^student with (.*) and (.*) exists and is logged in$/, async (username, password) => {
       const user = await req.post("/createAccount").send({ username, password });
       const res = await req.post("/login").send({ username, password });
+      cookies = res.headers['set-cookie']
       expect(res.statusCode).toBe(200);
     });
 
     when(/^the student (.*) deletes their account$/, async (username) => {
-      const res = await req.post("/deleteAccount").send({ username });
-      responseStatus = res.statusCode;
+      console.log("/n/n HERE IS THE FUCKER /n/n")
+      const res =  await req.post("/deleteAccount").set('cookie', cookies).send();
       responseMessage = res.body.message;
     });
 
@@ -33,7 +36,7 @@ defineFeature(feature, (test) => {
     and('the user should logged out', async () => {
       const res = await req.get("/").send();
       const loggedIn = res.statusCode;
-      expect(loggedIn).toBe(false);
+      expect(loggedIn).toBe(400);
     });
   });
 })
