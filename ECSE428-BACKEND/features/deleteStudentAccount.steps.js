@@ -23,7 +23,6 @@ defineFeature(feature, (test) => {
     });
 
     when(/^the student (.*) deletes their account$/, async (username) => {
-      console.log("/n/n HERE IS THE FUCKER /n/n")
       const res =  await req.post("/deleteAccount").set('cookie', cookies).send();
       responseMessage = res.body.message;
     });

@@ -95,17 +95,12 @@ app.post('/createAccount', (req, res) => {
 })
 
 app.post('/deleteAccount', auth, async (req, res) => {
-    console.log("here it is man")
-    // console.log(req.session.userid);
-    // var usr = JSON.stringify(req.session.userid);
+
     User.deleteOne({username:req.session.userid}).then(function(){
         console.log("Data deleted\n"); // Success
     }).catch(function(error){
         console.log(error); // Failure
     });
-    // var usr = User.findOne({username: req.session.userid} ).remove();
-
-    console.log(req.session.userid)
 
     req.session.destroy();
     res.send("account deleted");
