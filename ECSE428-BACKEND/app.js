@@ -16,7 +16,7 @@ const { Course } = require('./models/course')
 const PORT = process.env.PORT;
 const URI = process.env.URI;
 
-const app = express();
+var app = express();
 
 const SESSION_LIFE = 1000 * 60 * 60 * 24; //max time for a cookie before expiration
 
@@ -31,7 +31,7 @@ app.use(cookieParser()); //add the cookie parser middleware
 
 
 app.use(cors({
-    origin: 'http://localhost:3000', //access-control-allow-credentials:true
+    origin: ['http://localhost:3000','http://localhost:3100'], //access-control-allow-credentials:true
     credentials: true
 }));
 

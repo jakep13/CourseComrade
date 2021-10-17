@@ -1,6 +1,10 @@
-const request = require('./setup/request');
 const { defineFeature, loadFeature } = require("jest-cucumber")
+const supertest = require("supertest");
+const app = require("../app");
+const { User } = require('./../models/user')
+const { Course } = require('./../models/course')
 
+const req = supertest(app)
 
 const feature = loadFeature(
   "./features/Create-Student-Account.feature"
@@ -30,14 +34,19 @@ defineFeature(feature, (test) => {
 
   test('Create Student Account (Normal Flow)', ({ when, then }) => {
     when(/^the student (.*) wants to create an account with CourseComrade with the password (.*) which matches the verification password (.*) and consists of at least six characters of which at least one is a digit and letter.$/, async (username, password, verif_password) => {
-      const user = await request.post("/createAccount").send({ username, password });
+      const user = await req.post("/createAccount").send({ username, password });
     });
 
-    then(/^a new student account will be created with the username (.*)$/, (arg0) => {
+    then(/^a new student account will be created with the username (.*)$/, async (arg0) => {
+        var usr = await User.findOne({username: arg0 });
+        expect(usr).not.toBe(null)
+      
 
     });
 
-    then(/^a new user with username (.*) will be populated into the system with the given password (.*)$/, (arg0, arg1) => {
+    then(/^a new user with username (.*) will be populated into the system with the given password (.*)$/, async (arg0, arg1) => {
+        var usr = await User.findOne({username: arg0 , password: arg1});
+        expect(usr).not.toBe(null)
 
     });
   });

@@ -21,3 +21,13 @@ const userSchema = new Schema({
 
 
 module.exports = {User :  mongoose.model("User", userSchema, "userCollection")};
+
+
+
+//courses collection
+
+
+//user -> [courses]
+
+
+

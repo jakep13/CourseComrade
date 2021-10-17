@@ -1,17 +1,21 @@
-const database = require("../database")
+const database = require("./test_database")
 
-beforeEach( async (done) => {
-    await database.connect();
-    done();
+beforeAll( async () => {
+
+    const a = await database.connect();
+    console.log("just connected")
+    // done();
 });
 
-afterEach( async (done) => {
-    await database.clear();
-    done();
-});
+// afterEach( async (done) => {
+//     const a = await database.clear();
+//     done();
+// });
 
 
-afterAll( async (done) => {
-    await database.close();
-    done();
-});
+// afterAll( async (done) => {
+//     const a = await database.close();
+//     done();
+// });
+
+

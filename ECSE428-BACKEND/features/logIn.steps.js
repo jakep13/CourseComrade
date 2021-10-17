@@ -19,6 +19,7 @@ defineFeature(feature, (test) => {
   test('Attempt to log in with invalid username (Error Flow)', ({ given, when, and, then }) => {
     given(/^a student account with (.*) and (.*) exists$/, async (username, password) => {
       const user = await request.post("/createAccount").send({ username, password });
+      console.log("\n\n\n\n\n\n\n FUCKING PLEASE \n\n\n\n\n");
     });
 
     when(/^student enters a wrong username (.*) and student enters valid password (.*)$/, async (input_username, password) => {
