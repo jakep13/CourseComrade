@@ -14,10 +14,10 @@ Feature: Log In as Student
     And student requests to log in
     Then student should be successfully logged in
     Examples:
-      | username    | password         |
-      | test123     | dogs88           |
-      | broksi1122  | ilovecesar1      |
-      | dudeski1122 | ilovetheworld_88 |
+      | username      | password           |
+      | "test123"     | "dogs88"           |
+      | "broksi1122"  | "ilovecesar1"      |
+      | "dudeski1122" | "ilovetheworld_88" |
 
   Scenario: Attempt to log in with invalid username (Error Flow)
 
@@ -28,10 +28,10 @@ Feature: Log In as Student
     Then student should not be logged in
     And student should see the error message "Login failed: incorrect username or password"
     Examples:
-      | username    | password         | input_username |
-      | test123     | dogs88           | test12         |
-      | broksi1122  | ilovecesar1      | Broksi1122     |
-      | dudeski1122 | ilovetheworld_88 | wrong_user     |
+      | username      | password           | input_username |
+      | "test123"     | "dogs88"           | "test12"       |
+      | "broksi1122"  | "ilovecesar1"      | "Broksi1122"   |
+      | "dudeski1122" | "ilovetheworld_88" | "wrong_user"   |
 
   Scenario: Attempt to log in with invalid password (Error Flow)
 
@@ -44,7 +44,7 @@ Feature: Log In as Student
     Then student should be not be logged in
     And student should see the error message "Login failed: incorrect username or password"
     Examples:
-      | username    | password         | input_password |
-      | test123     | dogs88           | dogs885        |
-      | broksi1122  | ilovecesar1      | iLovecesar1    |
-      | dudeski1122 | ilovetheworld_88 | wrong_pass33   |
+      | username      | password           | input_password |
+      | "test123"     | "dogs88"           | "dogs885"      |
+      | "broksi1122"  | "ilovecesar1"      | "iLovecesar1"  |
+      | "dudeski1122" | "ilovetheworld_88" | "wrong_pass33" |
