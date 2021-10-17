@@ -139,6 +139,7 @@ app.post('/addCourse', auth, async (req, res) => {
     // }
 
     const course_regex = new RegExp('^[A-Z]{4}[0-9]{3}$');
+    //console.log(req.body.course);
     if (course_regex.test(req.body.course)) {
         User.findOneAndUpdate(
             { username: req.session.userid },
