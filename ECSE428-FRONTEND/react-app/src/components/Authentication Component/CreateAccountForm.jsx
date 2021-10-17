@@ -37,8 +37,8 @@ export default function CreateAccountForm() {
             const params = new URLSearchParams()
             params.append('username', username)
             params.append('password', password1)
-        
-            axios.post('http://localhost:3100/login', params, config)
+            console.log("\n JAKE THE MAN WAS HERE \n")
+            axios.post('http://localhost:3100/createAccount', params, config)
             .then((result) => {
             // Redirect
                 //
