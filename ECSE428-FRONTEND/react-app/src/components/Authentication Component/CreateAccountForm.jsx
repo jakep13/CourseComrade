@@ -41,12 +41,14 @@ export default function CreateAccountForm() {
             axios.post('http://localhost:3100/createAccount', params, config)
             .then((result) => {
             // Redirect
+                console.log(result)
                 //
                 //console.log(result)
                 //console.log("we made it into this b")
-                axios.get('http://localhost:3100/', config).then((result) => {
+                axios.post('http://localhost:3100/login', params,config).then((result) => {
                     history.push('/your-dashboard');
                     console.log(result);
+
                 }).catch((err) => {
                     // types of error:
                     console.log("there is an error");
@@ -99,4 +101,3 @@ export default function CreateAccountForm() {
         
     )
 }
-
