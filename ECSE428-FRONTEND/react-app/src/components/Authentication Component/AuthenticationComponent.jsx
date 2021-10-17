@@ -1,5 +1,4 @@
 import React from 'react';
-import LogIn from '../Authentication Component/LogIn';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Card from '../../Global Components/Card';
 

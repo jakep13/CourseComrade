@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-export default function Button(props) {
+export default function CustomizedButton(props) {
     const history = useHistory();
 
     function handleClick(option) {

@@ -4,7 +4,7 @@ import Card from '../../Global Components/Card';
 import '../../styles/Authentication Components/Form.scss';
 import '../../styles/fonts.scss'
 import '../../styles/Global Components/Button.scss'
-import Button from '../../Global Components/Button';
+import Button from '../../Global Components/CustomizedButton';
 
 
 
@@ -20,7 +20,6 @@ export default function deleteAccount() {
             />
             <button onclick="this.props.deleteAccount()">
             Delete Account
-            
             </button>
                 
         </div>
