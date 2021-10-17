@@ -1,5 +1,5 @@
 import react, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import { UserContext } from './components/Context Component/Context';
 import AuthenticationComponent from './components/Authentication Component/AuthenticationComponent';
 import './App.css';
@@ -9,6 +9,7 @@ import CreateAccount from './components/Authentication Component/CreateAccount';
 import deleteAccount from './components/Settings Component/DeleteAccount';
 import Dashboard1 from './components/Dashboard Component/Dashboard1';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import DeleteAccountForm from './components/Settings Component/DeleteAccountForm';
 
 function App() {
 
@@ -16,11 +17,11 @@ function App() {
   const [token, setToken] = useState();
   const [userState, setUserState] = useState();
 
-
+ 
   return (
     <UserContext.Provider value={{ user: userState }}>
       <div className='App'>
-        <Header />
+      <Header/>
         <div className="content-margin">
           <Router>
             <Switch>
@@ -28,11 +29,11 @@ function App() {
               <Route exact path="/Log In" component={LogIn}></Route>
               <Route exact path="/Create Account" component={CreateAccount}></Route>
               <Route exact path="/your-dashboard" component={Dashboard1}></Route>
-              <Route exact path="/deleteAccount" component={deleteAccount}></Route>
+              <Route exact path="/deleteAccount" component={DeleteAccountForm}></Route>
             </Switch>
           </Router>
         </div>
-
+     
       </div>
     </UserContext.Provider>
 

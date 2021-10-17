@@ -1,7 +1,6 @@
 import React from 'react';
 import CreateAccountForm from '../components/Authentication Component/CreateAccountForm';
 import LogInForm from '../components/Authentication Component/LogInForm';
-import DeleteAccountForm from '../components/Settings Component/DeleteAccountForm';
 import '../styles/Global Components/Card.scss';
 import CustomizedButton from './CustomizedButton';
 
@@ -26,9 +25,11 @@ export default function Card(props) {
                     }) 
                    }
                     {props.form === 'login' && <LogInForm />}
-                    {props.form === 'createAccount' && <CreateAccountForm/>}
-                    {props.form === 'deleteAccount' && <DeleteAccountForm/>}
-
+                    {props.form === 'createAccount' && <CreateAccountForm />}
+                    {props.form === 'deleteAccount' &&
+                        <div classname="btn-container">
+                            <CustomizedButton text="Delete Account" />
+                        </div>}
                 </div>
             </div>
         </div>
