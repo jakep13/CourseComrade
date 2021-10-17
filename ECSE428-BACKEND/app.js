@@ -53,7 +53,7 @@ const auth = (req, res, next) => {
     if (req.session == null || req.session.userid == null) {
         console.log("not logged in")
         res.status(405); //tell them to login
-        res.send({ message: "wow" });
+        res.send({ message: "cannot delete unregistered course" });
     } else {
         console.log("ALL GOOD - logged in")
         next();
