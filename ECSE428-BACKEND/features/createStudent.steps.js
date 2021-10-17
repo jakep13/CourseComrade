@@ -7,7 +7,7 @@ const { Course } = require('./../models/course')
 const req = supertest(app)
 
 const feature = loadFeature(
-  "./features/Create-Student-Account.feature"
+  "./features/ID001_Create_Student_Account.feature"
 );
 
 
