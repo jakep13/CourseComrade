@@ -11,25 +11,6 @@ const feature = loadFeature(
 );
 
 
-// When the student <username> wants to create an account with CourseComrade with the password <password> which matches the verification password <verif_password> and consists of at least six characters of which at least one is a digit/letter.
-
-
-// const whenStudentCreateAccount = (when) => {
-//   when("When the student <username> wants to create an account with CourseComrade with the password <password> which matches the verification password <verif_password> and consists of at least six characters of which at least one is a digit and letter.", async () => {
-//     await request.post("/createAccount").send({
-//       username: "wowman",
-//       password: "pass1weod"
-//     });
-//   })
-// };
-
-// // const thenStudentExists = (then) => { //check that the given student exists
-// //   then("The student exists", async () => {
-// //     await 
-// //   })
-// // }
-
-
 defineFeature(feature, (test) => {
 
   test('Create Student Account (Normal Flow)', ({ when, then }) => {
