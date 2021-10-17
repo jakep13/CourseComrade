@@ -13,9 +13,8 @@ beforeAll(async () => {
 // });
 
 
-// afterAll( async (done) => {
-//     const a = await database.close();
-//     done();
-// });
+afterAll( async () => {
+    const a = await database.close();
+});
 
 
