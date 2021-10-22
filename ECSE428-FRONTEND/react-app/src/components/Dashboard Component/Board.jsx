@@ -2,7 +2,8 @@ import React from 'react';
 import Box from './Box';
 import '../../styles/Dashboard Component/Board.scss';
 import Class from './Class';
-import MostPopular from './MostPopular';
+import Friend from '../Friend Component/Friend';
+
 
 
 export default function Board() {
@@ -11,8 +12,10 @@ export default function Board() {
             <div className="board-wrapper">
                 <Box title={"Welcome Back user"} />
                 <div className="grids">
-                    <Class />
-                    <MostPopular/>
+                    <div className="classes">
+                        <Class />
+                    </div>
+                    <div className="most-popular"> <Friend/></div>
                 </div>
             </div>
         </div>

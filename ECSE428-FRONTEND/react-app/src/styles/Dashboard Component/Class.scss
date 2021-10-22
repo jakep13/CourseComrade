@@ -1,14 +1,38 @@
 .class-container {
-  margin-top: 20px;
-  box-sizing: content-box;
-  height: fit-content;
-  border-radius: 20px;
-  border: 2px solid #e9e8e8da;
-  background-color: white;
-  padding: 5px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  width: 500px;
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5px;
+
+    .main {
+      font-size: 20px;
+      font-weight: 400;
+      padding-left: 5px;
+    }
+
+    .filter-wrapper {
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid #cacaca;
+    }
+  }
+
+  .class-wrapper {
+    width: 100%;
+    .icon {
+      padding-left: 20px;
+    }
+    /*  margin-top: 20px;
+    box-sizing: content-box;
+    height: fit-content;
+    border-radius: 20px;
+    border: 2px solid #e9e8e8da;
+    background-color: white;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 500px;*/
+  }
 }

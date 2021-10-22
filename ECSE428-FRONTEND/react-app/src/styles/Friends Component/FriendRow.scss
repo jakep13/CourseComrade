@@ -1,0 +1,17 @@
+.friend-row-container {
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  background-color: white;
+  border: 1px solid #e9e8e8da;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  .user-data {
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+}

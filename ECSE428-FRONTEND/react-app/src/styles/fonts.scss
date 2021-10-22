@@ -1,9 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 //Font Variables
 $headers: "Oswald"; // for titles
 $body: "Lato";
+$round: "Varela Round";
 
 .font-title {
   font-family: $headers;
@@ -15,6 +16,14 @@ $body: "Lato";
   text-align: start;
 }
 
+.font-round {
+  font-family: $round;
+  text-align: start;
+}
+
+.dashboard-text {
+  color: #003e51;
+}
 .text-title {
   font-size: 20px;
   font-weight: 500;

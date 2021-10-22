@@ -1,0 +1,22 @@
+.friend-container {
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5px;
+
+    .main {
+      font-size: 20px;
+      font-weight: 400;
+      padding-left: 5px;
+    }
+    .view-all {
+      font-size: 14px;
+      color: #5680e9;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

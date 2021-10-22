@@ -3,11 +3,32 @@
   height: auto;
   border-radius: 20px;
   border: 2px solid #e9e8e8da;
-  background-color: white;
-  padding: 5px;
-  align-items: center;
-  justify-content: center;
+  background-color: #9eb5eef1;
+  //background-color: #7fa1f7;
+  padding: 30px;
   display: flex;
-  flex-direction: column;
-  padding: 10px;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-bottom: 40px;
+
+  .header {
+    .greetings {
+      display: flex;
+      flex-direction: column;
+      column-gap: 2px;
+      .main {
+        display: flex;
+        font-size: 30px;
+        font-weight: bold;
+        justify-content: center;
+        align-items: center;
+      }
+      .body {
+        font-size: 14px;
+        margin: 0 auto;
+      }
+    }
+  }
+  img {
+  }
 }

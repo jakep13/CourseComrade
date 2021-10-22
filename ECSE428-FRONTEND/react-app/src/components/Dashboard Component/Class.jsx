@@ -1,17 +1,46 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Box from './Box';
 import'../../styles/Dashboard Component/Class.scss';
+import ClassRow from './ClassRow';
+import MostPopuar from './MostPopuar';
 
 function Class() {
+    const [selected, setSelected] = useState({ value: 'View All' });
+    
+    const classArray = [
+        { department: "ECSE", classCode: "ECSE428", className: "Software Engineering Practice" },
+        { department: "ECSE", classCode: "ECSE316", className: "Signals and Networks" },
+        { department: "ECSE", classCode: "ECSE222", className: "Digital Logic" },
+        { department: "COMP", classCode: "COMP250", className: "Intro to Computer Science" },
+        { department: "COMP", classCode: "COMP251", className: "Algorithms and Structures" },
+    ];
+    
+    const handleChange = (e) => {
+        console.log(e.target.value);
+        setSelected({ value: `${e.target.value}` });
+    
+    }
     return (
         <div className="class-container">
-        <div className="header"> <b> My Classes</b> </div>
-        <div className="body">
-                <li> ECSE428</li>
-                <li> ECSE316</li>
-                <li> COMP251 </li>
-                <li> COPM250</li>
-                <li> ECSE222 </li>
+            <div className="header">
+                <div className="main font-round"> My Classes </div>
+                <div className="filter-container">
+                    <select placeholder='Filters'  onChange={(e) => handleChange(e)} className="filter-wrapper">
+                        <option value="View All"> View All </option> 
+                        <option value="Most Popular"> Most Popular</option>
+                        <option value="Most Popular-Graph"> Most Popular - Graph </option>
+                    </select>
+                </div>
+            </div>
+            <div className="class-wrapper">
+                {(selected.value === 'View All' || selected.value === 'Most Popular') && 
+                     classArray.map((item) => {
+                        return (
+                            <ClassRow department={item.department} classCode={item.classCode} className={item.className}/>
+                        )
+                     })
+                }
+                {selected.value === 'Most Popular-Graph' && <MostPopuar/>}
         </div>
 
      

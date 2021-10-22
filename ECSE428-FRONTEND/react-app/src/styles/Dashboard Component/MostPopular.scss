@@ -1,17 +1,19 @@
 .popular-container {
-  margin-top: 20px;
-  box-sizing: content-box;
-  height: auto;
-  border-radius: 20px;
-  border: 2px solid #e9e8e8da;
-  background-color: white;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: 400;
+    padding-left: 5px;
+  }
 
-  svg {
-    width: 400px;
+  .graph {
+    border-radius: 50px;
+    background-color: #facf59;
+    // background-color: rgb(13, 197, 127);
     height: 300px;
+    width: 100%;
   }
 }
