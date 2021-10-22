@@ -1,0 +1,13 @@
+.board-container {
+  height: 100%;
+
+  .board-wrapper {
+    margin: 10px;
+    padding: 20px;
+
+    .grids {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}

@@ -1,9 +1,29 @@
-.dashboard-container{
-	display: flex;
-	flex-direction: row;
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.buttons{
-	display: flex;
-	justify-content: center;
-	align-items: center;
+
+.dashboard-content-margin {
+  padding: 0;
+  justify-content: flex-start;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  width: 100%;
+
+  .dashboard-container {
+    flex-direction: row;
+    display: flex;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: #fafafa;
+  }
+  .dashboard-body {
+    display: flex;
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
 }

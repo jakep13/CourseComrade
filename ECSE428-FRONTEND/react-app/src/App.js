@@ -10,6 +10,7 @@ import deleteAccount from './components/Settings Component/DeleteAccount';
 import Dashboard1 from './components/Dashboard Component/Dashboard1';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DeleteAccountForm from './components/Settings Component/DeleteAccountForm';
+import NavBar from './components/Nav Components/NavBar';
 
 function App() {
 
@@ -21,19 +22,15 @@ function App() {
   return (
     <UserContext.Provider value={{ user: userState }}>
       <div className='App'>
-      <Header/>
-        <div className="content-margin">
-          <Router>
+        <Router>
             <Switch>
               <Route exact path="/"> <AuthenticationComponent /></Route>
               <Route exact path="/Log In" component={LogIn}></Route>
               <Route exact path="/Create Account" component={CreateAccount}></Route>
               <Route exact path="/your-dashboard" component={Dashboard1}></Route>
-              <Route exact path="/deleteAccount" component={DeleteAccountForm}></Route>
+              <Route  path="/my-account"  exact component={DeleteAccountForm}></Route>
             </Switch>
           </Router>
-        </div>
-     
       </div>
     </UserContext.Provider>
 

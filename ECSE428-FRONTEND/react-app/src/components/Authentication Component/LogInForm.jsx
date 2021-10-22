@@ -32,10 +32,6 @@ export default function LogInForm() {
     
         axios.post('http://localhost:3100/login', params, config)
         .then((result) => {
-        // Redirect
-            //
-            //console.log(result)
-            //console.log("we made it into this b")
             axios.get('http://localhost:3100/', config).then((result) => {
                 history.push('/your-dashboard');
                 console.log(result);

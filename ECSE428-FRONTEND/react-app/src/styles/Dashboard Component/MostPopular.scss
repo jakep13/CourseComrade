@@ -1,0 +1,17 @@
+.popular-container {
+  margin-top: 20px;
+  box-sizing: content-box;
+  height: auto;
+  border-radius: 20px;
+  border: 2px solid #e9e8e8da;
+  background-color: white;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+
+  svg {
+    width: 400px;
+    height: 300px;
+  }
+}

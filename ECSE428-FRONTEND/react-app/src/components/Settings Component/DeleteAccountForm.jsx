@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import '../../styles/Authentication Components/Form.scss';
 import '../../styles/fonts.scss'
 import '../../styles/Global Components/Button.scss';
-import Card from '../../Global Components/Card';
-
+import DeleteAccount from '../Settings Component/DeleteAccount';
+import Button from 'react-bootstrap/Button';
 const axios = require('axios');
 
 const config = 
@@ -17,30 +16,25 @@ const config =
     }
 }
 export default function DeleteAccountForm() {
+    const [deleteAccount, setDeleteAccount] = useState(false);
+    const CloseDeleteAccount = () => setDeleteAccount(false);
+    const ShowDeleteAccount = () => setDeleteAccount(true);
     return (
         <>
             <div>
-            <Card
-                welcomeTitle="Delete Account"
-                subTitle="You won't be able to reactivate your account and your profile will be deleted permanently."
-                form="deleteAccount"
-                
-            />         
+                <Button onClick={ShowDeleteAccount}> Delete Account </Button> 
+                <DeleteAccount
+                    show={deleteAccount}
+                    setShow={setDeleteAccount}
+                    handleClose={CloseDeleteAccount}
+                    handleShow={ShowDeleteAccount}
+                />  
+            
         </div>
         
         </>
     )
- 
-   /* axios.post('http://localhost:3100/deleteAccount', params, config)
-    .then((result) => {
-        axios.get('http://localhost:3100/', config).then((result) => {
-            history.push('/');
-            console.log(result);
-            console.log("rania was here");
-        
-        })
 
-    })*/
     
     
 }

@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import DeleteAccount from '../Settings Component/DeleteAccount';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import TextField from '@mui/material/TextField';
+//import ButtonGroup from '@mui/material/ButtonGroup';
+//import TextField from '@mui/material/TextField';
 import '../../styles/Dashboard Component/Dashboard.scss'
+import NavBar from '../Nav Components/NavBar';
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import Search from '../Search Component/Search';
+import Board from './Board';
+import DeleteAccountForm from '../Settings Component/DeleteAccountForm';
 
 const axios = require('axios');
 
@@ -19,86 +24,25 @@ const config =
 
 export default function Dashboard1() {
 
-    const [deleteAccount, setDeleteAccount] = useState(false);
-    const CloseDeleteAccount = () => setDeleteAccount(false);
-    const ShowDeleteAccount = () => setDeleteAccount(true);
-    //const [showDeteAccountMessage, setDeleteAccountMessage] = useState(false);
-    
-    const [myClass, setClass] = useState('')
-
-    function getClassName(className) {
-        console.log(className);
-        setClass(className);
-    }
-
-    function addClass(className) {
-        const params = new URLSearchParams()
-        params.append('course', className)
-        //console.log(className)
-
-        axios.post('http://localhost:3100/addCourse', params, config)
-            .then((result) => {
-            // Redirect
-                console.log(result)
-            })
-            .catch((err) => {
-            })
-    }
-
-    function deleteClass(className) {
-        const params = new URLSearchParams()
-        params.append('course', className)
-        //console.log(className)
-
-        axios.post('http://localhost:3100/removeCourse', params, config)
-            .then((result) => {
-            // Redirect
-                console.log(result)
-            })
-            .catch((err) => {
-            })
-    }
-
-    function getClasses() {
-        
-    }
+    let [dashboardActive, setDashboardActive] = useState(true);
+    let [searchActive, setSearchActive] = useState(false);
+    let [myAccount, setMyAccount] = useState(false);
 
     return (
-
-        <div>
-            <h1> Welcome to your dashboard </h1>
-
-        <div className='dashboard-container'>
-
-            <ButtonGroup variant="outlined" aria-label="add/drop classes">
-                    
-                   <TextField
-                        id="search_bar"
-                        label="Search Class"
-                        helperText="e.g. ECSE428"
-                        onChange={(e) => getClassName(e.target.value)} 
-                    />
-
-                    <Button onClick={() => {addClass(myClass)}}> Add Class </Button>
-                    <Button onClick={() => {deleteClass(myClass)}}> Delete Class</Button>
-                </ButtonGroup>  
-
-            <div> <Button onClick={ShowDeleteAccount}> Settings </Button> 
-            </div>
-
-
-
-            {deleteAccount &&
-              
-               <DeleteAccount
-                    show={deleteAccount}
-                    setShow={setDeleteAccount}
-                    handleClose={CloseDeleteAccount}
-                    handleShow={ShowDeleteAccount}
+        <div className="dashboard-content-margin">
+            <div className="dashboard-container">
+                <NavBar
+                    setDashboardTab={setDashboardActive}
+                    setSearchTab={setSearchActive}
+                    setAccountTab={setMyAccount}
                 />
-            }
-
-            </div> 
+                <div style={{ width:"100%" , background:"#fafafa"}}>
+                    {(dashboardActive && searchActive=== false && myAccount=== false)  && (<Board />)}
+                    {searchActive && <Search />}
+                    {myAccount && <DeleteAccountForm />}
+                </div>
+               
+            </div>
         </div>
     )
 }
