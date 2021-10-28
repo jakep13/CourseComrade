@@ -3,6 +3,7 @@ import Bar from './Bar';
 import ClassResults from './ClassResults';
 import FriendResults from './FriendResults';
 import '../../styles/Search Component/Seach.scss';
+import EmptyState from '../../Global Components/EmptyState';
 
 export default function Search() {
     
@@ -72,14 +73,12 @@ export default function Search() {
                         <div className="title"> <b> Classes </b> </div>
                         <div className="button"> Add New Class</div>
                     </div>
-                    {classList &&
-                        <ClassResults results={classList}/>     
-                    }
-                    {!classList && <h1> no results </h1>}
+                    {classList ? <ClassResults results={classList}/>  : <EmptyState message="No classes found. Start searching"  />}
+
                 </div>
                 <div className="friendResults">
                     <div className="friend-header font-round"> <b> Friends </b></div>
-                    {friendList ? <FriendResults results={friendList}/> : <h1> </h1>}
+                    {friendList ? <FriendResults results={friendList}/> : <EmptyState message="No friends found. Start searching"  />}
                 </div>
         
             </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../styles/Friends Component/Friend.scss';
 import FriendRow from '../Friend Component/FriendRow';
+import EmptyState from '../../Global Components/EmptyState';
 
 export default function FriendResults({results}) {
     return (
@@ -10,7 +11,7 @@ export default function FriendResults({results}) {
                     results.map((item) => {
                         return ( <FriendRow name={item.username}/>)
                     })
-                    : <h1> No Results </h1>
+                    :    <EmptyState message="No friends found ..."/>
                 }
             </div>
         </div>

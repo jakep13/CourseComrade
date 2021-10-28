@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import'../../styles/Dashboard Component/Class.scss';
 import ClassRow from '../Dashboard Component/ClassRow';
-
+import EmptyState from '../../Global Components/EmptyState';
 
 function Class({results}) {
     return (
@@ -14,7 +14,7 @@ function Class({results}) {
                         )
                     })
                     :
-                    <h1> No results </h1>
+                    <EmptyState message="No classes found ..."/>
                 }  
         </div>
 

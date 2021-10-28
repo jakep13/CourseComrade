@@ -1,0 +1,19 @@
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+
+  svg {
+    margin: 20px;
+    height: 120px;
+    width: 120px;
+    fill: #cacaca;
+  }
+
+  .text {
+    font-size: 20px;
+    color: #6d6a6a;
+  }
+}
