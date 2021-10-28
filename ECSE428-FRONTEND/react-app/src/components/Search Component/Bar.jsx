@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import '../../styles/Search Component/Bar.scss';
 import Button from 'react-bootstrap/Button';
+import { RiSearchLine } from 'react-icons/ri';
 
 const axios = require('axios');
 
@@ -14,7 +15,11 @@ const config =
     }
 }
 
-export default function Bar() {
+
+
+/* to do when backend is done*/
+//const friendResults =[]
+export default function Bar({keyword, setKeyword}) {
     let [classResults, setClassResults] = useState(0);
     const [addClasses, setAddClasses] = useState(false);
     const CloseAddClass = () => setAddClasses(false);
@@ -60,16 +65,20 @@ export default function Bar() {
         <div className="searchbar-container">
             {/* <input className="searchbar" type="search" placeholder='Search a friend or a class' ></input>*/}
             <div className="results-container">
-                    <input
-                        id="search_bar"
-                        className="searchbar"
-                         label="Search Class"
-                         helperText="e.g. ECSE428"
-                         onChange={(e) => getClassName(e.target.value)} 
-                     />
+                <input
+                    id="search_bar"
+                    className="searchbar"
+                    label="Search Class"
+                    key="random1"
+                    helperText="e.g. ECSE428"
+                    value={keyword}
+                    placeholder='Search for a class or for a person'
+                    onChange={(e) => setKeyword(e.target.value)} 
+                />
+                
  
-                     <Button onClick={() => {addClass(myClass)}}> Add Class </Button>
-                     <Button onClick={() => {deleteClass(myClass)}}> Delete Class</Button>
+                {/* <Button onClick={() => {addClass(myClass)}}> Add Class </Button>
+                     <Button onClick={() => {deleteClass(myClass)}}> Delete Class</Button>*/}
             </div>
        </div>
     )
