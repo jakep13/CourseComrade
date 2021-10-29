@@ -20,12 +20,20 @@ const config =
 }
 
 export default function ModifyAccountForm() {
- 
+    const [modifyAccount, setModifyAccount] = useState(false);
+    const CloseModifyAccount = () => setModifyAccount(false);
+    const ShowModifyAccount = () => setModifyAccount(true);
     return (
         <>
         <div>
-        <div className="font-title text-title"> Modify Your Password</div>
-        <ModifyAccount/>  
+        <Button onClick={ShowModifyAccount}> Modify Account </Button> 
+        <ModifyAccount
+            show={modifyAccount}
+            setShow={setModifyAccount}
+            handleClose={CloseModifyAccount}
+            handleShow={ShowModifyAccount}
+        />
+       
         </div>
         
         </>
