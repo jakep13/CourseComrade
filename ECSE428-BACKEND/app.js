@@ -131,6 +131,7 @@ app.post('/deleteAccount', auth, async (req, res) => {
 app.post('/addCourse', auth, async (req, res) => {
 
     var new_course = await Course.findOne({ code: req.body.course });
+    console.log(new_course);
 
     //if course doesn't exist we populate it 
     // if(new_course == null){
@@ -183,9 +184,11 @@ app.post('/populateCourse', (req, res) => {
 //get all events of logged in user
 app.get('/userCourses', auth, async (req, res) => {
     const cur_user = await User.findOne({ username: req.session.userid });
+    console.log(cur_user);
     res.send({
         courses: cur_user.courses
     });
+
 })
 
 

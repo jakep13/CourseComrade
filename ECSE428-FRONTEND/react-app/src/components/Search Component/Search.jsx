@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Bar from './Bar';
 import ClassResults from './ClassResults';
+import ClassDatabase  from './ClassDatabase';
 import FriendResults from './FriendResults';
 import '../../styles/Search Component/Seach.scss';
 import EmptyState from '../../Global Components/EmptyState';
@@ -15,20 +16,7 @@ export default function Search() {
         //  setClassListDefault(data)
         //})
         //}
-    const searchClassResults = [
-            { department: 'ECSE', code: 'ECSE428', className: 'Software Engineering Practices' },
-            { department: 'ECSE', code: 'ECSE200', className: 'Electric Circuits 1' },
-            { department: 'ECSE', code: 'ECSE222', className: 'Digital Logic' },
-            { department: 'ECSE', code: 'ECSE408', className: 'Communication Systems' },
-            { department: 'ECON', code: 'ECON337', className: 'Intro Econometrics 1' },
-            { department: 'ECON', code: 'ECON546', className: 'Game Theory' },
-            { department: 'ECON', code: 'ECON225', className: 'Economics of the Environment' },
-            { department: 'COMP', code: 'COMP202', className: 'Foundation of Programmations' },
-            { department: 'COMP', code: 'COMP208', className: 'Computer Programming for PS&E' },
-            { department: 'COMP', code: 'COMP250', className: 'Intro to Computer Science' },
-            { department: 'COMP', code: 'COMP251', className: 'Algorithms and Structures' },
-    ];
-
+  
     const friendsResults = [
         { username: 'James' },
         { username: 'Robert' },
@@ -48,7 +36,7 @@ export default function Search() {
     ]
     
     const [input, setInput] = useState('');
-    const [classListDefault, setClassListDefault] = useState(searchClassResults);
+    const [classListDefault, setClassListDefault] = useState(ClassDatabase);
     const [friendListDefault, setFriendListDefault] = useState(friendsResults);
     const [classList, setClassList] = useState();
     const [friendList, setFriendList] = useState();

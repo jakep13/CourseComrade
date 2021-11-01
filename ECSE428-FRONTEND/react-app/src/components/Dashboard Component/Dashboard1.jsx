@@ -36,7 +36,8 @@ export default function Dashboard1() {
                     setSearchTab={setSearchActive}
                     setAccountTab={setMyAccount}
                 />
-                <div style={{ width:"100%" , background:"#fafafa"}}>
+                <div style={{ width: "100%", background: "#fafafa" }}>
+                    
                     {(dashboardActive && searchActive=== false && myAccount=== false)  && (<Board />)}
                     {searchActive && <Search />}
                     {myAccount && <DeleteAccountForm />}

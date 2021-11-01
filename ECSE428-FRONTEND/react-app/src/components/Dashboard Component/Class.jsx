@@ -36,7 +36,7 @@ function Class() {
                 {(selected.value === 'View All' || selected.value === 'Most Popular') && 
                      classArray.map((item) => {
                         return (
-                            <ClassRow department={item.department} classCode={item.classCode} className={item.className}/>
+                            <ClassRow department={item.department} classCode={item.classCode} className={item.className} buttonMessage="Remove"/>
                         )
                      })
                 }
