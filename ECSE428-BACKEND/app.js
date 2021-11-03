@@ -191,6 +191,38 @@ app.get('/userCourses', auth, async (req, res) => {
 
 })
 
+// search for student 
+app.get('/user', auth, async (req, res) => {
+    const user = await User.findOne({ username: req.body.username });
+
+    // authenticate user exists
+    if (user != null) {
+        const send_user = {
+            username: user.username,
+            courses: user.courses
+        }
+
+        res.status(200).send({ user: send_user });
+    } else {
+        res.status(400).send({
+            message: 'no user exists with that username'
+        });
+    }
+})
+
+// get all users
+app.get('/users', auth, async (req, res) => {
+    User.find({}, function (err, users) {
+        let usernames = {}
+
+        for (let i = 0; i < users.length; i++) {
+            usernames[i] = users[i].username;
+        }
+
+        res.send(usernames);
+    });
+})
+
 
 
 module.exports = app;
