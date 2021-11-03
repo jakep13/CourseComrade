@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const friends = require("mongoose-friends")
 
 const Schema = mongoose.Schema;
 
@@ -19,6 +20,7 @@ const userSchema = new Schema({
     }
 })
 
+userSchema.plugin(friends());
 module.exports = { User: mongoose.model("User", userSchema, "userCollection") };
 
 
