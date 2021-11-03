@@ -111,22 +111,7 @@ app.post('/deleteAccount', auth, async (req, res) => {
     });
 })
 
-// deleteAccount = (username, password) => {
-//     var usr = User.findOne({username: username})
-//     if (usr.password === password) {
-//         User.deleteOne({username: username});
-//         return true; 
-//     }else{
-//         return false;
-//     }
-// }
-
-//user wants to add COMP250, 
-//is it in the courses collection, 
-//if not, don't add it to user
-// if it is
 //find User, and add course to list
-
 app.post('/addCourse', auth, async (req, res) => {
     const course_regex = new RegExp('^[A-Z]{4}[0-9]{3}$');
     if (course_regex.test(req.body.course)) {
