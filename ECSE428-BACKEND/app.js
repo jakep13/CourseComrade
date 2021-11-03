@@ -76,7 +76,7 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.get('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 })
@@ -182,13 +182,17 @@ app.post('/populateCourse', (req, res) => {
 })
 
 //get all events of logged in user
-app.get('/userCourses', auth, async (req, res) => {
+app.get('/courses', auth, async (req, res) => {
     const cur_user = await User.findOne({ username: req.session.userid });
-    console.log(cur_user);
-    res.send({
-        courses: cur_user.courses
-    });
 
+    Course.find(
+        { code: { $in: cur_user.courses } }, function (err, courses) {
+            if (err) {
+                res.status(403);
+                return res.send({ message: "error" });
+            }
+            return res.send({ courses });
+        });
 })
 
 // search for student 
