@@ -8,13 +8,13 @@ Feature: Add Class to User Profile
         Given student <username> is logged in to CourseComrade account
 
     Scenario Outline: Register class to student profile (Normal Flow)
-        When student <username> registers for class <course> on CourseComrade
+        When student <username> registers for class <course> - <course_name> on CourseComrade
         Then <course> should be added to student <username> profile
         Examples:
-            | username  | course  |
-            | big_suze  | COMP551 |
-            | bob123    | ECSE321 |
-            | test_user | COMP330 |
+            | username  | course  | course_name                   |
+            | big_suze  | COMP551 | Applied Machine Learning      |
+            | bob123    | ECSE321 | Intro to Software Engineering |
+            | test_user | COMP330 | Theory of Computation         |
 
     Scenario Outline: Attempt to register for an invalid course (Error Flow)
         When student <username> registers for an invalid class <course> on CourseComrade

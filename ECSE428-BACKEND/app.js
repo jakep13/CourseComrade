@@ -101,15 +101,14 @@ app.post('/createAccount', (req, res) => {
 });
 
 app.post('/deleteAccount', auth, async (req, res) => {
-
-    User.deleteOne({ username: req.session.userid }).then(function () {
-        console.log("Data deleted\n"); // Success
-    }).catch(function (error) {
-        console.log(error); // Failure
+    User.deleteOne({ username: req.session.userid }, function (err, user) {
+        if (err) {
+            res.status(403).send({ message: "error: account not deleted" });
+        } else {
+            req.session.destroy();
+            res.status(200).send("account deleted");
+        }
     });
-
-    req.session.destroy();
-    res.send("account deleted");
 })
 
 // deleteAccount = (username, password) => {
@@ -129,19 +128,16 @@ app.post('/deleteAccount', auth, async (req, res) => {
 //find User, and add course to list
 
 app.post('/addCourse', auth, async (req, res) => {
-
-    var new_course = await Course.findOne({ code: req.body.course });
-    console.log(new_course);
-
-    //if course doesn't exist we populate it 
-    // if(new_course == null){
-    //     new_course = new Course({code : req.body.course})
-    //     new_course.save();
-    // }
-
     const course_regex = new RegExp('^[A-Z]{4}[0-9]{3}$');
-    //console.log(req.body.course);
     if (course_regex.test(req.body.course)) {
+        var new_course = await Course.findOne({ code: req.body.course });
+
+        //if course doesn't exist we populate it 
+        if (new_course == null) {
+            new_course = new Course({ code: req.body.course, name: req.body.name })
+            new_course.save();
+        }
+
         User.findOneAndUpdate(
             { username: req.session.userid },
             { $push: { courses: req.body.course } },
@@ -151,7 +147,7 @@ app.post('/addCourse', auth, async (req, res) => {
                     res.send({ message: "failure - course cannot be added " });
                 }
                 else res.send({ message: "success - course added" })
-            })
+            });
     } else {
         res.status(402);
         res.send({ message: "failure - incorrect course format " });
@@ -159,15 +155,10 @@ app.post('/addCourse', auth, async (req, res) => {
 })
 
 app.post('/removeCourse', auth, (req, res) => {
-    // let user = await User.findOne({ username: req.session.userid })
-    // console.log(user)
-    // console.log(req.body.course)
-    // let registeredCourses = user.courses;
-
     User.findOneAndUpdate(
         { username: req.session.userid },
         { $pull: { courses: req.body.course } },
-        function (err, doc) {
+        function (err, user) {
             if (err) {
                 res.status(403);
                 return res.send({ message: "failing" });
@@ -177,7 +168,12 @@ app.post('/removeCourse', auth, (req, res) => {
 })
 
 app.post('/populateCourse', (req, res) => {
+    var newCourse = new Course({ code: req.body.course, name: req.body.name })
 
+    newCourse.save(function (err, course) {
+        if (err) res.status(403).send({ message: "error: course already exists" });
+        else res.send({ message: "course created successfully" })
+    })
 
 })
 

@@ -6,13 +6,13 @@ Feature: Delete Class From Student Account
 
     Scenario: Delete Class From Student Account (Normal Flow)
         Given student "big_suze" is logged in
-        And the student is registered to "ECSE428"
+        And the student is registered to "ECSE428" - "Software Validation"
         When the student request to remove the course "ECSE428" from their profile
         Then the student is registered to no courses
 
     Scenario: Delete Unregistered Class From Student Account (Error Flow)
         Given student "big_suze" is logged in
-        And the student is registered to "ECSE428"
-        When the student request to remove the unregistered course "COMP332" from their profile
+        And the student is registered to "ECSE428" - "Software Validation"
+        When the student request to remove the unregistered course "COMP330" from their profile
         Then "failure - cannot delete unregistered course" error message is issued
         And the student is registered to "ECSE428"
