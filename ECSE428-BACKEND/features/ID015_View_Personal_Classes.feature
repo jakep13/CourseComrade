@@ -13,7 +13,7 @@ Feature: View Personal Classes
       | MATH328 | History and Philosophy of Math |
       | MATH240 | Discrete Structures            |
       | COMP330 | Theory of Computation          |
-    When the student "big_suze" requests to view their classes
+    When the student requests to view their classes
     Then the following list of classes is generated:
       | course  | course_name                    |
       | COMP551 | Applied Machine Learning       |
