@@ -172,6 +172,7 @@ app.get('/courses', auth, async (req, res) => {
                 res.status(403);
                 return res.send({ message: "error" });
             }
+
             return res.send({ courses });
         });
 })

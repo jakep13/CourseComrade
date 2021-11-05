@@ -103,7 +103,6 @@ defineFeature(feature, (test) => {
             table.forEach( (c) => {
                 verify_registered_courses.push(c.course);
             });
-            
             var registered_courses_cleaned = [];
             registered_courses.body['courses'].forEach(function(course) {
                 registered_courses_cleaned.push(course.code);
@@ -114,20 +113,30 @@ defineFeature(feature, (test) => {
 
 
     test('Attempt to view personal registered classes when no classes are registered (Error Flow)', ({ given, and, when, then }) => {
-    	given(/^student "(.*)" is logged in$/, (arg0) => {
+    	var registered_courses;
+        var verify_registered_courses = [];
 
+    	given(/^student "(.*)" is logged in$/, async (username) => {
+            const password = "pass123"
+            const user = await req.post("/createAccount").send({ username, password, verif_password: password });
+            const login_res = await req.post("/login").send({ username, password });
+            cookies = login_res.headers['set-cookie']
+            expect(login_res.statusCode).toBe(200);
     	});
 
-    	and('the student is not registered to any courses', () => {
-
+    	and('the student is not registered to any courses', async () => {
+            registered_courses = await req.get("/courses").set('cookie', cookies);
+            if (registered_courses.body['courses'].length == 0) {
+                registered_courses.body['message'] = "you are not registered to any classes"
+            }
     	});
 
     	when('the student requests to view their classes', () => {
-
+            expect(registered_courses.body['courses']).toStrictEqual([]);
     	});
 
-    	then(/^a resulting "(.*)" message is issued$/, (arg0) => {
-
+    	then(/^a resulting "(.*)" message is issued$/, (message) => {
+            expect(registered_courses.body['message']).toBe(message);
     	});
     });
 
