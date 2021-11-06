@@ -35,9 +35,17 @@ export default function Search() {
         
     ]
     
+    async function makeGetRequest() {
+        let res = await axios.get('http://localhost:3100/users');
+        const [friendListDefault, setFriendListDefault] = useState(res.data);
+        console.log(friendListDefault);
+      }
+      
+    makeGetRequest();
+
     const [input, setInput] = useState('');
     const [classListDefault, setClassListDefault] = useState(ClassDatabase);
-    const [friendListDefault, setFriendListDefault] = useState(friendsResults);
+    //const [friendListDefault, setFriendListDefault] = useState(friendsResults);
     const [classList, setClassList] = useState();
     const [friendList, setFriendList] = useState();
     
