@@ -162,7 +162,7 @@ app.post('/populateCourse', (req, res) => {
 
 })
 
-//get all events of logged in user
+//get all courses of logged in user
 app.get('/courses', auth, async (req, res) => {
     const cur_user = await User.findOne({ username: req.session.userid });
 
@@ -175,6 +175,20 @@ app.get('/courses', auth, async (req, res) => {
 
             return res.send({ courses });
         });
+})
+
+//get all courses in database
+app.get('/getAllCourses', auth, async (req, res) => {
+    Course.find({}, function (err, courses) {
+        if (err) {
+            res.status(403);
+            return res.send({ message: "error" });
+        }
+        courseCodes = courses.map(c => {
+            return c.code;
+        });
+        return res.send({ courseCodes });
+    });
 })
 
 // search for student 
