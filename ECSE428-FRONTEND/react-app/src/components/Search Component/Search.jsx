@@ -27,17 +27,18 @@ export default function Search() {
     const [friendList, setFriendList] = useState();
     
     const fetchData = async () => {
-        console.log("fetching data")
+        console.log("fetching data");
         axios.get('http://localhost:3100/users', config).then((result) => {
-            console.log(result.data);
-            var toArray = Object.entries(result.data).reduce((ini, [k, v]) => (ini[k] = v, ini), []);
-            //setFriendList(result);
+            const toArray = Object.entries(result.data).reduce((ini, [k, v]) => (ini[k] = v, ini), []);
             setFriendListDefault(toArray);
             console.log("fetch data for friends:", friendListDefault);
 
         }).catch((err) => {
-            console.log(err)
+            console.log("i am here")
         })
+
+
+       
     }
     
   
