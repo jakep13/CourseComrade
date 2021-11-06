@@ -1,22 +1,5 @@
 import React, {useState} from 'react';
 import '../../styles/Search Component/Bar.scss';
-import Button from 'react-bootstrap/Button';
-import { RiSearchLine } from 'react-icons/ri';
-
-const axios = require('axios');
-
-const config = 
-{
-    withCredentials: true,
-    headers: {
-      'Acess-Control-Allow-Origin':true,
-      'Content-Type': 'application/x-www-form-urlencoded'
-
-    }
-}
-
-
-
 export default function Bar({keyword, setKeyword}) {
 
     return (
