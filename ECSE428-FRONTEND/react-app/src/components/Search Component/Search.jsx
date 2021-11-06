@@ -20,60 +20,41 @@ const config =
 
 
 export default function Search() {
-    
-        /* to do when backend is done */
-    const friendsResults = [
-        { username: 'James' },
-        { username: 'Robert' },
-        { username: 'Micheal' },
-        { username: 'John' },
-        { username: 'William' },
-        { username: 'Richard' },
-        { username: 'Joseph' },
-        { username: 'Mary' },
-        { username: 'Patricia'},
-        { username: 'Jennifer' },
-        { username: 'Linda' },
-        { username: 'Elizabeth' },
-        { username: 'Susan' },
-        { username: 'Jessica'},
-        
-    ]
-    
-
     const [input, setInput] = useState('');
     const [classListDefault, setClassListDefault] = useState(ClassDatabase);
     const [friendListDefault, setFriendListDefault] = useState();
     const [classList, setClassList] = useState();
     const [friendList, setFriendList] = useState();
     
-    const updateInput = async (input) => {
-        const filteredClass = classListDefault.filter(item => {
-            return item.code.toLowerCase().includes(input.toLowerCase())
-        })
-        /*const filteredFriends = friendListDefault.filter(item => {
-            return item.username.toLowerCase().includes(input.toLowerCase())
-        })*/
-        setInput(input);
-        setClassList(filteredClass);
-        //setFriendList(filteredFriends);
-    }
-
     const fetchData = async () => {
         console.log("fetching data")
-        axios.get('http://localhost:3100/users').then((result) => {
-            setFriendListDefault(result);
+        axios.get('http://localhost:3100/users', config).then((result) => {
+            console.log(result.data);
+            var toArray = Object.entries(result.data).reduce((ini, [k, v]) => (ini[k] = v, ini), []);
+            //setFriendList(result);
+            setFriendListDefault(toArray);
             console.log("fetch data for friends:", friendListDefault);
 
-            //axios.get('http://')
-            
         }).catch((err) => {
             console.log(err)
         })
     }
+    
   
+    const updateInput = async (input) => {
+        const filteredClass = classListDefault.filter(item => {
+            return item.code.toLowerCase().includes(input.toLowerCase())
+        })
+        const filteredFriends = friendListDefault.filter(item => {
+            return item.toLowerCase().includes(input.toLowerCase())
+        })
+        
+        setInput(input);
+        setClassList(filteredClass);
+        setFriendList(filteredFriends);
+    }
 
-    useEffect( () => {fetchData()},[]);
+    useEffect( () => {fetchData()}, friendListDefault);
     return (
         <div className="search-container">
             <Bar input={input} setKeyword={updateInput} />
