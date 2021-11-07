@@ -4,7 +4,7 @@ const supertest = require("supertest");
 const req = supertest(app)
 
 const feature = loadFeature(
-        "./features/ID009_Search_for_classes_by_Class_Code.feature"
+    "./test/features/ID009_Search_for_classes_by_Class_Code.feature"
 );
 
 let responseMessage = "";
@@ -40,7 +40,7 @@ defineFeature(feature, (test) => {
         });
     });
 
-    
+
     test('Search for a class that does not exist (Error Flow)', ({ given, when, then }) => {
         given(/^student (.*) is logged in to CourseComrade account$/, async (username) => {
             const password = "mypassword1"

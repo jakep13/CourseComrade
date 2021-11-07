@@ -5,7 +5,7 @@ const { assert } = require("console");
 const req = supertest(app)
 
 const feature = loadFeature(
-    "./features/ID015_View_Personal_Classes.feature"
+    "./test/features/ID015_View_Personal_Classes.feature"
 );
 
 let responseMessage = "";

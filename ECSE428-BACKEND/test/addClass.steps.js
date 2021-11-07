@@ -4,7 +4,7 @@ const supertest = require("supertest");
 const req = supertest(app)
 
 const feature = loadFeature(
-        "./features/ID010_Add_Class_to_User_Profile.feature"
+        "./test/features/ID010_Add_Class_to_User_Profile.feature"
 );
 
 let responseMessage = "";

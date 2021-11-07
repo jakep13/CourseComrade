@@ -1,13 +1,13 @@
 const { defineFeature, loadFeature } = require("jest-cucumber")
 const supertest = require("supertest");
 const app = require("../app");
-const { User } = require('./../models/user')
-const { Course } = require('./../models/course')
+const { User } = require('../models/user')
+const { Course } = require('../models/course')
 
 const req = supertest(app)
 
 const feature = loadFeature(
-  "./features/ID001_Create_Student_Account.feature"
+  "./test/features/ID001_Create_Student_Account.feature"
 );
 
 

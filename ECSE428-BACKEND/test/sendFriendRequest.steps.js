@@ -7,7 +7,7 @@ const { Course } = require('../models/course')
 const req = supertest(app)
 
 const feature = loadFeature(
-  "./features/ID005_Send_Friend_Request.feature"
+  "./test/features/ID005_Send_Friend_Request.feature"
 );
 
 const password = "pass123";
