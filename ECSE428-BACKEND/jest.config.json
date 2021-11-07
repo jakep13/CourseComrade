@@ -1,5 +1,5 @@
 {
 "testMatch":["**/*.steps.js"],
 "testEnvironment" : "node",
-"setupFilesAfterEnv": ["<rootDir>/features/setup/setup.js"]
+"setupFilesAfterEnv": ["<rootDir>/test/setup/setup.js"]
 }

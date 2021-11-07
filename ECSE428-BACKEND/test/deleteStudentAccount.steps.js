@@ -5,7 +5,7 @@ const req = supertest(app)
 const { User } = require('./../models/user')
 
 const feature = loadFeature(
-  "./features/ID003_Delete_Student_Account.feature"
+  "./test/features/ID003_Delete_Student_Account.feature"
 );
 
 var cookies;

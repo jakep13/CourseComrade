@@ -11,14 +11,23 @@ const config =
     headers: {
       'Acess-Control-Allow-Origin':true,
       'Content-Type': 'application/x-www-form-urlencoded'
-
     }
 }
 
-
-function Class() {
+export default function Class() {
     const [selected, setSelected] = useState({ value: 'View All' });
- 
+    const [registeredClass, setRegisteredClass] = useState();
+
+    const fetchData = async () => {
+     
+        axios.get('http://localhost:3100/courses', config).then((result) => {
+            console.log(result.data)
+            setRegisteredClass(result.data);
+            console.log(registeredClass);
+        }).catch((err) => {
+            console.log("ERROR")
+        })
+    }
     
     const classArray = [
         { department: "ECSE", classCode: "ECSE428", className: "Software Engineering Practice" },
@@ -34,7 +43,7 @@ function Class() {
     
     }
 
- 
+    useEffect( () => {fetchData()}, registeredClass);
     return (
         <div className="class-container">
             <div className="header">
@@ -49,7 +58,7 @@ function Class() {
             </div>
             <div className="class-wrapper">
                 {(selected.value === 'View All' || selected.value === 'Most Popular') && 
-                     classArray?.map((item) => {
+                     registeredClass?.map((item) => {
                         return (
                             <ClassRow  classCode={item.code} className={item.name} buttonMessage="Remove"/>
                         )
@@ -57,10 +66,6 @@ function Class() {
                 }
                 {selected.value === 'Most Popular-Graph' && <MostPopuar/>}
         </div>
-
-     
     </div>
     )
 }
-
-export default Class

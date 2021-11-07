@@ -4,7 +4,7 @@ const supertest = require("supertest");
 const req = supertest(app)
 
 const feature = loadFeature(
-  "./features/ID002_Log_In.feature"
+  "./test/features/ID002_Log_In.feature"
 );
 
 let responseMessage = "";

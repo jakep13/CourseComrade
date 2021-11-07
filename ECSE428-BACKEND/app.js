@@ -95,7 +95,7 @@ app.post('/createAccount', (req, res) => {
             if (err) res.status(403).send({ message: "username already taken" });
             else res.send({ message: "user created successfully" })
         })
-    } else {
+    } else {    
         res.status(400).send({ message: "please enter your password twice" });
     }
 });
@@ -207,17 +207,43 @@ app.get('/getAllCourses', auth, async (req, res) => {
     });
 })
 
+
+// get specific course
+app.get('/getCourse', auth, async (req, res) => {
+    const course = await Course.findOne({ code: req.body.course }).exec();
+    if (course == null) {
+        res.status(403);
+        return res.send({ message: "invalid course input" });
+    }
+    return res.status(200).send({
+        code: course.code,
+        name: course.name
+    });
+
+    // Course.find({}, function (err, courses) {
+    //     if (err) {
+    //         res.status(403);
+    //         return res.send({ message: "error" });
+    //     }
+    //     var courseToSend = courses.find(c => c.code === req.body.course);
+    //     if (courseToSend == undefined) {
+    //         res.status(403);
+    //         return res.send({ message: "invalid course input" });
+    //     }
+    //     return res.send(courseToSend);
+    // });
+})
+
+
 // search for student 
 app.get('/user', auth, async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
-
     // authenticate user exists
     if (user != null) {
         const send_user = {
             username: user.username,
             courses: user.courses
         }
-
         res.status(200).send({ user: send_user });
     } else {
         res.status(400).send({
