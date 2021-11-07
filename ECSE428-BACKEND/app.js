@@ -213,6 +213,7 @@ app.get('/getCourse', auth, async (req, res) => {
     const course = await Course.findOne({ code: req.body.course }).exec();
     if (course == null) {
         res.status(403);
+        console.log(req.body.course);
         return res.send({ message: "invalid course input" });
     }
     res.status(200);
