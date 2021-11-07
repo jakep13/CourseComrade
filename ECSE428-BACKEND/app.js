@@ -207,6 +207,22 @@ app.get('/getAllCourses', auth, async (req, res) => {
     });
 })
 
+
+// get specific course
+app.get('/getCourse', auth, async (req, res) => {
+    const course = await Course.findOne({ code: req.body.course }).exec();
+    if (course == null) {
+        res.status(403);
+        return res.send({ message: "invalid course input" });
+    }
+    res.status(200);
+    return res.send({
+        code: course.code,
+        name: course.name
+    });
+})
+
+
 // search for student 
 app.get('/user', auth, async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
