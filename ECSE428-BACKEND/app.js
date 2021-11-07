@@ -213,14 +213,25 @@ app.get('/getCourse', auth, async (req, res) => {
     const course = await Course.findOne({ code: req.body.course }).exec();
     if (course == null) {
         res.status(403);
-        console.log(req.body.course);
         return res.send({ message: "invalid course input" });
     }
-    res.status(200);
-    return res.send({
+    return res.status(200).send({
         code: course.code,
         name: course.name
     });
+
+    // Course.find({}, function (err, courses) {
+    //     if (err) {
+    //         res.status(403);
+    //         return res.send({ message: "error" });
+    //     }
+    //     var courseToSend = courses.find(c => c.code === req.body.course);
+    //     if (courseToSend == undefined) {
+    //         res.status(403);
+    //         return res.send({ message: "invalid course input" });
+    //     }
+    //     return res.send(courseToSend);
+    // });
 })
 
 
