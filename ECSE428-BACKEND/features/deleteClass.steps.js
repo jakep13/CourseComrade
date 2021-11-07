@@ -34,8 +34,8 @@ defineFeature(feature, (test) => {
       expect(res.statusCode).toBe(200);
     });
 
-    and(/^the student is registered to "(.*)"$/, async (course) => {
-      const res = await req.post("/addCourse").set('cookie', cookies).send({ course });
+    and(/^the student is registered to "(.*)" - "(.*)"$/, async (course, name) => {
+      const res = await req.post("/addCourse").set('cookie', cookies).send({ course, name });
       expect(res.statusCode).toBe(200);
     });
 
@@ -46,8 +46,8 @@ defineFeature(feature, (test) => {
     });
 
     then('the student is registered to no courses', async () => {
-      const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
-      const courses = coursesRes.body.courses;
+      const coursesRes = await req.get("/courses").set('cookie', cookies).send();
+      const courses = coursesRes.body;
 
       expect(courses.length).toBe(0);
     });
@@ -63,8 +63,8 @@ defineFeature(feature, (test) => {
       expect(res.statusCode).toBe(200);
     });
 
-    and(/^the student is registered to "(.*)"$/, async (course) => {
-      const res = await req.post("/addCourse").set('cookie', cookies).send({ course });
+    and(/^the student is registered to "(.*)" - "(.*)"$/, async (course, name) => {
+      const res = await req.post("/addCourse").set('cookie', cookies).send({ course, name });
       expect(res.statusCode).toBe(200);
     });
 
@@ -79,11 +79,12 @@ defineFeature(feature, (test) => {
     });
 
     and(/^the student is registered to "(.*)"$/, async (course) => {
-      const coursesRes = await req.get("/userCourses").set('cookie', cookies).send();
-      const courses = coursesRes.body.courses;
+      const coursesRes = await req.get("/courses").set('cookie', cookies).send();
+      const courses = coursesRes.body;
+      const courseCodes = courses.map(course => course.code);
 
       expect(courses.length).toBe(1);
-      expect(courses.includes(course)).toBe(true);
+      expect(courseCodes.includes(course)).toBe(true);
     });
   });
 

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Box from './Box';
 import '../../styles/Dashboard Component/Board.scss';
 import Class from './Class';
 import Friend from '../Friend Component/Friend';
 
 
-
 export default function Board() {
+   
     return (
         <div className="board-container">
             <div className="board-wrapper">

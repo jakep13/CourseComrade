@@ -23,6 +23,7 @@
     "jest-cucumber": "^3.0.1",
     "mongodb-memory-server": "^7.4.4",
     "mongoose": "^6.0.9",
+    "mongoose-friends": "^0.2.5",
     "node": "^16.10.0",
     "nodemon": "^2.0.13",
     "npm": "^7.24.2",

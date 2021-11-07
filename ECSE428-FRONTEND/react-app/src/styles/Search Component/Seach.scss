@@ -1,0 +1,31 @@
+.result-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
+  padding: 20px;
+
+  .class-header,
+  .friend-header {
+    box-sizing: content-box;
+    height: 40px;
+    border: 2px solid #e9e8e8da;
+    display: flex;
+    align-items: center;
+    .title {
+      font-size: 20px;
+    }
+    .button {
+      font-size: 14px;
+      padding-right: 5px;
+    }
+    padding-left: 20px;
+  }
+  .class-header {
+    background-color: #9eb5eef1;
+    display: flex;
+    justify-content: space-between;
+  }
+  .friend-header {
+    background-color: #facf59;
+  }
+}

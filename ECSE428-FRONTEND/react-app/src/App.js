@@ -14,16 +14,18 @@ import NavBar from './components/Nav Components/NavBar';
 
 function App() {
 
+
   //token used for auth???
-  const [token, setToken] = useState();
+  const [token, setToken] = useState(document.cookie);
   const [userState, setUserState] = useState();
+
 
  
   return (
     <UserContext.Provider value={{ user: userState }}>
       <div className='App'>
         <Router>
-            <Switch>
+          <Switch>
               <Route exact path="/"> <AuthenticationComponent /></Route>
               <Route exact path="/Log In" component={LogIn}></Route>
               <Route exact path="/Create Account" component={CreateAccount}></Route>

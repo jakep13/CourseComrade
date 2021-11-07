@@ -28,8 +28,8 @@ defineFeature(feature, (test) => {
                         expect(login_res.statusCode).toBe(200);
                 });
 
-                when(/^student (.*) registers for class (.*) on CourseComrade$/, async (username, course) => {
-                        const registration_res = await req.post("/addCourse").set('cookie', cookies).send({ course });
+                when(/^student (.*) registers for class (.*) - (.*) on CourseComrade$/, async (username, course, name) => {
+                        const registration_res = await req.post("/addCourse").set('cookie', cookies).send({ course, name });
                         responseStatus = registration_res.statusCode;
                         responseMessage = registration_res.body.message;
                         registered = (responseStatus == 200)

@@ -76,7 +76,7 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.get('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 })
@@ -101,46 +101,28 @@ app.post('/createAccount', (req, res) => {
 });
 
 app.post('/deleteAccount', auth, async (req, res) => {
-
-    User.deleteOne({ username: req.session.userid }).then(function () {
-        console.log("Data deleted\n"); // Success
-    }).catch(function (error) {
-        console.log(error); // Failure
+    User.deleteOne({ username: req.session.userid }, function (err, user) {
+        if (err) {
+            res.status(403).send({ message: "error: account not deleted" });
+        } else {
+            req.session.destroy();
+            res.status(200).send("account deleted");
+        }
     });
-
-    req.session.destroy();
-    res.send("account deleted");
 })
 
-// deleteAccount = (username, password) => {
-//     var usr = User.findOne({username: username})
-//     if (usr.password === password) {
-//         User.deleteOne({username: username});
-//         return true; 
-//     }else{
-//         return false;
-//     }
-// }
-
-//user wants to add COMP250, 
-//is it in the courses collection, 
-//if not, don't add it to user
-// if it is
 //find User, and add course to list
-
 app.post('/addCourse', auth, async (req, res) => {
-
-    var new_course = await Course.findOne({ code: req.body.course });
-
-    //if course doesn't exist we populate it 
-    // if(new_course == null){
-    //     new_course = new Course({code : req.body.course})
-    //     new_course.save();
-    // }
-
     const course_regex = new RegExp('^[A-Z]{4}[0-9]{3}$');
-    //console.log(req.body.course);
     if (course_regex.test(req.body.course)) {
+        var new_course = await Course.findOne({ code: req.body.course });
+
+        //if course doesn't exist we populate it 
+        if (new_course == null) {
+            new_course = new Course({ code: req.body.course, name: req.body.name })
+            new_course.save();
+        }
+
         User.findOneAndUpdate(
             { username: req.session.userid },
             { $push: { courses: req.body.course } },
@@ -150,7 +132,7 @@ app.post('/addCourse', auth, async (req, res) => {
                     res.send({ message: "failure - course cannot be added " });
                 }
                 else res.send({ message: "success - course added" })
-            })
+            });
     } else {
         res.status(402);
         res.send({ message: "failure - incorrect course format " });
@@ -158,15 +140,10 @@ app.post('/addCourse', auth, async (req, res) => {
 })
 
 app.post('/removeCourse', auth, (req, res) => {
-    // let user = await User.findOne({ username: req.session.userid })
-    // console.log(user)
-    // console.log(req.body.course)
-    // let registeredCourses = user.courses;
-
     User.findOneAndUpdate(
         { username: req.session.userid },
         { $pull: { courses: req.body.course } },
-        function (err, doc) {
+        function (err, user) {
             if (err) {
                 res.status(403);
                 return res.send({ message: "failing" });
@@ -176,18 +153,245 @@ app.post('/removeCourse', auth, (req, res) => {
 })
 
 app.post('/populateCourse', (req, res) => {
+    var newCourse = new Course({ code: req.body.course, name: req.body.name })
 
-
+    newCourse.save(function (err, course) {
+        if (err) res.status(403).send({ message: "error: course already exists" });
+        else res.send({ message: "course created successfully" })
+    })
 })
 
-//get all events of logged in user
-app.get('/userCourses', auth, async (req, res) => {
+app.put('/resetCourses', (req, res) => {
+    Course.deleteMany({}, function (err, courses) {
+        if (err) {
+            res.status(403);
+            return res.send({ message: "error" });
+        }
+    });
+});
+
+//get all courses of logged in user
+app.get('/courses', auth, async (req, res) => {
     const cur_user = await User.findOne({ username: req.session.userid });
-    res.send({
-        courses: cur_user.courses
+
+    Course.find(
+        { code: { $in: cur_user.courses } }, function (err, courses) {
+            if (err) {
+                res.status(403);
+                return res.send({ message: "error" });
+            }
+            sendCourses = courses.map(c => {
+                return {
+                    code: c.code,
+                    name: c.name
+                };
+            });
+            return res.send(sendCourses);
+        });
+})
+
+//get all courses in database
+app.get('/getAllCourses', auth, async (req, res) => {
+    Course.find({}, function (err, courses) {
+        if (err) {
+            res.status(403);
+            return res.send({ message: "error" });
+        }
+        sendCourses = courses.map(c => {
+            return {
+                code: c.code,
+                name: c.name
+            };
+        });
+        return res.send(sendCourses);
     });
 })
 
+// search for student 
+app.get('/user', auth, async (req, res) => {
+    const user = await User.findOne({ username: req.body.username });
+
+    // authenticate user exists
+    if (user != null) {
+        const send_user = {
+            username: user.username,
+            courses: user.courses
+        }
+
+        res.status(200).send({ user: send_user });
+    } else {
+        res.status(400).send({
+            message: 'no user exists with that username'
+        });
+    }
+})
+
+// get all users
+app.get('/users', auth, async (req, res) => {
+    User.find({}, function (err, users) {
+        let usernames = {}
+
+        for (let i = 0; i < users.length; i++) {
+            usernames[i] = users[i].username;
+        }
+
+        res.send(usernames);
+    });
+})
+
+// request friend
+app.post('/addFriend', auth, async (req, res) => {
+    const cur_user = await User.findOne({ username: req.session.userid });
+    const user = await User.findOne({ username: req.body.username });
+
+    if (user == null) {
+        res.status(400).send({
+            message: 'no user exists with that username'
+        });
+    } else if (user.username === cur_user.username) {
+        res.status(400).send({
+            message: 'cannot add yourself as a friend'
+        });
+    } else {
+        User.getFriends(cur_user, { username: user.username }, function (err, friends) {
+            if (err) {
+                res.status(400).send({ message: err });
+            } else {
+                let exists = false;
+                friends.forEach(f => {
+                    exists = exists || f.friend.username === user.username;
+                });
+
+                if (exists) {
+                    res.status(400).send({
+                        message: 'cannot request this user'
+                    });
+                } else {
+                    User.requestFriend(cur_user._id, user._id, function (err, c) {
+                        if (err) {
+                            res.status(400).send({ message: err });
+                        } else {
+                            res.status(200).send({ message: "friend request sent" });
+                        }
+                    });
+                }
+            }
+        });
+    }
+})
+
+// accept friend
+app.post('/acceptFriend', auth, async (req, res) => {
+    const cur_user = await User.findOne({ username: req.session.userid });
+    const user = await User.findOne({ username: req.body.username });
+
+    if (user == null) {
+        res.status(400).send({
+            message: 'no user exists with that username'
+        });
+    } else {
+        User.getPendingFriends(cur_user, { username: user.username }, function (err, friends) {
+            if (err) {
+                res.status(400).send({ message: err });
+            } else {
+                if (friends.length === 0) {
+                    res.status(400).send({
+                        message: 'friend request does not exist'
+                    });
+                } else {
+                    User.requestFriend(cur_user._id, user._id, function (err, c) {
+                        if (err) {
+                            res.status(400).send({ message: err });
+                        } else {
+                            res.status(200).send({ message: "friend request accepted" });
+                        }
+                    });
+                }
+            }
+        });
+    }
+})
+
+// decline friend request
+app.post('/declineFriend', auth, async (req, res) => {
+    const cur_user = await User.findOne({ username: req.session.userid });
+    const user = await User.findOne({ username: req.body.username });
+
+    if (user == null) {
+        res.status(400).send({
+            message: 'no user exists with that username'
+        });
+    } else {
+        User.getPendingFriends(cur_user, { username: user.username }, function (err, friends) {
+            if (err) {
+                res.status(400).send({ message: err });
+            } else {
+                if (friends.length === 0) {
+                    res.status(400).send({
+                        message: 'friend request does not exist'
+                    });
+                } else {
+                    User.removeFriend(cur_user._id, user._id, function (err, cb) {
+                        if (err) {
+                            res.status(400).send({ message: err });
+                        } else {
+                            res.status(200).send({ message: "friend request declined" });
+                        }
+                    });
+                }
+            }
+        });
+    }
+})
+
+// remove friend
+app.post('/removeFriend', auth, async (req, res) => {
+    const cur_user = await User.findOne({ username: req.session.userid });
+    const user = await User.findOne({ username: req.body.username });
+
+    if (user == null) {
+        res.status(400).send({
+            message: 'no user exists with that username'
+        });
+    } else {
+        User.getFriends(cur_user, { username: user.username }, function (err, friends) {
+            if (err) {
+                res.status(400).send({ message: err });
+            } else {
+                if (friends.length === 0) {
+                    res.status(400).send({
+                        message: 'user is not your friend'
+                    });
+                } else {
+                    User.removeFriend(cur_user._id, user._id, function (err, c) {
+                        if (err) {
+                            res.status(400).send({ message: err });
+                        } else {
+                            res.status(200).send({ message: "friend removed" });
+                        }
+                    });
+                }
+            }
+        });
+    }
+})
+
+
+// get friends
+app.get('/friends', auth, async (req, res) => {
+    const cur_user = await User.findOne({ username: req.session.userid });
+
+    User.getFriends(cur_user, {},
+        { username: 1, courses: 1 },
+        { sort: { username: 1 } },
+        function (err, friends) {
+            if (err) {
+                res.status(400).send({ message: err });
+            } else {
+                res.status(200).send({ friends });
+            }
+        });
+})
 
 
 module.exports = app;
