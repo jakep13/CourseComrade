@@ -30,20 +30,22 @@ defineFeature(feature, (test) => {
 
         and(/^student (.*) exists in the system$/, async(username2) => {
             const user2 = await req.post("/createAccount").send({
-                username2,
+                username: username2,
                 password,
                 verif_password: password
             });
+            
         });
 
         when(/^student (.*) searches for user (.*) on CourseComrade$/, async(username1, username2) => {
-            const res = await req.get("/user").set('cookie', cookies).send({ username2 });
+            const res = await req.get("/user").set('cookie', cookies).send({ username: username2 });
             responseStatus = res.statusCode;
             responseMessage = res.body.message;
         });
 
         then(/^(.*) should be shown to (.*)$/, async(username2, username1) => {
             expect(responseStatus).toBe(200);
+            
         });
     });
 
@@ -64,7 +66,7 @@ defineFeature(feature, (test) => {
         });   
 
         when(/^student (.*) searches for non-existant user (.*) on CourseComrade$/, async(username1, username2) => {
-            const res = await req.get("/user").set('cookie', cookies).send({ username2 });
+            const res = await req.get("/user").set('cookie', cookies).send({ username: username2 });
             responseStatus = res.statusCode;
             responseMessage = res.body.message;
         });

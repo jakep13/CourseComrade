@@ -13,15 +13,15 @@ Feature: Search for Another Student by Name
         Then <username2> should be shown to <username1>
         Examples: 
             | username1  | username2   |
-            | jake_p  	 | arian_o     |
-            | cath_vg    | norman_k    |
-            | caesar_a   | annabelle_d |
+            | jake__p  	 | arian__o     |
+            | cath__vg    | norman__k    |
+            | caesar__a   | annabelle__d |
 
     Scenario Outline: Request to add non-existant student to personal network (Error Flow)
         When student <username1> searches for non-existant user <DNE> on CourseComrade
-        Then the error message "No user of this username exists" is issued
+        Then the error message "no user exists with that username" is issued
         Examples:
             | username1  | DNE    |
-            | jake_p  	 | fake1  |
-            | cath_vg    | fake2  |
-            | caesar_a   | fake3  |
+            | jake__p  	 | fake1  |
+            | cath__vg    | fake2  |
+            | caesar__a   | fake3  |

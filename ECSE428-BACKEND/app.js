@@ -95,7 +95,7 @@ app.post('/createAccount', (req, res) => {
             if (err) res.status(403).send({ message: "username already taken" });
             else res.send({ message: "user created successfully" })
         })
-    } else {
+    } else {    
         res.status(400).send({ message: "please enter your password twice" });
     }
 });
@@ -210,14 +210,12 @@ app.get('/getAllCourses', auth, async (req, res) => {
 // search for student 
 app.get('/user', auth, async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
-
     // authenticate user exists
     if (user != null) {
         const send_user = {
             username: user.username,
             courses: user.courses
         }
-
         res.status(200).send({ user: send_user });
     } else {
         res.status(400).send({
