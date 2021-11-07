@@ -47,7 +47,7 @@ defineFeature(feature, (test) => {
 
     then('the student is registered to no courses', async () => {
       const coursesRes = await req.get("/courses").set('cookie', cookies).send();
-      const courses = coursesRes.body.courses;
+      const courses = coursesRes.body;
 
       expect(courses.length).toBe(0);
     });
@@ -80,7 +80,7 @@ defineFeature(feature, (test) => {
 
     and(/^the student is registered to "(.*)"$/, async (course) => {
       const coursesRes = await req.get("/courses").set('cookie', cookies).send();
-      const courses = coursesRes.body.courses;
+      const courses = coursesRes.body;
       const courseCodes = courses.map(course => course.code);
 
       expect(courses.length).toBe(1);

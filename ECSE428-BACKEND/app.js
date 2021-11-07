@@ -159,8 +159,16 @@ app.post('/populateCourse', (req, res) => {
         if (err) res.status(403).send({ message: "error: course already exists" });
         else res.send({ message: "course created successfully" })
     })
-
 })
+
+app.put('/resetCourses', (req, res) => {
+    Course.deleteMany({}, function (err, courses) {
+        if (err) {
+            res.status(403);
+            return res.send({ message: "error" });
+        }
+    });
+});
 
 //get all courses of logged in user
 app.get('/courses', auth, async (req, res) => {
@@ -172,8 +180,13 @@ app.get('/courses', auth, async (req, res) => {
                 res.status(403);
                 return res.send({ message: "error" });
             }
-
-            return res.send({ courses });
+            sendCourses = courses.map(c => {
+                return {
+                    code: c.code,
+                    name: c.name
+                };
+            });
+            return res.send(sendCourses);
         });
 })
 
@@ -184,10 +197,13 @@ app.get('/getAllCourses', auth, async (req, res) => {
             res.status(403);
             return res.send({ message: "error" });
         }
-        courseCodes = courses.map(c => {
-            return c.code;
+        sendCourses = courses.map(c => {
+            return {
+                code: c.code,
+                name: c.name
+            };
         });
-        return res.send({ courseCodes });
+        return res.send(sendCourses);
     });
 })
 
