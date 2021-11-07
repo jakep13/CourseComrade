@@ -17,28 +17,28 @@ const config =
     }
 }
 
-
-
 export default function Search() {
     const [input, setInput] = useState('');
-    const [classListDefault, setClassListDefault] = useState(ClassDatabase);
+    const [classListDefault, setClassListDefault] = useState();
     const [friendListDefault, setFriendListDefault] = useState();
     const [classList, setClassList] = useState();
     const [friendList, setFriendList] = useState();
     
     const fetchData = async () => {
-        console.log("fetching data");
+     
         axios.get('http://localhost:3100/users', config).then((result) => {
             const toArray = Object.entries(result.data).reduce((ini, [k, v]) => (ini[k] = v, ini), []);
             setFriendListDefault(toArray);
-            console.log("fetch data for friends:", friendListDefault);
-
+            console.log(friendListDefault)
+            axios.get('http://localhost:3100/getAllCourses', config).then((result) => {
+                console.log(result.data)
+                setClassListDefault(result.data);  
+            }).catch((err) => {
+                
+            })
         }).catch((err) => {
             console.log("i am here")
         })
-
-
-       
     }
     
   
@@ -53,9 +53,10 @@ export default function Search() {
         setInput(input);
         setClassList(filteredClass);
         setFriendList(filteredFriends);
+       
     }
 
-    useEffect( () => {fetchData()}, friendListDefault);
+    useEffect( () => {fetchData()}, friendListDefault, classListDefault);
     return (
         <div className="search-container">
             <Bar input={input} setKeyword={updateInput} />

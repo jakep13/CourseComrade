@@ -9,6 +9,8 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Search from '../Search Component/Search';
 import Board from './Board';
 import DeleteAccountForm from '../Settings Component/DeleteAccountForm';
+import ModifyAccountForm from '../Settings Component/ModifyAccountForm';
+import ModifyAccount from '../Settings Component/ModifyAccountForm';
 
 const axios = require('axios');
 
@@ -40,7 +42,11 @@ export default function Dashboard1() {
                     
                     {(dashboardActive && searchActive=== false && myAccount=== false)  && (<Board />)}
                     {searchActive && <Search />}
+                    {myAccount && <ModifyAccountForm />}
+
                     {myAccount && <DeleteAccountForm />}
+
+                    
                 </div>
                
             </div>

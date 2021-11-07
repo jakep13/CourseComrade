@@ -1,11 +1,24 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Box from './Box';
 import'../../styles/Dashboard Component/Class.scss';
 import ClassRow from './ClassRow';
 import MostPopuar from './MostPopuar';
+const axios = require('axios');
+
+const config = 
+{
+    withCredentials: true,
+    headers: {
+      'Acess-Control-Allow-Origin':true,
+      'Content-Type': 'application/x-www-form-urlencoded'
+
+    }
+}
+
 
 function Class() {
     const [selected, setSelected] = useState({ value: 'View All' });
+ 
     
     const classArray = [
         { department: "ECSE", classCode: "ECSE428", className: "Software Engineering Practice" },
@@ -20,6 +33,8 @@ function Class() {
         setSelected({ value: `${e.target.value}` });
     
     }
+
+ 
     return (
         <div className="class-container">
             <div className="header">
@@ -34,9 +49,9 @@ function Class() {
             </div>
             <div className="class-wrapper">
                 {(selected.value === 'View All' || selected.value === 'Most Popular') && 
-                     classArray.map((item) => {
+                     classArray?.map((item) => {
                         return (
-                            <ClassRow department={item.department} classCode={item.classCode} className={item.className} buttonMessage="Remove"/>
+                            <ClassRow  classCode={item.code} className={item.name} buttonMessage="Remove"/>
                         )
                      })
                 }
