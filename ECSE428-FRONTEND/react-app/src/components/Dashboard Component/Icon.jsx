@@ -1,12 +1,12 @@
 import React from 'react';
 import'../../styles/Dashboard Component/Icon.scss';
 
-export default function Icon({ department }) {
-    let letter = department.charAt(0).toUpperCase();
 
+export default function Icon(props) {
+  
     return (
-        <div className={ letter ==="E" ? "icon-container eng-color font-subtitle text-title" : "icon-container comp-color font-subtitle text-title"}>
-            {letter}
+        <div className= "icon-container eng-color font-subtitle text-title" >
+            {props.department && props.department.charAt(0)}
         </div>
     )
 }

@@ -18,7 +18,7 @@ const config =
 }
 
 
-export default function ClassRow({ department, classCode, className, buttonMessage }) {
+export default function ClassRow({  classCode, className, buttonMessage }) {
    
     const [isAdded, setIsAdded] = useState(false);
     const [isDeleted, setIsDelete] = useState(false);
@@ -68,7 +68,7 @@ export default function ClassRow({ department, classCode, className, buttonMessa
     }
     return (
         <div className="row-container">
-            <div className="icon"> <Icon department={department}/> </div>
+            <div className="icon"> <Icon department={classCode}/> </div>
             <div className="classCode font-round text-body">{classCode}</div>
             <div className="className font-round text-body"> {className}</div>  
             {buttonMessage === 'Add' && <Button disabled={isAdded} onClick={() => handleClick(buttonMessage, classCode)}> <div className="btn-container"> <MdAddCircle /> </div> </Button>}

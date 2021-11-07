@@ -10,7 +10,7 @@ function Class({results}) {
                 {results.length > 0 ?
                     results.map((item) => {
                         return(
-                            <ClassRow department={item.department} classCode={item.code} className={item.className} buttonMessage={"Add"}/>
+                            <ClassRow department={item.code} classCode={item.code} className={item.name} buttonMessage={"Add"}/>
                         )
                     })
                     :
