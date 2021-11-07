@@ -9,7 +9,6 @@ const feature = loadFeature(
   "./test/features/ID004_Modify_Account_Details.feature"
 );
 
-
 defineFeature(feature, (test) => {
   let cookies;
   let responseMessage = "";
@@ -22,93 +21,82 @@ defineFeature(feature, (test) => {
   });
 
   test('Attempt to modify account details with valid credentials (Normal Flow)', ({ given, and, when, then }) => {
-    given(/^student (.*) is logged in to CourseComrade$/, (arg0) => {
-      pending();
+    given(/^student (.*) with password (.*) is logged in to CourseComrade$/, async (username, password) => {
+      const user = await req.post("/createAccount").send({ username, password, verif_password: password });
+      const res = await req.post("/login").send({ username, password });
+      cookies = res.headers['set-cookie']
+      expect(res.statusCode).toBe(200);
     });
 
-    and(/^student (.*) has password (.*) and username (.*)$/, (arg0, arg1, arg2) => {
-      pending();
+    when(/^student (.*) requests to modify account details to (.*) and (.*)$/, async (username, newUsername, newPassword) => {
+      const res = await req.put("/modifyAccount").set('cookie', cookies).send({ username: newUsername, password: newPassword });
+      responseStatus = res.statusCode;
+      responseMessage = res.body.message;
     });
 
-    and(/^student (.*) provides new credentials (.*) and (.*)$/, (arg0, arg1, arg2) => {
-      pending();
-    });
-
-    when(/^student (.*) requests to modify account details$/, (arg0) => {
-      pending();
-    });
-
-    and(/^student (.*) provides valid credentials (.*) and (.*)$/, (arg0, arg1, arg2) => {
-      pending();
-    });
-
-    then(/^account details (.*) and (.*) shall be updated to (.*) and (.*)$/, (arg0, arg1, arg2, arg3) => {
-      pending();
+    then(/^account details (.*) and (.*) shall be updated to (.*) and (.*)$/, async (oldUsername, oldPassword, username, password) => {
+      const user = await User.findOne({ username });
+      expect(responseStatus).toBe(200);
+      expect(user.username).toBe(username);
+      expect(user.password).toBe(password);
     });
   });
 
   test('Attempt to modify account details with an existing username (Error Flow)', ({ given, and, when, then }) => {
-    given(/^student (.*) is logged in to CourseComrade$/, (arg0) => {
-      pending();
+    given(/^student (.*) with password (.*) is logged in to CourseComrade$/, async (username, password) => {
+      const user = await req.post("/createAccount").send({ username, password, verif_password: password });
+      const res = await req.post("/login").send({ username, password });
+      cookies = res.headers['set-cookie']
+      expect(res.statusCode).toBe(200);
     });
 
-    and(/^student (.*) has password (.*) and username (.*)$/, (arg0, arg1, arg2) => {
-      pending();
+    given(/^student (.*) already exists in the system$/, async (username) => {
+      const password = "pass123";
+      const res = await req.post("/createAccount").send({ username, password, verif_password: password });
+      expect(res.statusCode).toBe(200);
     });
 
-    and(/^student (.*) provides new credentials (.*) and (.*)$/, (arg0, arg1, arg2) => {
-      pending();
+    when(/^student (.*) requests to modify account details to (.*) and (.*)$/, async (username, newUsername, newPassword) => {
+      const res = await req.put("/modifyAccount").set('cookie', cookies).send({ username: newUsername, password: newPassword });
+      responseStatus = res.statusCode;
+      responseMessage = res.body.message;
     });
 
-    when(/^student (.*) requests to modify account details$/, (arg0) => {
-      pending();
+    then(/^no change shall occur to account belonging to (.*) and (.*)$/, async (username, password) => {
+      const user = await User.findOne({ username });
+      expect(user.username).toBe(username);
+      expect(user.password).toBe(password);
     });
 
-    and(/^username (.*) already exists in the system$/, (arg0) => {
-      pending();
-    });
-
-    and(/^student (.*) provides a new username (.*) and a new password (.*)$/, (arg0, arg1, arg2) => {
-      pending();
-    });
-
-    then(/^no change shall occur to account belonging to (.*)$/, (arg0) => {
-      pending();
-    });
-
-    and(/^the error message "(.*)" is issued$/, (arg0) => {
-      pending();
+    and(/^the error message "(.*)" is issued$/, (error) => {
+      expect(responseStatus).not.toBe(200);
+      expect(responseMessage).toBe(error);
     });
   });
 
   test('Attempt to modify account details with invalid credentials (Error Flow)', ({ given, and, when, then }) => {
-    given(/^student (.*) is logged in to CourseComrade$/, (arg0) => {
-      pending();
+    given(/^student (.*) with password (.*) is logged in to CourseComrade$/, async (username, password) => {
+      const user = await req.post("/createAccount").send({ username, password, verif_password: password });
+      const res = await req.post("/login").send({ username, password });
+      cookies = res.headers['set-cookie']
+      expect(res.statusCode).toBe(200);
     });
 
-    and(/^student (.*) has password (.*) and username (.*)$/, (arg0, arg1, arg2) => {
-      pending();
+    when(/^student (.*) requests to modify account details to (.*) and (.*)$/, async (username, newUsername, newPassword) => {
+      const res = await req.put("/modifyAccount").set('cookie', cookies).send({ username: newUsername, password: newPassword });
+      responseStatus = res.statusCode;
+      responseMessage = res.body.error;
     });
 
-    and(/^student (.*) provides new credentials (.*) and (.*)$/, (arg0, arg1, arg2) => {
-      pending();
+    then(/^no change shall occur to account belonging to (.*) and (.*)$/, async (username, password) => {
+      const user = await User.findOne({ username });
+      expect(user.username).toBe(username);
+      expect(user.password).toBe(password);
     });
 
-    when(/^student (.*) requests to modify account details$/, (arg0) => {
-      pending();
-    });
-
-    and(/^student (.*) provides invalid credentials (.*) and (.*)$/, (arg0, arg1, arg2) => {
-      pending();
-    });
-
-    then(/^no change shall occur to account belonging to (.*)$/, (arg0) => {
-      pending();
-    });
-
-    and(/^the error message "(.*)" is issued$/, (arg0) => {
-      pending();
+    and(/^the error message "(.*)" is issued$/, (error) => {
+      expect(responseStatus).not.toBe(200);
+      expect(responseMessage).toBe(error);
     });
   });
-
 });

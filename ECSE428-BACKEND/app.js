@@ -85,7 +85,7 @@ app.post('/logout', (req, res) => {
 app.post('/createAccount', (req, res) => {
     const verif_password = req.body.verif_password || req.body.password;
 
-    const pass_regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9<>!@#$%^_&*]{6,}$/;
+    const pass_regex = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/;
     if (!pass_regex.test(req.body.password)) {
         res.status(400).send({ message: "invalid password" });
     } else if (req.body.password === verif_password) {
@@ -95,7 +95,7 @@ app.post('/createAccount', (req, res) => {
             if (err) res.status(403).send({ message: "username already taken" });
             else res.send({ message: "user created successfully" })
         })
-    } else {    
+    } else {
         res.status(400).send({ message: "please enter your password twice" });
     }
 });
@@ -110,6 +110,64 @@ app.post('/deleteAccount', auth, async (req, res) => {
         }
     });
 })
+
+// modify account
+app.put('/modifyAccount', auth, async (req, res) => {
+    const newUsername = req.body.username;
+    const newPassword = req.body.password;
+    let update;
+
+    // set update
+    if (newUsername && newPassword) {
+        update = { username: newUsername, password: newPassword };
+    } else if (newUsername) {
+        update = { username: newUsername };
+    } else if (newPassword) {
+        update = { password: newPassword };
+    } else {
+        res.status(403).send({ error: "invalid input", message: "input new username or new password" })
+        return;
+    }
+
+    // validate new entries
+    if (newPassword) {
+        const pass_regex = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/;
+        if (!pass_regex.test(newPassword)) {
+            res.status(400).send({ error: "invalid input", message: "invalid password" });
+            return;
+        }
+    }
+    if (newUsername) {
+        const user_regex = /^.{3,20}$/;
+        if (!user_regex.test(newUsername)) {
+            res.status(400).send({ error: "invalid input", message: "invalid username - must be between 3-20 characters" });
+            return;
+        }
+    }
+
+    // make sure username is not taken
+    if (newUsername) {
+        const user = await User.findOne({ username: newUsername });
+
+        if (user) {
+            res.status(403).send({ message: "username already taken" })
+            return;
+        }
+    }
+
+    // update
+    User.findOneAndUpdate({ username: req.session.userid }, update, { new: true },
+        function (err, user) {
+            if (err) {
+                res.status(403).send({ error: err, message: "error" });
+            } else {
+                req.session.destroy();
+                res.status(200).send({ message: "account updated" });
+            }
+        });
+})
+
+
 
 //find User, and add course to list
 app.post('/addCourse', auth, async (req, res) => {
