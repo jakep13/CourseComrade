@@ -4,7 +4,7 @@ const supertest = require("supertest");
 const req = supertest(app)
 
 const feature = loadFeature(
-    "./test/features/ID009_Search_for_classes_by_Class_Code.feature"
+    "./test/features/ID009_Search_for_Classes_by_Class_Code.feature"
 );
 
 let responseMessage = "";
