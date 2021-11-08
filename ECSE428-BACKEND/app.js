@@ -396,6 +396,43 @@ app.post('/acceptFriend', auth, async (req, res) => {
     }
 })
 
+
+
+// remove friend
+app.post('/removeFriend', auth, async (req, res) => {
+    // console.log(" \n")
+    const cur_user = await User.findOne({ username: req.session.userid });
+    const user = await User.findOne({ username: req.body.username });
+
+    if (user == null) {
+        res.status(400).send({
+            message: 'no user exists with that username'
+        });
+    } else {
+        User.getFriends(cur_user, { username: user.username }, function (err, friends) {
+            if (err) {
+                res.status(400).send({ message: err });
+            } else {
+                if (friends.length === 0) {
+                    res.status(400).send({
+                        message: 'user is not your friend'
+                    });
+                } else {
+                    User.removeFriend(cur_user._id, user._id, function (err, c) {
+                        if (err) {
+                            res.status(400).send({ message: err });
+                        } else {
+                            res.status(200).send({ message: "friend removed" });
+                        }
+                    });
+                }
+            }
+        });
+    }
+})
+
+
+
 // decline friend request
 app.post('/declineFriend', auth, async (req, res) => {
     const cur_user = await User.findOne({ username: req.session.userid });
@@ -428,37 +465,7 @@ app.post('/declineFriend', auth, async (req, res) => {
     }
 })
 
-// remove friend
-app.post('/removeFriend', auth, async (req, res) => {
-    const cur_user = await User.findOne({ username: req.session.userid });
-    const user = await User.findOne({ username: req.body.username });
 
-    if (user == null) {
-        res.status(400).send({
-            message: 'no user exists with that username'
-        });
-    } else {
-        User.getFriends(cur_user, { username: user.username }, function (err, friends) {
-            if (err) {
-                res.status(400).send({ message: err });
-            } else {
-                if (friends.length === 0) {
-                    res.status(400).send({
-                        message: 'user is not your friend'
-                    });
-                } else {
-                    User.removeFriend(cur_user._id, user._id, function (err, c) {
-                        if (err) {
-                            res.status(400).send({ message: err });
-                        } else {
-                            res.status(200).send({ message: "friend removed" });
-                        }
-                    });
-                }
-            }
-        });
-    }
-})
 
 
 // get friends
