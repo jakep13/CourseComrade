@@ -479,9 +479,32 @@ app.get('/friends', auth, async (req, res) => {
             if (err) {
                 res.status(400).send({ message: err });
             } else {
-                res.status(200).send({ friends });
+                res.status(200).send(friends);
             }
         });
+})
+
+// get friends by course
+app.get('/getFriendsByCourse', auth, async (req, res) => {
+    const course = await Course.findOne({ code: req.body.course });
+
+    if (course == null) {
+        res.status(400).send({ message: "invalid course" });
+    } else {
+        const cur_user = await User.findOne({ username: req.session.userid });
+
+        User.getAcceptedFriends(cur_user, { courses: { "$in": [req.body.course] } },
+            { username: 1 },
+            { sort: { username: 1 } },
+            function (err, friends) {
+                if (err) {
+                    res.status(403).send({ message: err });
+                } else {
+                    const usernames = friends.map(friend => friend.friend.username);
+                    res.status(200).send(usernames);
+                }
+            });
+    }
 })
 
 
