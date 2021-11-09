@@ -29,6 +29,6 @@ Feature: View Comrade Classes
     Scenario: Attempt to view personal registered classes when no classes are registered (Alternate Flow)
         Given student "marty_the_martlet" has no registered courses
         And the student "big_suze" attempts to view the courses of "marty_the_martlet"
-        Then a resulting "This user is not registered to any classes" message is issued
+        Then a resulting "this user is not registered to any classes" message is issued
 
 

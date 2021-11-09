@@ -65,6 +65,7 @@ app.post('/login', async (req, res) => {
     if (cur != null && req.body.password == cur.password) {
         session = req.session;
         session.userid = req.body.username;
+        session.user_id = cur._id;
 
         res.status(200).send({
             message: "logged in"
@@ -238,13 +239,13 @@ app.get('/courses', auth, async (req, res) => {
                 res.status(403);
                 return res.send({ message: "error" });
             }
-            sendCourses = courses.map(c => {
+            coursesDOM = courses.map(c => {
                 return {
                     code: c.code,
                     name: c.name
                 };
             });
-            return res.send(sendCourses);
+            return res.send(coursesDOM);
         });
 })
 
@@ -255,13 +256,13 @@ app.get('/getAllCourses', auth, async (req, res) => {
             res.status(403);
             return res.send({ message: "error" });
         }
-        sendCourses = courses.map(c => {
+        coursesDOM = courses.map(c => {
             return {
                 code: c.code,
                 name: c.name
             };
         });
-        return res.send(sendCourses);
+        return res.send(coursesDOM);
     });
 })
 
@@ -277,19 +278,6 @@ app.get('/getCourse', auth, async (req, res) => {
         code: course.code,
         name: course.name
     });
-
-    // Course.find({}, function (err, courses) {
-    //     if (err) {
-    //         res.status(403);
-    //         return res.send({ message: "error" });
-    //     }
-    //     var courseToSend = courses.find(c => c.code === req.body.course);
-    //     if (courseToSend == undefined) {
-    //         res.status(403);
-    //         return res.send({ message: "invalid course input" });
-    //     }
-    //     return res.send(courseToSend);
-    // });
 })
 
 
@@ -485,26 +473,55 @@ app.get('/friends', auth, async (req, res) => {
 })
 
 // get friends by course
-app.get('/getFriendsByCourse', auth, async (req, res) => {
+app.get('/friendsByCourse', auth, async (req, res) => {
     const course = await Course.findOne({ code: req.body.course });
-
     if (course == null) {
-        res.status(400).send({ message: "invalid course" });
-    } else {
-        const cur_user = await User.findOne({ username: req.session.userid });
-
-        User.getAcceptedFriends(cur_user, { courses: { "$in": [req.body.course] } },
-            { username: 1 },
-            { sort: { username: 1 } },
-            function (err, friends) {
-                if (err) {
-                    res.status(403).send({ message: err });
-                } else {
-                    const usernames = friends.map(friend => friend.friend.username);
-                    res.status(200).send(usernames);
-                }
-            });
+        return res.status(400).send({ message: "invalid course" });
     }
+
+    const cur_user = await User.findOne({ username: req.session.userid });
+    User.getAcceptedFriends(cur_user, { courses: { "$in": [req.body.course] } },
+        { username: 1 },
+        { sort: { username: 1 } },
+        function (err, friends) {
+            if (err) {
+                return res.status(403).send({ message: err });
+            }
+
+            const usernames = friends.map(friend => friend.friend.username);
+            return res.status(200).send(usernames);
+        });
+
+})
+
+// get comrades courses 
+app.get('/comradesCourses', auth, async (req, res) => {
+    User.getAcceptedFriends(req.session.user_id, { username: req.body.username },
+        function (err, friends) {
+            if (err) {
+                return res.status(403).send({ message: err });
+            } else if (friends.length !== 1) {
+                return res.status(400).send({ message: "user is not your comrade" });
+            }
+
+            Course.find(
+                { code: { $in: friends[0].friend.courses } }, function (err, courses) {
+                    if (err) {
+                        return res.status(403).send({ message: err });
+                    } else if (courses.length === 0) {
+                        return res.status(403).send({ message: "this user is not registered to any classes" });
+                    }
+
+                    coursesDOM = courses.map(c => {
+                        return {
+                            code: c.code,
+                            name: c.name
+                        };
+                    });
+
+                    return res.status(200).send(coursesDOM);
+                });
+        });
 })
 
 
