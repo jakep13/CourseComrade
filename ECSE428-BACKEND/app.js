@@ -57,6 +57,10 @@ const auth = (req, res, next) => {
     }
 }
 
+/*==================================*/
+/*======= ACCOUNT MANAGEMENT =======*/
+/*==================================*/
+
 app.post('/login', async (req, res) => {
     //find the corresponding user to authenticate the password with
     const cur = await User.findOne({ username: req.body.username })
@@ -126,33 +130,28 @@ app.put('/modifyAccount', auth, async (req, res) => {
     } else if (newPassword) {
         update = { password: newPassword };
     } else {
-        res.status(403).send({ error: "invalid input", message: "input new username or new password" })
-        return;
+        return res.status(403).send({ error: "invalid input", message: "input new username or new password" })
     }
 
     // validate new entries
     if (newPassword) {
         const pass_regex = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/;
         if (!pass_regex.test(newPassword)) {
-            res.status(400).send({ error: "invalid input", message: "invalid password" });
-            return;
+            return res.status(400).send({ error: "invalid input", message: "invalid password" });
         }
     }
     if (newUsername) {
         const user_regex = /^.{3,20}$/;
         if (!user_regex.test(newUsername)) {
-            res.status(400).send({ error: "invalid input", message: "invalid username - must be between 3-20 characters" });
-            return;
+            return res.status(400).send({ error: "invalid input", message: "invalid username - must be between 3-20 characters" });
         }
     }
 
     // make sure username is not taken
     if (newUsername) {
         const user = await User.findOne({ username: newUsername });
-
         if (user) {
-            res.status(403).send({ message: "username already taken" })
-            return;
+            return res.status(403).send({ message: "username already taken" })
         }
     }
 
@@ -162,13 +161,15 @@ app.put('/modifyAccount', auth, async (req, res) => {
             if (err) {
                 res.status(403).send({ error: err, message: "error" });
             } else {
-                req.session.destroy();
                 res.status(200).send({ message: "account updated" });
             }
         });
 })
 
 
+/*==================================*/
+/*======= COURSE MANIPULATION ======*/
+/*==================================*/
 
 //find User, and add course to list
 app.post('/addCourse', auth, async (req, res) => {
@@ -280,22 +281,26 @@ app.get('/getCourse', auth, async (req, res) => {
     });
 })
 
+/*==================================*/
+/*======== SEARCH FOR USER =========*/
+/*==================================*/
 
 // search for student 
 app.get('/user', auth, async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
+
     // authenticate user exists
-    if (user != null) {
-        const send_user = {
-            username: user.username,
-            courses: user.courses
-        }
-        res.status(200).send({ user: send_user });
-    } else {
-        res.status(400).send({
+    if (user == null) {
+        return res.status(400).send({
             message: 'no user exists with that username'
         });
     }
+
+    const send_user = {
+        username: user.username,
+        courses: user.courses
+    };
+    return res.status(200).send({ user: send_user });
 })
 
 // get all users
@@ -307,168 +312,144 @@ app.get('/users', auth, async (req, res) => {
             usernames[i] = users[i].username;
         }
 
-        res.send(usernames);
+        return res.send(usernames);
     });
 })
 
+/*==================================*/
+/*========= FRIEND NETWORK =========*/
+/*==================================*/
+
 // request friend
 app.post('/addFriend', auth, async (req, res) => {
-    const cur_user = await User.findOne({ username: req.session.userid });
     const user = await User.findOne({ username: req.body.username });
-
     if (user == null) {
-        res.status(400).send({
+        return res.status(400).send({
             message: 'no user exists with that username'
         });
-    } else if (user.username === cur_user.username) {
-        res.status(400).send({
+    } else if (user.username === req.session.userid) {
+        return res.status(400).send({
             message: 'cannot add yourself as a friend'
         });
-    } else {
-        User.getFriends(cur_user, { username: user.username }, function (err, friends) {
-            if (err) {
-                res.status(400).send({ message: err });
-            } else {
-                let exists = false;
-                friends.forEach(f => {
-                    exists = exists || f.friend.username === user.username;
-                });
-
-                if (exists) {
-                    res.status(400).send({
-                        message: 'cannot request this user'
-                    });
-                } else {
-                    User.requestFriend(cur_user._id, user._id, function (err, c) {
-                        if (err) {
-                            res.status(400).send({ message: err });
-                        } else {
-                            res.status(200).send({ message: "friend request sent" });
-                        }
-                    });
-                }
-            }
-        });
     }
+
+    User.getFriends(req.session.user_id, { username: user.username }, function (err, friends) {
+        if (err) {
+            return res.status(400).send({ message: err });
+        }
+
+        let exists = false;
+        friends.forEach(f => {
+            exists = exists || f.friend.username === user.username;
+        });
+
+        if (exists) {
+            return res.status(400).send({
+                message: 'cannot request this user'
+            });
+        } else {
+            User.requestFriend(req.session.user_id, user._id, function (err, c) {
+                if (err) {
+                    return res.status(400).send({ message: err });
+                }
+                return res.status(200).send({ message: "friend request sent" });
+            });
+        }
+    });
 })
 
 // accept friend
 app.post('/acceptFriend', auth, async (req, res) => {
-    const cur_user = await User.findOne({ username: req.session.userid });
     const user = await User.findOne({ username: req.body.username });
-
     if (user == null) {
-        res.status(400).send({
+        return res.status(400).send({
             message: 'no user exists with that username'
         });
-    } else {
-        User.getPendingFriends(cur_user, { username: user.username }, function (err, friends) {
-            if (err) {
-                res.status(400).send({ message: err });
-            } else {
-                if (friends.length === 0) {
-                    res.status(400).send({
-                        message: 'friend request does not exist'
-                    });
-                } else {
-                    User.requestFriend(cur_user._id, user._id, function (err, c) {
-                        if (err) {
-                            res.status(400).send({ message: err });
-                        } else {
-                            res.status(200).send({ message: "friend request accepted" });
-                        }
-                    });
-                }
-            }
-        });
     }
+
+    User.getPendingFriends(req.session.user_id, { username: user.username }, function (err, friends) {
+        if (err) {
+            return res.status(400).send({ message: err });
+        } else if (friends.length === 0) {
+            return res.status(400).send({
+                message: 'friend request does not exist'
+            });
+        }
+        User.requestFriend(req.session.user_id._id, user._id, function (err, c) {
+            if (err) {
+                return res.status(400).send({ message: err });
+            }
+            return res.status(200).send({ message: "friend request accepted" });
+        });
+    });
+
 })
-
-
 
 // remove friend
 app.post('/removeFriend', auth, async (req, res) => {
-    // console.log(" \n")
-    const cur_user = await User.findOne({ username: req.session.userid });
     const user = await User.findOne({ username: req.body.username });
-
     if (user == null) {
-        res.status(400).send({
+        return res.status(400).send({
             message: 'no user exists with that username'
         });
-    } else {
-        User.getFriends(cur_user, { username: user.username }, function (err, friends) {
-            if (err) {
-                res.status(400).send({ message: err });
-            } else {
-                if (friends.length === 0) {
-                    res.status(400).send({
-                        message: 'user is not your friend'
-                    });
-                } else {
-                    User.removeFriend(cur_user._id, user._id, function (err, c) {
-                        if (err) {
-                            res.status(400).send({ message: err });
-                        } else {
-                            res.status(200).send({ message: "friend removed" });
-                        }
-                    });
-                }
-            }
-        });
     }
+
+    User.getFriends(req.session.user_id, { username: user.username }, function (err, friends) {
+        if (err) {
+            return res.status(400).send({ message: err });
+        } else if (friends.length === 0) {
+            return res.status(400).send({
+                message: 'user is not your friend'
+            });
+        }
+
+        User.removeFriend(req.session.user_id, user._id, function (err, c) {
+            if (err) {
+                return res.status(400).send({ message: err });
+            }
+            return res.status(200).send({ message: "friend removed" });
+        });
+    });
 })
-
-
 
 // decline friend request
 app.post('/declineFriend', auth, async (req, res) => {
-    const cur_user = await User.findOne({ username: req.session.userid });
     const user = await User.findOne({ username: req.body.username });
-
     if (user == null) {
-        res.status(400).send({
+        return res.status(400).send({
             message: 'no user exists with that username'
         });
-    } else {
-        User.getPendingFriends(cur_user, { username: user.username }, function (err, friends) {
-            if (err) {
-                res.status(400).send({ message: err });
-            } else {
-                if (friends.length === 0) {
-                    res.status(400).send({
-                        message: 'friend request does not exist'
-                    });
-                } else {
-                    User.removeFriend(cur_user._id, user._id, function (err, cb) {
-                        if (err) {
-                            res.status(400).send({ message: err });
-                        } else {
-                            res.status(200).send({ message: "friend request declined" });
-                        }
-                    });
-                }
-            }
-        });
     }
+
+    User.getPendingFriends(req.session.user_id, { username: user.username }, function (err, friends) {
+        if (err) {
+            return res.status(400).send({ message: err });
+        } else if (friends.length === 0) {
+            return res.status(400).send({
+                message: 'friend request does not exist'
+            });
+        }
+
+        User.removeFriend(req.session.user_id, user._id, function (err, cb) {
+            if (err) {
+                return res.status(400).send({ message: err });
+            }
+            return res.status(200).send({ message: "friend request declined" });
+        });
+    });
+
 })
-
-
-
 
 // get friends
 app.get('/friends', auth, async (req, res) => {
-    const cur_user = await User.findOne({ username: req.session.userid });
-
-    User.getFriends(cur_user, {},
+    User.getFriends(req.session.user_id, {},
         { username: 1, courses: 1 },
         { sort: { username: 1 } },
         function (err, friends) {
             if (err) {
-                res.status(400).send({ message: err });
-            } else {
-                res.status(200).send(friends);
+                return res.status(400).send({ message: err });
             }
+            return res.status(200).send(friends);
         });
 })
 
@@ -479,8 +460,7 @@ app.get('/friendsByCourse', auth, async (req, res) => {
         return res.status(400).send({ message: "invalid course" });
     }
 
-    const cur_user = await User.findOne({ username: req.session.userid });
-    User.getAcceptedFriends(cur_user, { courses: { "$in": [req.body.course] } },
+    User.getAcceptedFriends(req.session.user_id, { courses: { "$in": [req.body.course] } },
         { username: 1 },
         { sort: { username: 1 } },
         function (err, friends) {

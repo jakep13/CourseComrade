@@ -62,7 +62,7 @@ defineFeature(feature, (test) => {
     then(/^"(.*)" should have sent a request to (.*)$/, async (username1, username2) => {
       const friends_res = await req.get("/friends").set('cookie', cookies).send();
       expect(friends_res.statusCode).toBe(200);
-      expect(existsWithStatus(friends_res.body.friends, username2, "requested")).toBe(true);
+      expect(existsWithStatus(friends_res.body, username2, "requested")).toBe(true);
     });
 
     and(/^(.*) should have a pending friend request from "(.*)"$/, async (username1, username2) => {
@@ -73,7 +73,7 @@ defineFeature(feature, (test) => {
 
       const friends_res = await req.get("/friends").set('cookie', cookies).send();
       expect(friends_res.statusCode).toBe(200);
-      expect(existsWithStatus(friends_res.body.friends, username2, "pending")).toBe(true);
+      expect(existsWithStatus(friends_res.body, username2, "pending")).toBe(true);
     });
   });
 
@@ -104,7 +104,7 @@ defineFeature(feature, (test) => {
     then('no change to any personal network will occur', async () => {
       const friends_res = await req.get("/friends").set('cookie', cookies).send();
       expect(friends_res.statusCode).toBe(200);
-      expect(existsWithStatus(friends_res.body.friends, addedUsername, null)).toBe(false);
+      expect(existsWithStatus(friends_res.body, addedUsername, null)).toBe(false);
     });
 
     and(/^the error message "(.*)" is issued$/, (error) => {
