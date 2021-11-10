@@ -11,7 +11,7 @@ Start the backend and frontend servers:
 $ npm start
 ```
 ---
-### Testing 
+### Testing Endpoints 
 Test controller and api methods
 ```bash
 $ npm test
