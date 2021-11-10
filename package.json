@@ -1,1 +1,14 @@
-{}
+{
+  "name": "course-comrade",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "postinstall": "(cd ECSE428-BACKEND && npm install); (cd ECSE428-FRONTEND && npm install); (cd ECSE428-FRONTEND/react-app && npm install)",
+    "backend": "cd ECSE428-BACKEND && npm start",
+    "frontend": "cd ECSE428-FRONTEND/react-app && npm start",
+    "start": "concurrently \"npm run frontend\" \"npm run backend\""
+  },
+  "dependencies": {
+    "concurrently": "^6.3.0"
+  }
+}
