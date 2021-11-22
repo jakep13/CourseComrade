@@ -19,4 +19,4 @@ $ npm test
 ---
 ### For Development Purposes 
 When localhost:3000 opens, navigate to Log In page and input the following credentials to access the FrontEnd: 
-`username: catherine & password: 123abc`
+`username: catherine & password: test123`
