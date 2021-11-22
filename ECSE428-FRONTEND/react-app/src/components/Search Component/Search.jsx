@@ -29,9 +29,7 @@ export default function Search() {
         axios.get('http://localhost:3100/users', config).then((result) => {
             const toArray = Object.entries(result.data).reduce((ini, [k, v]) => (ini[k] = v, ini), []);
             setFriendListDefault(toArray);
-            console.log(friendListDefault)
             axios.get('http://localhost:3100/getAllCourses', config).then((result) => {
-                console.log(result.data)
                 setClassListDefault(result.data);  
             }).catch((err) => {
                 

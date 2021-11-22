@@ -9,7 +9,6 @@ export default function FriendResults({results}) {
             <div className="body">
                 {results.length > 0 ?
                     results.map((item) => {
-                        console.log(item)
                         return ( <FriendRow friendName={item} buttonMessage={"Add"}/>)
                     })
                     :    <EmptyState message="No friends found ..."/>

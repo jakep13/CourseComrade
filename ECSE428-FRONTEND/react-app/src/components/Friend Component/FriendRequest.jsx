@@ -27,12 +27,12 @@ function FriendRequest({ requests }) {
             requests.map((item) => {
                 return (
                     <div className="friend-request-container">
-                        <div className="user-icon"> <Icon department={item.username}/> </div>
+                        <div className="user-icon"> <Icon department={item}/> </div>
                         <div className="user-data">
-                            <div className="name font-round"> {item.username}</div>
+                            <div className="name font-round"> {item}</div>
                         </div>
-                        <Button disabled={isAdded} onClick={() => acceptRequest(item.username)}> <div className="btn-container add"> <MdAddCircle /> </div> </Button>
-                        <Button disabled={isDeleted} onClick={() => deleteRequest(item.username)}> <div className="btn-container"> <TiDelete /> </div> </Button>
+                        <Button disabled={isAdded} onClick={() => acceptRequest(item)}> <div className="btn-container add"> <MdAddCircle /> </div> </Button>
+                        <Button disabled={isDeleted} onClick={() => deleteRequest(item)}> <div className="btn-container"> <TiDelete /> </div> </Button>
                     </div>
                 )
             })

@@ -34,20 +34,15 @@ export default function Friend() {
     const requestList = useMemo(() => {
         if (!rawData) return [];
 
-        const filteredRequests = rawData.filter(item => {
-            return item.status.toLowerCase().includes("requested");
+        const rawFilteredRequests = rawData.filter(item => {
+            return item.status.toLowerCase().includes("pending");
         });
-        console.log(filteredRequests)
+        const filteredRequests = [];
+        for (let r = 0; r < Object.keys(rawFilteredRequests).length; r++) {
+            filteredRequests.push(rawFilteredRequests[r].friend.username);
+        }
         return filteredRequests;
     }, [rawData])
-
-
-    const friendRequest = [
-        { username: 'Abdullah'},
-        { username: 'Anik'},
-        { username: 'Bethany'},
-        { username: 'Thomas'},
-    ]
 
     const handleChange = (e) => {
         setSelected({ value: `${e.target.value}` });
@@ -61,15 +56,6 @@ export default function Friend() {
             console.log("ERROR")
         });
 
-        axios.get('http://localhost:3100/courses', config).then((result) => {
-            const temp = [];
-            for (let i = 0; i < Object.keys(result.data).length; i++){
-                temp.push(result.data[i].code);
-            }
-            setMyClasses(temp);
-        }).catch((err) => {
-            console.log("ERROR: COuldnt fetch courses")
-        })
     }, []);
     return (
         <div className="friend-container">
@@ -94,10 +80,8 @@ export default function Friend() {
                 {(selected.value === 'View All' ) && !friends &&
                   <EmptyState message="No Friends found. Start adding friends in the search bar"  />
                 }
-                {(selected.value === 'Requests' ) && <FriendRequest requests={friendRequest}/>}
+                {(selected.value === 'Requests' ) && <FriendRequest requests={requestList}/>}
 
-                
-            
             </div>
         </div>
     )

@@ -25,7 +25,6 @@ export default function FriendRow({friendName, classes, buttonMessage}) {
         console.log("handle click code: ", friendName)
         if (buttonMessage === 'Add') {
             addFriend(friendName);
-            setIsAdded(true);
             return;
         }
         
@@ -39,17 +38,19 @@ export default function FriendRow({friendName, classes, buttonMessage}) {
         console.log("adding friend: ", friendName)
 
         const params = new URLSearchParams()
-        params.append('addFriend', friendName)
+        params.append('username', friendName)
 
         axios.post('http://localhost:3100/addFriend', params, config)
             .then((result) => {
-            // Redirect
-                console.log(result)
+                setIsAdded(true);
+                console.log("sent request to" , result)
             })
             .catch((err) => {
+                console.log("Cannot add friend", err);
             })
     }
 
+    let deleteStyle = { fill: "red", width:"25px", height:"25px" };
     return (
         <div className="friend-row-container">
             <div className="user-icon"> <Icon department={friendName}/> </div>
@@ -58,7 +59,7 @@ export default function FriendRow({friendName, classes, buttonMessage}) {
                 {classes &&  <div className="classes font-round">{classes}</div>}    
             </div>
             { buttonMessage === 'Add' && <Button disabled={isAdded} onClick={() => handleClick(buttonMessage, friendName)}> <div className="btn-container"> <MdAddCircle /> </div> </Button>}
-            { buttonMessage === 'Remove' && <Button disabled={isAdded} onClick={() => handleClick(buttonMessage, friendName)}> <div className="btn-container"> <TiDelete/> </div> </Button>}
+            {buttonMessage === 'Remove' && <div disabled={isAdded} onClick={() => handleClick(buttonMessage, friendName)}> <div className="btn-container"> <TiDelete style={deleteStyle}/> </div> </div>}
         </div>
     )
 }
