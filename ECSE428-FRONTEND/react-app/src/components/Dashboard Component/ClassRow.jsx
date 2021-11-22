@@ -100,6 +100,7 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
                         code = {classCode}
                     />
                 </div>
+                
                 {buttonMessage === 'Add' && <div className="btn-container" disabled={isAdded} onClick={() => handleClick(buttonMessage, classCode)}> <div className="btn-container"> <MdAddCircle style={addStyle}/> </div> </div>}
                 {buttonMessage === 'Remove' && <div disabled={isDeleted} onClick={() => handleClick(buttonMessage, classCode)}> <div className="btn-container"> <TiDelete style={deleteStyle}/> </div> </div>}
                
