@@ -1,24 +1,103 @@
-import React from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import '../../styles/Friends Component/Friend.scss';
+import FriendRequest from './FriendRequest';
 import FriendRow from './FriendRow';
+import EmptyState from '../../Global Components/EmptyState';
+
+const axios = require('axios');
+
+const config = 
+{
+    withCredentials: true,
+    headers: {
+      'Acess-Control-Allow-Origin':true,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+}
 
 export default function Friend() {
-    const friendList = [
-        { name: 'Abdullah', commonClasses: '5' },
-        { name: 'Anik', commonClasses: '4' },
-        { name: 'Bethany', commonClasses: '6' },
-        {name: 'Thomas', commonClasses: '7'},
+    const [selected, setSelected] = useState({ value: 'View All' });
+    const [rawData, setRawData] = useState();
+    const [myClasses, setMyClasses] = useState();
+    
+   
+    const friends = useMemo(() => {
+        if (!rawData) return [];
+
+        const filteredFriends = rawData.filter(item => {
+            return item.status.toLowerCase().includes("accepted")
+        })
+        return filteredFriends;
+    }, [rawData])
+
+
+    const requestList = useMemo(() => {
+        if (!rawData) return [];
+
+        const filteredRequests = rawData.filter(item => {
+            return item.status.toLowerCase().includes("requested");
+        });
+        console.log(filteredRequests)
+        return filteredRequests;
+    }, [rawData])
+
+
+    const friendRequest = [
+        { username: 'Abdullah'},
+        { username: 'Anik'},
+        { username: 'Bethany'},
+        { username: 'Thomas'},
     ]
+
+    const handleChange = (e) => {
+        setSelected({ value: `${e.target.value}` });
+    
+    }
+
+    useEffect(() => { 
+        axios.get('http://localhost:3100/friends', config).then((result) => {
+            setRawData(result.data)
+        }).catch((err) => {
+            console.log("ERROR")
+        });
+
+        axios.get('http://localhost:3100/courses', config).then((result) => {
+            const temp = [];
+            for (let i = 0; i < Object.keys(result.data).length; i++){
+                temp.push(result.data[i].code);
+            }
+            setMyClasses(temp);
+        }).catch((err) => {
+            console.log("ERROR: COuldnt fetch courses")
+        })
+    }, []);
     return (
         <div className="friend-container">
             <div className="header">
                 <div className="main font-round"> My Friends </div>
-                <div className="view-all">  See all </div>
+                <div className="view-all">
+                <div className="filter-container">
+                    <select placeholder='Filters'  onChange={(e) => handleChange(e)} className="filter-wrapper">
+                        <option value="View All"> View All </option> 
+                        <option value="Requests"> My Friend Requests</option>
+                    </select>
+                </div>
+                
+                </div>
             </div>
             <div className="body">
-                {friendList.map((item) => {
-                    return ( <FriendRow name={item.name} numClasses={item.commonClasses}/>)
-                })}
+                {(selected.value === 'View All' ) && friends &&
+                    friends.map((item) => {
+                        return ( <FriendRow friendName={item.friend.username} classes={item.friend.courses} buttonMessage={"Remove"}/>)
+                    })
+                }
+                {(selected.value === 'View All' ) && !friends &&
+                  <EmptyState message="No Friends found. Start adding friends in the search bar"  />
+                }
+                {(selected.value === 'Requests' ) && <FriendRequest requests={friendRequest}/>}
+
+                
+            
             </div>
         </div>
     )

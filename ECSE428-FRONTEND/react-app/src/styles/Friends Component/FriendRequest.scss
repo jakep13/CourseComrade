@@ -1,13 +1,11 @@
-.friend-row-container {
+.friend-request-container {
   display: grid;
-  grid-template-columns: 20% 60% 20%;
+  grid-template-columns: 20% 50% 15% 15%;
   background-color: white;
   border: 1px solid #e9e8e8da;
   border-radius: 20px;
   margin-bottom: 10px;
   height: 50px;
-  justify-content: center;
-  align-content: center;
   .user-data {
     display: flex;
     flex-direction: column;
@@ -16,14 +14,6 @@
       font-weight: bold;
       font-size: 16px;
     }
-  }
-
-  .user-icon {
-    padding-left: 20px;
-    display: flex;
-    justify-content: center;
-    align-self: center;
-    color: white;
   }
   Button {
     background-color: #517decf1;

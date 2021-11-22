@@ -21,21 +21,13 @@ export default function Class() {
     const fetchData = async () => {
      
         axios.get('http://localhost:3100/courses', config).then((result) => {
-            console.log(result.data)
             setRegisteredClass(result.data);
-            console.log(registeredClass);
         }).catch((err) => {
             console.log("ERROR")
         })
     }
     
-    const classArray = [
-        { department: "ECSE", classCode: "ECSE428", className: "Software Engineering Practice" },
-        { department: "ECSE", classCode: "ECSE316", className: "Signals and Networks" },
-        { department: "ECSE", classCode: "ECSE222", className: "Digital Logic" },
-        { department: "COMP", classCode: "COMP250", className: "Intro to Computer Science" },
-        { department: "COMP", classCode: "COMP251", className: "Algorithms and Structures" },
-    ];
+   
     
     const handleChange = (e) => {
         console.log(e.target.value);
@@ -43,7 +35,7 @@ export default function Class() {
     
     }
 
-    useEffect( () => {fetchData()}, registeredClass);
+    useEffect( () => {fetchData()});
     return (
         <div className="class-container">
             <div className="header">

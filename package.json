@@ -10,6 +10,8 @@
     "test": "cd ECSE428-BACKEND && npm test"
   },
   "dependencies": {
-    "concurrently": "^6.3.0"
+    "concurrently": "^6.3.0",
+    "dotenv": "^10.0.0",
+    "mongoose": "^6.0.13"
   }
 }
