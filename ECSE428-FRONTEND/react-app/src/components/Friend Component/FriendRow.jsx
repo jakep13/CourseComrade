@@ -6,7 +6,6 @@ import { TiDelete } from 'react-icons/ti';
 import { ImBooks } from 'react-icons/im';
 import Modal from 'react-bootstrap/Modal';
 import Icon from '../Dashboard Component/Icon';
-import ClassResults from '../Search Component/ClassResults';
 import ClassRow from '../Dashboard Component/ClassRow';
 import EmptyState from '../../Global Components/EmptyState';
 
