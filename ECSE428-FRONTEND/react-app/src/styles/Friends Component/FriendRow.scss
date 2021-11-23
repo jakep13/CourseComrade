@@ -1,6 +1,6 @@
 .friend-row-container {
   display: grid;
-  grid-template-columns: 20% 60% 20%;
+  grid-template-columns: 15% 60% 20%;
   background-color: white;
   border: 1px solid #e9e8e8da;
   border-radius: 20px;
@@ -15,6 +15,20 @@
     .name {
       font-weight: bold;
       font-size: 16px;
+    }
+  }
+
+  .btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    div {
+      margin-right: 10px;
+
+      svg {
+        height: 20px;
+        width: 20px;
+      }
     }
   }
 

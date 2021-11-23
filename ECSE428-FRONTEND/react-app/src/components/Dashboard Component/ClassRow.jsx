@@ -5,6 +5,7 @@ import { TiDelete } from 'react-icons/ti';
 import { MdAddCircle } from 'react-icons/md';
 import { FaUserFriends } from 'react-icons/fa';
 import '../../styles/Dashboard Component/ClassRow.scss';
+import Modal from 'react-bootstrap/Modal';
 import ViewClassmates from '../../Global Components/ViewClassmates';
 const axios = require('axios');
 
@@ -26,18 +27,19 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
     const [viewClassmates, setViewClassmates] = useState(false);
     const CloseModal = () => setViewClassmates(false);
     const ShowModal = () => setViewClassmates(true);
+    const [show, setShow] = useState(false);
 
 
     function OpenModal(className) {
-        ShowModal();
+        setShow(true);
         const params = new URLSearchParams()
-        console.log(className);
-        //params.append('code', className);
+        params.append('code', className);
         axios.get('http://localhost:3100/friendsByCourse', params, config)
             .then((result) => {
                 console.log("friends in course: ", result)
             })
             .catch((err) => {
+                console.log("cant find friends");
             })
     }
     function addClass(className) {
@@ -92,15 +94,30 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
             <div className="btns">
                 <div className="viewUsers" onClick={() => OpenModal(classCode)}>
                     <FaUserFriends />
-                    <ViewClassmates
-                        show={viewClassmates}
-                        setShow={setViewClassmates}
-                        handleClose={CloseModal}
-                        handleShow={ShowModal}
-                        code = {classCode}
-                    />
-                </div>
-                
+                </div>     
+                <Modal
+                show={show}
+                onHide={() => setShow(false)}
+                dialogClassName="modal-90w"
+                aria-labelledby="example-custom-modal-styling-title"
+                >
+                <Modal.Header closeButton>
+                    <Modal.Title id="example-custom-modal-styling-title">
+                    Friends in your class
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>
+                    Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
+                    commodi aspernatur enim, consectetur. Cumque deleniti temporibus
+                    ipsam atque a dolores quisquam quisquam adipisci possimus
+                    laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
+                    accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
+                    reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
+                    deleniti rem!
+                    </p>
+                </Modal.Body>
+                </Modal>
                 {buttonMessage === 'Add' && <div className="btn-container" disabled={isAdded} onClick={() => handleClick(buttonMessage, classCode)}> <div className="btn-container"> <MdAddCircle style={addStyle}/> </div> </div>}
                 {buttonMessage === 'Remove' && <div disabled={isDeleted} onClick={() => handleClick(buttonMessage, classCode)}> <div className="btn-container"> <TiDelete style={deleteStyle}/> </div> </div>}
                
@@ -109,5 +126,7 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
         
        
         </div>
+
+        
     )
 }

@@ -1,6 +1,6 @@
 .friend-request-container {
   display: grid;
-  grid-template-columns: 20% 50% 15% 15%;
+  grid-template-columns: 15% 60% 20%;
   background-color: white;
   border: 1px solid #e9e8e8da;
   border-radius: 20px;
@@ -17,27 +17,24 @@
     }
   }
 
+  .btns-request {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    div {
+      margin-right: 10px;
+
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
+
   .user-icon {
     display: flex;
     justify-content: center;
     align-self: center;
   }
-  Button {
-    background-color: #517decf1;
-    height: 60%;
-    width: 50%;
-    border-color: transparent;
-    display: flex;
-    border-radius: 20px;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    justify-self: center;
-    align-self: center;
-
-    svg {
-      height: 20px;
-      width: 20px;
-    }
-  }
+ 
 }

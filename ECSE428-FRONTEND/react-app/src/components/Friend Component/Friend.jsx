@@ -27,6 +27,7 @@ export default function Friend() {
         const filteredFriends = rawData.filter(item => {
             return item.status.toLowerCase().includes("accepted")
         })
+        console.log(filteredFriends);
         return filteredFriends;
     }, [rawData])
 
@@ -74,7 +75,7 @@ export default function Friend() {
             <div className="body">
                 {(selected.value === 'View All' ) && friends &&
                     friends.map((item) => {
-                        return ( <FriendRow friendName={item.friend.username} classes={item.friend.courses} buttonMessage={"Remove"}/>)
+                        return ( <FriendRow friendName={item.friend.username} classes={item.friend.courses} viewClass={true} buttonMessage={"Remove"}/>)
                     })
                 }
                 {(selected.value === 'View All' ) && !friends &&

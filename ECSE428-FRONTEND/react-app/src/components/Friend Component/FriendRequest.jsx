@@ -21,6 +21,8 @@ function FriendRequest({ requests }) {
         setIsDeleted(true);
         return;
     }
+    let addStyle = {fill:"green"}
+    let deleteStyle = { fill: "red", width:"25px", height:"25px" };
     return (
         <>
             {
@@ -31,8 +33,11 @@ function FriendRequest({ requests }) {
                         <div className="user-data">
                             <div className="name font-round"> {item}</div>
                         </div>
-                        <Button disabled={isAdded} onClick={() => acceptRequest(item)}> <div className="btn-container add"> <MdAddCircle /> </div> </Button>
-                        <Button disabled={isDeleted} onClick={() => deleteRequest(item)}> <div className="btn-container"> <TiDelete /> </div> </Button>
+                        <div classname="btns-request">
+                            <div disabled={isAdded} onClick={() => acceptRequest(item)}> <div className="btn-container add"> <MdAddCircle style={addStyle}/> </div> </div>
+                            <div disabled={isDeleted} onClick={() => deleteRequest(item)}> <div className="btn-container"> <TiDelete style={deleteStyle}/> </div> </div>
+                        </div>
+                       
                     </div>
                 )
             })
