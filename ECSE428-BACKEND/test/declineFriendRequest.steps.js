@@ -67,7 +67,7 @@ defineFeature(feature, test => {
     	when(/^"(.*)" declines the invite from "(.*)"$/, async (username1, username2) => {
             // login to other student account to send request
             const login_res = await req.post("/login").send({ username: username1, password });
-            cookies = login_res.headers['set-cookie']
+            cookies = login_res.headers['set-cookie'];
             expect(login_res.statusCode).toBe(200);
 
             // decline request
@@ -77,7 +77,7 @@ defineFeature(feature, test => {
 
     	then(/^"(.*)" will not be added to the network of "(.*)" and vis-versa$/, async (username1, username2) => {
             // login to other student account to send request
-            const login_res = await req.post("/login").send({ username: username2, password });
+            const login_res = await req.post("/login").send({ username: username1, password });
             cookies = login_res.headers['set-cookie']
             expect(login_res.statusCode).toBe(200);
 
@@ -102,10 +102,6 @@ defineFeature(feature, test => {
     	});
 
     	and(/^student "(.*)" is logged in to CourseComrade account$/, (arg0) => {
-
-    	});
-
-    	given(/^"(.*)" received an invite from "(.*)"$/, (arg0, arg1) => {
 
     	});
 
