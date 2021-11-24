@@ -375,7 +375,7 @@ app.post('/acceptFriend', auth, async (req, res) => {
                 message: 'friend request does not exist'
             });
         }
-        User.requestFriend(req.session.user_id._id, user._id, function (err, c) {
+        User.requestFriend(req.session.user_id, user._id, function (err, c) {
             if (err) {
                 return res.status(400).send({ message: err });
             }

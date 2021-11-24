@@ -16,6 +16,7 @@ Scenario: Decline an invite received by a CourseComrade user to join that user's
 
 
 Scenario: Attempt to decline an invite reveived by a CourseComrade user to join that user's network (Error Flow)
+    Given "big_suzee" received an invite from "marty_the_martlett" 
+    And "big_suzee" already accepted the invite from "marty_the_martlett" in another session
     When "big_suzee" attempts to decline the invite
-    And the invite was already accepted in another session
     Then "big_suzee" will be added to the network of "marty_the_martlett" and vis-versa
