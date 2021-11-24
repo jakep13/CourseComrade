@@ -10,9 +10,8 @@ Background:
 
 
 Scenario: Decline an invite received by a CourseComrade user to join that user's network (Normal Flow)
-    Given the user "marty_the_martlet" exists
-    And "big_suze" received an invite from "marty_the_martlet"
-    When "big_suze" declines the invite
+    Given "big_suze" received an invite from "marty_the_martlet"
+    When "big_suze" declines the invite from "marty_the_martlet"
     Then "marty_the_martlet" will not be added to the network of "big_suze" and vis-versa
 
 
