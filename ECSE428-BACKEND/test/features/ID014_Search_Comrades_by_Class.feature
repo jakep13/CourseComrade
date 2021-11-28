@@ -11,22 +11,12 @@ Feature: Search Comrades by Class
 
     Scenario: Get list of comrades registered in a class (Normal Flow)
         Given the class "ECSE428" exists
-        And the following are comrades of "big_suze" that are registered in class "ECSE428":
-            | username    |
-            | jake_p      |
-            | arian_o     |
-            | norman_k    |
-            | annabelle_d |
+        And "marty_the_martlet" is a comrade of "big_suze" that is registered in class "ECSE428":
         When "big_suze" searches for comrades registered in class "ECSE428"
-        Then they should see the following list of comrades:
-            | username    |
-            | jake_p      |
-            | arian_o     |
-            | norman_k    |
-            | annabelle_d |
+        Then "big_suze" should see "marty_the_martlet" in the list of comrades
 
 
     Scenario: Get list of comrades registered in a non-existent class (Error Flow)
-        Given the class "FUCK111" does not exist
-        When "big_suze" searches for comrades registered in class "FUCK111"
+        Given the class "UUCC111" does not exist
+        When "big_suze" searches for comrades registered in class "UUCC111"
         Then the error message "invalid course" is issued
