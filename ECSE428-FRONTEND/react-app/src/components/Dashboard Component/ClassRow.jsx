@@ -33,13 +33,15 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
     function OpenModal(className) {
         setShow(true);
         const params = new URLSearchParams()
-        params.append('code', className);
-        axios.get('http://localhost:3100/friendsByCourse', params, config)
+        params.append('course', className);
+        console.log("here is the name " + className)
+        axios.post('http://localhost:3100/friendsByCourse', params, config)
             .then((result) => {
                 console.log("friends in course: ", result)
             })
             .catch((err) => {
-                console.log("cant find friends");
+                console.log("here is the name " + className)
+                console.log("cant find friends ", err);
             })
     }
     function addClass(className) {

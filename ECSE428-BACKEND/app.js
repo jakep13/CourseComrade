@@ -51,8 +51,10 @@ app.get('/', (req, res) => {
 const auth = (req, res, next) => {
     if (req.session == null || req.session.userid == null) {
         res.status(405); //tell them to login
+        console.log("not logged in")
         res.send({ message: "not logged in" });
     } else {
+        console.log("logged in YAYAY")
         next();
     }
 }
@@ -454,8 +456,12 @@ app.get('/friends', auth, async (req, res) => {
 })
 
 // get friends by course
-app.get('/friendsByCourse', auth, async (req, res) => {
+app.post('/friendsByCourse', auth, async (req, res) => {
+
+    console.log(req.body.course)
     const course = await Course.findOne({ code: req.body.course });
+    console.log(req.body)
+    console.log(course)
     if (course == null) {
         return res.status(400).send({ message: "invalid course" });
     }
