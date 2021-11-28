@@ -1,28 +1,10 @@
 import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button';
-import DeleteAccount from '../Settings Component/DeleteAccount';
-//import ButtonGroup from '@mui/material/ButtonGroup';
-//import TextField from '@mui/material/TextField';
 import '../../styles/Dashboard Component/Dashboard.scss'
 import NavBar from '../Nav Components/NavBar';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Search from '../Search Component/Search';
 import Board from './Board';
 import DeleteAccountForm from '../Settings Component/DeleteAccountForm';
 import ModifyAccountForm from '../Settings Component/ModifyAccountForm';
-import ModifyAccount from '../Settings Component/ModifyAccountForm';
-
-const axios = require('axios');
-
-const config = 
-{
-    withCredentials: true,
-    headers: {
-      'Acess-Control-Allow-Origin':true,
-      'Content-Type': 'application/x-www-form-urlencoded'
-
-    }
-}
 
 export default function Dashboard1() {
 
@@ -43,10 +25,7 @@ export default function Dashboard1() {
                     {(dashboardActive && searchActive=== false && myAccount=== false)  && (<Board />)}
                     {searchActive && <Search />}
                     {myAccount && <ModifyAccountForm />}
-
-                    {myAccount && <DeleteAccountForm />}
-
-                    
+                    {myAccount && <DeleteAccountForm />}   
                 </div>
                
             </div>

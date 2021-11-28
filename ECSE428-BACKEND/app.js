@@ -54,7 +54,6 @@ const auth = (req, res, next) => {
         console.log("not logged in")
         res.send({ message: "not logged in" });
     } else {
-        console.log("logged in YAYAY")
         next();
     }
 }

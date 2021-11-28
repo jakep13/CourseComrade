@@ -34,10 +34,10 @@ export default function LogInForm() {
         .then((result) => {
             axios.get('http://localhost:3100/', config).then((result) => {
                 history.push('/your-dashboard');
-                console.log(result);
+                console.log("successful login")
             }).catch((err) => {
                 // types of error:
-                console.log("there is an error");
+                console.log("cant redirect after login");
                 // 1. if Wrong username 
                 wrongUsername = setWrongUsername(true);
                 usernameInput = setUsernameInput('');
@@ -51,7 +51,7 @@ export default function LogInForm() {
     
         })
         .catch((err) => {
-      
+            console.log("cant login")
         })
     
     }

@@ -4,10 +4,30 @@ import { MdOutlineDashboard } from 'react-icons/md';
 import { RiSearchLine } from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
 import '../../styles/Nav Components/NavBar.scss';
-import Button from 'react-bootstrap/esm/Button';
-import { Link } from 'react-router-dom';
 
+
+const axios = require('axios');
+
+const config = 
+{
+    withCredentials: true,
+    headers: {
+      'Acess-Control-Allow-Origin':true,
+      'Content-Type': 'application/x-www-form-urlencoded'
+
+    }
+}
 export default function NavBar({ setDashboardTab, setSearchTab, setAccountTab }) {
+  
+    function signOut() {
+        axios.post('http://localhost:3100/logout')
+        .then((result) => {
+            console.log("log out successful", result.data);
+        })
+        .catch((err) => {
+            console.log("cant log out", err);
+        })
+    }
     const handleClick = (index) => {
         if (index === 0) {
             setDashboardTab(true);
@@ -46,7 +66,7 @@ export default function NavBar({ setDashboardTab, setSearchTab, setAccountTab })
                 </div>
 
                   
-                <div className="tabs signout">
+                <div className="tabs signout" onClick={signOut()}>
                     <div className="tab">                 
                         <li> <a className="signout" href="#"> <i className="icons"><IoMdExit/> </i> <div className="font-subtitle text-subtitle"> Sign Out </div> </a></li>
                     </div>

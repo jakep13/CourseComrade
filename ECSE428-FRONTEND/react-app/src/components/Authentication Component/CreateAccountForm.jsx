@@ -40,18 +40,13 @@ export default function CreateAccountForm() {
 
             axios.post('http://localhost:3100/createAccount', params, config)
             .then((result) => {
-            // Redirect
-                console.log(result)
-                //
-                //console.log(result)
-                //console.log("we made it into this b")
+                console.log("successful account creation")
                 axios.post('http://localhost:3100/login', params,config).then((result) => {
                     history.push('/your-dashboard');
-                    console.log(result);
-
+                    console.log("successful account creation and redirection into account");
                 }).catch((err) => {
                     // types of error:
-                    console.log("there is an error");
+                    console.log("cant login after account creation");
                     // 1. if username already taken 
                     wrongUsername = setWrongUsername(true);
                     usernameInput = '';
@@ -60,7 +55,7 @@ export default function CreateAccountForm() {
         
             })
             .catch((err) => {
-          
+                console.log("cant create accont ");
             })
         }
        

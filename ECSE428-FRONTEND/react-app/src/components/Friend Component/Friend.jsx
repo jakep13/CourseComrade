@@ -18,9 +18,7 @@ const config =
 export default function Friend() {
     const [selected, setSelected] = useState({ value: 'View All' });
     const [rawData, setRawData] = useState();
-    const [myClasses, setMyClasses] = useState();
-    
-   
+  
     const friends = useMemo(() => {
         if (!rawData) return [];
 
@@ -53,8 +51,9 @@ export default function Friend() {
     useEffect(() => { 
         axios.get('http://localhost:3100/friends', config).then((result) => {
             setRawData(result.data)
+            console.log("successfully found data for /friends ENDPOINT")
         }).catch((err) => {
-            console.log("ERROR")
+            console.log("ERROR failed at finding data for /friends ENDPOINT")
         });
 
     }, []);

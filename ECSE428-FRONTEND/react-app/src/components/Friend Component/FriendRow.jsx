@@ -6,7 +6,7 @@ import { TiDelete } from 'react-icons/ti';
 import { ImBooks } from 'react-icons/im';
 import Modal from 'react-bootstrap/Modal';
 import Icon from '../Dashboard Component/Icon';
-import ClassRow from '../Dashboard Component/ClassRow';
+import '../../styles/Dashboard Component/ClassRow.scss';
 import EmptyState from '../../Global Components/EmptyState';
 
 const axios = require('axios');
@@ -50,14 +50,24 @@ export default function FriendRow({friendName, classes, viewClass, buttonMessage
         }
         
         if (buttonMessage === 'Remove') {
-            console.log("remove friend")
-            //deleteFriend(friendName);
+            removeFriend(friendName);
+            return;
         }
     }
 
-    function addFriend(friendName) {
-        console.log("adding friend: ", friendName)
+    function removeFriend(friendName) {
+        const params = new URLSearchParams()
+        params.append('username', friendName)
 
+        axios.post('http://localhost:3100/removeFriend', params, config)
+            .then((result) => {
+                console.log("delete friend" , result)
+            })
+            .catch((err) => {
+                console.log("Cannot delete friend", err);
+            })
+    }
+    function addFriend(friendName) {
         const params = new URLSearchParams()
         params.append('username', friendName)
 
@@ -72,7 +82,8 @@ export default function FriendRow({friendName, classes, viewClass, buttonMessage
     }
 
     let addStyle = {fill:"green"}
-    let deleteStyle = { fill: "red", width:"25px", height:"25px" };
+    let deleteStyle = { fill: "red", width: "25px", height: "25px" };
+    let modalBody={ background: "#9eb5eef1"}
     return (
         <div className="friend-row-container">
             <div className="user-icon"> <Icon department={friendName}/> </div>
@@ -93,16 +104,27 @@ export default function FriendRow({friendName, classes, viewClass, buttonMessage
                 aria-labelledby="example-custom-modal-styling-title"
                 >
                 <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">
+                    <Modal.Title className='font-round text-subtitle'>
                     {friendName} registered classes
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    {classes.length === 0 && <EmptyState message="Friend is not registed to any classes yet"/>}
-                   {classes.map((item) => {
-                       return(<ClassRow classCode={item} className={item} buttonMessage={""}/>)
-                   })}
-                </Modal.Body>
+               
+                {classes.length === 0 ? 
+                    <Modal.Body>
+                        <EmptyState message="Friend is not registed to any classes yet" />
+                    </Modal.Body>
+                                :
+                    <Modal.Body style={modalBody}>
+                        {classes.map((item) => {
+                            return (
+                                <div className="row-container" style={{display:"grid", gridTemplateColumns: "15% 20%"}}>
+                                    <div className="icon"> <Icon department={item}/> </div>
+                                    <div className="classCode font-round text-body">{item}</div>
+                                </div>
+                            )
+                        })}
+                    </Modal.Body>             
+                }               
             </Modal>
             </>
             )}

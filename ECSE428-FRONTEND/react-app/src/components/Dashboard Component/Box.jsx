@@ -15,14 +15,8 @@ const config =
     }
 }
 
-function getUserName(setUsername) {
-    axios.get('http://localhost:3100/', config).then((result) => {
-        console.log(result);
-    
-    })
-}
+
 function Box({ title, body }) {
-    const [username, setUserName] = useState();
     return (
         <div className="welcome-container">
             <div className="header">
@@ -30,12 +24,7 @@ function Box({ title, body }) {
                     <div className="main"> Welcome Back</div>
                     <div className="body"> All your classes in one place</div>
                 </div>
-            </div>
-            <div className="box-body">
-                Date
-             </div>
-
-            
+            </div>          
         </div>
     )
 }

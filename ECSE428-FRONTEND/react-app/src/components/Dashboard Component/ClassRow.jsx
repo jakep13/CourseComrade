@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import Icon from './Icon';
-import Button from 'react-bootstrap/Button';
 import { TiDelete } from 'react-icons/ti';
 import { MdAddCircle } from 'react-icons/md';
 import { FaUserFriends } from 'react-icons/fa';
 import '../../styles/Dashboard Component/ClassRow.scss';
 import Modal from 'react-bootstrap/Modal';
-import ViewClassmates from '../../Global Components/ViewClassmates';
+import '../../styles/Friends Component/FriendRow.scss';
+import EmptyState from '../../Global Components/EmptyState';
 const axios = require('axios');
 
 const config = 
@@ -20,28 +20,24 @@ const config =
 }
 
 
-export default function ClassRow({  classCode, className, buttonMessage }) {
+export default function ClassRow({ classCode, className, buttonMessage }) {
    
     const [isAdded, setIsAdded] = useState(false);
     const [isDeleted, setIsDelete] = useState(false);
-    const [viewClassmates, setViewClassmates] = useState(false);
-    const CloseModal = () => setViewClassmates(false);
-    const ShowModal = () => setViewClassmates(true);
     const [show, setShow] = useState(false);
-
+    const [friendsInClass, setFriendsInClass] = useState();
 
     function OpenModal(className) {
         setShow(true);
         const params = new URLSearchParams()
         params.append('course', className);
-        console.log("here is the name " + className)
         axios.post('http://localhost:3100/friendsByCourse', params, config)
             .then((result) => {
-                console.log("friends in course: ", result)
+                setFriendsInClass(result.data);
+                console.log("found friendsByCourse: ", result.data)
             })
             .catch((err) => {
-                console.log("here is the name " + className)
-                console.log("cant find friends ", err);
+                console.log("cant find friends by course ", err);
             })
     }
     function addClass(className) {
@@ -49,10 +45,10 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
         params.append('course', className)
         axios.post('http://localhost:3100/addCourse', params, config)
             .then((result) => {
-            // Redirect
-                console.log(result)
+                console.log("successfully added the course: ", className);
             })
             .catch((err) => {
+                console.log("failed at adding the course: ", className);
             })
     }
 
@@ -63,31 +59,31 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
 
         axios.post('http://localhost:3100/removeCourse', params, config)
             .then((result) => {
-            // Redirect
-                console.log(result)
+                console.log("successfully deleted the course: ", className);
             })
             .catch((err) => {
+                console.log("failed at deleting the course: ", className);
             })
     }
 
     function handleClick(buttonMessage, classCode) {
         console.log("handle click code: ", classCode)
         if (buttonMessage === 'Add') {
-            console.log("add");
             addClass(classCode);
             setIsAdded(true);
             return;
         }
         
         if (buttonMessage === 'Remove') {
-            console.log("remove")
             deleteClass(classCode);
+            setIsDelete(true);
         }
 
     }
 
-    let addStyle = {fill:"green"}
-    let deleteStyle = { fill: "red", width:"25px", height:"25px" };
+    let addStyle = { fill: "green" }
+    let deleteStyle = { fill: "red", width: "25px", height: "25px" };
+    let modalBody={ background: "#9eb5eef1"}
     return (
         <div className="row-container">
             <div className="icon"> <Icon department={classCode}/> </div>
@@ -101,24 +97,32 @@ export default function ClassRow({  classCode, className, buttonMessage }) {
                 show={show}
                 onHide={() => setShow(false)}
                 dialogClassName="modal-90w"
-                aria-labelledby="example-custom-modal-styling-title"
+                    aria-labelledby="example-custom-modal-styling-title"
+                    closeButton
                 >
-                <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">
-                    Friends in your class
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>
-                    Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-                    commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-                    ipsam atque a dolores quisquam quisquam adipisci possimus
-                    laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-                    accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-                    reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-                    deleniti rem!
-                    </p>
-                </Modal.Body>
+                    <Modal.Header closeButton>
+                        <Modal.Title className="font-round text-subtitle">
+                            Friends in your class
+                        </Modal.Title>   
+                    </Modal.Header>
+                    {friendsInClass?.length === 0 ? 
+                        <Modal.Body>
+                          <EmptyState message="Friend is not registed to any classes yet" />
+                        </Modal.Body>
+                        :
+                        <Modal.Body style={modalBody}>
+                            {friendsInClass?.map((item) => {
+                                return (
+                                    <div className="friend-row-container">
+                                        <div className="user-icon"><Icon department={item} /></div>
+                                        <div className="user-data">
+                                            <div className="name font-round">{item}</div>
+                                        </div>
+                                    </div>
+                                );      
+                             })}
+                        </Modal.Body>  
+                    }
                 </Modal>
                 {buttonMessage === 'Add' && <div className="btn-container" disabled={isAdded} onClick={() => handleClick(buttonMessage, classCode)}> <div className="btn-container"> <MdAddCircle style={addStyle}/> </div> </div>}
                 {buttonMessage === 'Remove' && <div disabled={isDeleted} onClick={() => handleClick(buttonMessage, classCode)}> <div className="btn-container"> <TiDelete style={deleteStyle}/> </div> </div>}

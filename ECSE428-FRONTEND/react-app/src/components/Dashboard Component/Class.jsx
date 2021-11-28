@@ -23,7 +23,7 @@ export default function Class() {
         axios.get('http://localhost:3100/courses', config).then((result) => {
             setRegisteredClass(result.data);
         }).catch((err) => {
-            console.log("ERROR")
+            console.log("ERROR: cant get courses from API")
         })
     }
     
