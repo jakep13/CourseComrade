@@ -8,13 +8,14 @@ Feature: Search for Classes by Class Code
         Given student <username> is logged in to CourseComrade account
 
     Scenario Outline: Search for a class that exists (Normal Flow)
+        Given <course> exists in the CourseComrade database
         When student <username> searches for existing class <course> on CourseComrade
         Then <course> should be issued to student <username> 
         Examples:
             | username  | course  |
             | user111   | COMP551 |
-            # | bob123    | COMP330 |
-            # | test_user | ECSE428 |
+            | bob123    | COMP330 |
+            | test_user | ECSE428 |
             
 
     Scenario Outline: Search for a class that does not exist (Error Flow)

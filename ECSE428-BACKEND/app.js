@@ -218,7 +218,7 @@ app.post('/populateCourse', (req, res) => {
 
     newCourse.save(function (err, course) {
         if (err) res.status(403).send({ message: "error: course already exists" });
-        else res.send({ message: "course created successfully" })
+        else res.status(200).send({ message: "course created successfully" })
     })
 })
 
