@@ -89,7 +89,6 @@ defineFeature(feature, test => {
                     exists = true;
                 }
             });
-            console.log(friends_res.body);
             expect(exists).toBe(false);
     	});
     });
@@ -166,7 +165,6 @@ defineFeature(feature, test => {
                     exists = true;
                 }
             });
-            console.log(friends_res.body);
             expect(exists).toBe(true);
     	});
     });

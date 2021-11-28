@@ -395,7 +395,7 @@ app.post('/removeFriend', auth, async (req, res) => {
         });
     }
 
-    User.getFriends(req.session.user_id, { username: user.username }, function (err, friends) {
+    User.getFriends(req.session.user_id, { username: user.username }, async function (err, friends) {
         if (err) {
             return res.status(400).send({ message: err });
         } else if (friends.length === 0) {
@@ -404,7 +404,8 @@ app.post('/removeFriend', auth, async (req, res) => {
             });
         }
 
-        User.removeFriend(req.session.user_id, user._id, function (err, c) {
+        const self = await User.findOne({ username: req.session.userid });
+        User.removeFriend(self, user, function (err, c) {
             if (err) {
                 return res.status(400).send({ message: err });
             }
@@ -422,7 +423,7 @@ app.post('/declineFriend', auth, async (req, res) => {
         });
     }
 
-    User.getPendingFriends(req.session.user_id, { username: user.username }, function (err, friends) {
+    User.getPendingFriends(req.session.user_id, { username: user.username }, async function (err, friends) {
         if (err) {
             return res.status(400).send({ message: err });
         } else if (friends.length === 0) {
@@ -431,7 +432,8 @@ app.post('/declineFriend', auth, async (req, res) => {
             });
         }
 
-        User.removeFriend(req.session.user_id, user._id, function (err, cb) {
+        const self = await User.findOne({ username: req.session.userid });
+         User.removeFriend(self, user, function (err, c) {
             if (err) {
                 return res.status(400).send({ message: err });
             }
@@ -456,11 +458,7 @@ app.get('/friends', auth, async (req, res) => {
 
 // get friends by course
 app.post('/friendsByCourse', auth, async (req, res) => {
-
-    console.log(req.body.course)
     const course = await Course.findOne({ code: req.body.course });
-    console.log(req.body)
-    console.log(course)
     if (course == null) {
         return res.status(400).send({ message: "invalid course" });
     }
