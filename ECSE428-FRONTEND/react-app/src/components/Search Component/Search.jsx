@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Bar from './Bar';
 import ClassResults from './ClassResults';
-import ClassDatabase  from './ClassDatabase';
 import FriendResults from './FriendResults';
 import '../../styles/Search Component/Seach.scss';
 import EmptyState from '../../Global Components/EmptyState';
@@ -62,7 +61,6 @@ export default function Search() {
                 <div className="classResults">
                     <div className="class-header font-round">
                         <div className="title"> <b> Classes </b> </div>
-                        <div className="button"> Add New Class</div>
                     </div>
                     {classList ? <ClassResults results={classList}/>  : <EmptyState message="No classes found. Start searching"  />}
 

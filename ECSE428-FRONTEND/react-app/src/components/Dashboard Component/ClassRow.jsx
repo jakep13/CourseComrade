@@ -107,7 +107,7 @@ export default function ClassRow({ classCode, className, buttonMessage }) {
                     </Modal.Header>
                     {friendsInClass?.length === 0 ? 
                         <Modal.Body>
-                          <EmptyState message="Friend is not registed to any classes yet" />
+                          <EmptyState message="None of your friends are registered to this class" />
                         </Modal.Body>
                         :
                         <Modal.Body style={modalBody}>
