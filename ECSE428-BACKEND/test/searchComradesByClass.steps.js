@@ -78,7 +78,7 @@ defineFeature(feature, test => {
                 expect(login_res2.statusCode).toBe(200);
 
                 // get friends by course
-                const friends_res = await req.get("/friendsByCourse").set('cookie', cookies).send({ course: code });
+                const friends_res = await req.post("/friendsByCourse").set('cookie', cookies).send({ course: code });
                 expect(friends_res.statusCode).toBe(400);
     	});
 
@@ -119,7 +119,7 @@ defineFeature(feature, test => {
            expect(login_res2.statusCode).toBe(200);
 
            // get friends by course
-           const friends_res = await req.get("/friendsByCourse").set('cookie', cookies).send({ course: code });
+           const friends_res = await req.post("/friendsByCourse").set('cookie', cookies).send({ course: code });
            errMsg = friends_res.body.message;
            expect(friends_res.statusCode).toBe(400);         
     	});
