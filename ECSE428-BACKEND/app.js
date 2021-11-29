@@ -189,14 +189,12 @@ app.post('/addCourse', auth, async (req, res) => {
             { $push: { courses: req.body.course } },
             function (err, doc) {
                 if (err) {
-                    res.status(403);
-                    res.send({ message: "failure - course cannot be added " });
+                    res.status(403).send({ message: "failure - course cannot be added " });
                 }
-                else res.send({ message: "success - course added" })
+                else res.status(200).send({ message: "success - course added" })
             });
     } else {
-        res.status(402);
-        res.send({ message: "failure - incorrect course format " });
+        res.status(402).send({ message: "failure - incorrect course format " });
     }
 })
 
@@ -433,7 +431,7 @@ app.post('/declineFriend', auth, async (req, res) => {
         }
 
         const self = await User.findOne({ username: req.session.userid });
-         User.removeFriend(self, user, function (err, c) {
+        User.removeFriend(self, user, function (err, c) {
             if (err) {
                 return res.status(400).send({ message: err });
             }
