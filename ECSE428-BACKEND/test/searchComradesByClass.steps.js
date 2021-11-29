@@ -37,42 +37,42 @@ defineFeature(feature, test => {
     	});
 
     	and(/^(.*) is a comrade of "(.*)" that is registered in class "(.*)":$/, async (friend_username, username, code) => {
-                // send friend request
-                const friendReq_res = await req.post("/addFriend").set('cookie', cookies).send({ username: friend_username });
-                responseStatus = friendReq_res.statusCode;
-                responseMessage = friendReq_res.body.message;
-
-                // login as friend to accept request
-                const friend = await req.post("/createAccount").send({
+                // friend exists
+                const user = await req.post("/createAccount").send({
                         username: friend_username,
                         password: password,
                         verif_password: password
                     });
+
+                // send friend request
+                const friendReq_res = await req.post("/addFriend").set('cookie', cookies).send({ username: friend_username });
+
+                // login as friend to accept request
                 const login_res = await req.post("/login").send({ username: friend_username, password: password });
-                cookies = login_res.headers['set-cookie'];
+                const loc_cookies = login_res.headers['set-cookie'];
                 expect(login_res.statusCode).toBe(200);
-                
+
                 // accept friend request
-                const accept_res = await req.post("/acceptFriend").set('cookie', cookies).send({ username: username });
-                expect(accept_res.statusCode).toBe(400);
-                
-                // relogin as user
-                const login_res2 = await req.post("/login").send({ username, password });
-                cookies = login_res2.headers['set-cookie']
-                expect(login_res2.statusCode).toBe(200);
+                const accept_res = await req.post("/acceptFriend").set('cookie', loc_cookies).send({ username: username });
+                expect(accept_res.statusCode).toBe(200);
 
                 // check if they are friends
-                const friends_res = await req.get("/friends").set('cookie', cookies).send({ username: username });
+                const friends_res = await req.get("/friends").set('cookie', cookies);
                 expect(friends_res.statusCode).toBe(200);
                 let exists = false;
                 friends_res.body.forEach(f => {
-                        if (f.friend.username === username) {
+                        if (f.friend.username === friend_username) {
                                 exists = true;
                         }
                 });
-                expect(exists).toBe(false);
-    	});
+                expect(exists).toBe(true);
 
+                // register to course
+                const register_res = await req.post("/addCourse").set('cookie', loc_cookies).send({ course: code , name: "test Course"});
+                expect(register_res.statusCode).toBe(200);
+    	});
+        
+        let friends_res;
     	when(/^"(.*)" searches for comrades registered in class "(.*)"$/, async (username, code) => {
                 // relogin as user
                 const login_res2 = await req.post("/login").send({ username, password });
@@ -80,16 +80,19 @@ defineFeature(feature, test => {
                 expect(login_res2.statusCode).toBe(200);
 
                 // get friends by course
-                const friends_res = await req.post("/friendsByCourse").set('cookie', cookies).send({ course: code });
+                friends_res = await req.post("/friendsByCourse").set('cookie', cookies).send({ course: code });
                 expect(friends_res.statusCode).toBe(200);
     	});
 
-    	then(/^"(.*) should see (.*) in the list of comrades$/, async (table) => {
-                for (let i = 0; i < table.length; i++) {
-                        const friend = table[i][0];
-                        const exists = table[i][1];
-                        expect(exists).toBe(undefined);
-                }
+    	then(/^"(.*) should see (.*) in the list of comrades$/, async (username, friend_username) => {
+                // check if friend is in list
+                let exists = false;
+                friends_res.body.forEach(f => {
+                        if (f === friend_username) {
+                                exists = true;
+                        }
+                });
+                expect(exists).toBe(true);
     	});
     });
 
