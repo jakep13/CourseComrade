@@ -4,6 +4,7 @@ import { TiDelete } from 'react-icons/ti';
 import { MdAddCircle} from 'react-icons/md';
 import '../../styles/Friends Component/FriendRequest.scss';
 import Icon from '../Dashboard Component/Icon';
+import EmptyState from '../../Global Components/EmptyState';
 
 const axios = require('axios');
 
@@ -52,6 +53,7 @@ function FriendRequest({ requests }) {
     let deleteStyle = { fill: "red", width:"25px", height:"25px" };
     return (
         <>
+            {requests?.length === 0 && (<EmptyState message="you do not have any friend requests"/>)}
             {
             requests.map((item) => {
                 return (

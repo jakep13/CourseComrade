@@ -30,8 +30,10 @@ defineFeature(feature, test => {
     	});
 
     	given(/^the class "(.*)" exists$/, async (code) => {
+            var newCourse = new Course({ code: code, name: "name" })
+            newCourse.save()
             const res = await req.get("/getCourse").set('cookie', cookies).send({ course: code });
-            expect(res.statusCode).toBe(403); // TODO: need to fix this
+            expect(res.statusCode).toBe(200); // TODO: need to fix this
     	});
 
     	and(/^(.*) is a comrade of "(.*)" that is registered in class "(.*)":$/, async (friend_username, username, code) => {
@@ -79,7 +81,7 @@ defineFeature(feature, test => {
 
                 // get friends by course
                 const friends_res = await req.post("/friendsByCourse").set('cookie', cookies).send({ course: code });
-                expect(friends_res.statusCode).toBe(400);
+                expect(friends_res.statusCode).toBe(200);
     	});
 
     	then(/^"(.*) should see (.*) in the list of comrades$/, async (table) => {
