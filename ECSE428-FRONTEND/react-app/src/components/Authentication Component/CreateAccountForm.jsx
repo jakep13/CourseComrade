@@ -24,16 +24,17 @@ export default function CreateAccountForm() {
 
     let [wrongUsername, setWrongUsername] = useState(false);
     let [wrongPassword, setWrongPassword] = useState(false);
+    let [invalidPassword, setInvalidPassword] = useState(false);
 
     function auth(username, password1, password2) {
 
-        if (password1 !== password2) {
-            wrongPassword = setWrongPassword(true);
-            passwordInput = setPasswordInput('');
-            passwordInput2 = setPasswordInput2('');
+        if(password1 !== password2){        
+                setWrongPassword(true);
+                setInvalidPassword(false);
+                setPasswordInput("");
+                setPasswordInput2("");
         }
-        else {
-
+        else{
             const params = new URLSearchParams()
             params.append('username', username)
             params.append('password', password1)
@@ -45,17 +46,22 @@ export default function CreateAccountForm() {
                     history.push('/your-dashboard');
                     console.log("successful account creation and redirection into account");
                 }).catch((err) => {
-                    // types of error:
-                    console.log("cant login after account creation");
-                    // 1. if username already taken 
-                    wrongUsername = setWrongUsername(true);
-                    usernameInput = '';
+                   
                       
                 })
         
             })
             .catch((err) => {
-                console.log("cant create accont ");
+                if(err.response.data.message == "invalid password"){
+                    setInvalidPassword(true);
+                    setWrongPassword(false);
+                    setPasswordInput("");
+                    setPasswordInput2("");
+                }
+                if(err.response.data.message === "username already taken"){
+                    setWrongUsername(true);
+                    setUsernameInput("");
+                }
             })
         }
        
@@ -68,22 +74,67 @@ export default function CreateAccountForm() {
                 value={usernameInput} 
                 placeholder={wrongUsername === true ? "username already taken" : "UserName "}
                 onChange={e => setUsernameInput(e.target.value)}
+                style={{ textAlign:"center", padding:"10px"}}
             />
         
-            <input type="password" 
-                className={wrongPassword === true ? "input-container-error font-body text-body" : "input-container font-body text-body"}
-                value={passwordInput} 
-                placeholder={wrongPassword === true ? "Passwords do not match" : "Password"} 
-                onChange={e => setPasswordInput(e.target.value)}
-            />
+            {wrongPassword === false && invalidPassword === false && 
+                <>
+                    <input type="password" 
+                    className= "input-container font-body text-body"
+                    value={passwordInput} 
+                    placeholder="Enter password."
+                    onChange={e => setPasswordInput(e.target.value)}
+                    style={{ textAlign:"center", padding:"10px"}}
+                    />
+    
+                    <input type="password" 
+                        className="input-container font-body text-body"
+                        value={passwordInput2} 
+                        placeholder= "Enter password again"
+                        onChange={e => setPasswordInput2(e.target.value)}
+                        style={{ textAlign:"center", padding:"10px"}}
+                    />
+             </>
+            }
 
-            <input type="password" 
-                className={wrongPassword === true ? "input-container-error font-body text-body" : "input-container font-body text-body"}
-                value={passwordInput2} 
-                placeholder={wrongPassword === true ? "Passwords do not match" : "Password"} 
-                onChange={e => setPasswordInput2(e.target.value)}
-            />
-
+            {wrongPassword === true  && invalidPassword === false &&
+                <>
+                    <input type="password" 
+                    className= "input-container-error font-body text-body"
+                    value={passwordInput} 
+                    placeholder="Passwords do not match"
+                    onChange={e => setPasswordInput(e.target.value)}
+                    style={{ textAlign:"center", padding:"10px"}}
+                    />
+    
+                    <input type="password" 
+                        className="input-container-error font-body text-body"
+                        value={passwordInput2} 
+                        placeholder= "Passwords do not match"
+                        onChange={e => setPasswordInput2(e.target.value)}
+                        style={{ textAlign:"center", padding:"10px"}}
+                    />
+             </>
+            }
+            {invalidPassword === true  && wrongPassword === false &&
+                <>
+                    <input type="password" 
+                    className= "input-container-error font-body text-body"
+                    value={passwordInput} 
+                    placeholder="Passwords must be between 3-20 characters with 1 number"
+                    onChange={e => setPasswordInput(e.target.value)}
+                    style={{ textAlign:"center", padding:"10px"}}
+                    />
+    
+                    <input type="password" 
+                        className="input-container-error font-body text-body"
+                        value={passwordInput2} 
+                        placeholder= "Passwords must be between 3-20 characters with 1 number"
+                        onChange={e => setPasswordInput2(e.target.value)}
+                        style={{ textAlign:"center", padding:"10px"}}
+                    />
+             </>
+            }
             <div className="button-container" style={{background:"linear-gradient(86deg,rgba(86, 128, 233, 1) 2%, rgba(193, 200, 228, 1) 100%)",  color:"white"}} onClick={() => auth(usernameInput, passwordInput, passwordInput2)}>
                 <div className="button-wrapper">
                     <div className="text-wrapper">

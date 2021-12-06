@@ -51,7 +51,12 @@ export default function LogInForm() {
     
         })
         .catch((err) => {
-            console.log("cant login")
+
+            wrongUsername = setWrongUsername(true);
+            usernameInput = setUsernameInput('');
+            // 2. else if wrong password 
+            wrongPassword = setWrongPassword(true);
+            passwordInput = setPasswordInput('');
         })
     
     }
@@ -64,6 +69,7 @@ export default function LogInForm() {
                 value={usernameInput} 
                 placeholder={wrongUsername === true ? "Wrong Username" : "UserName"}
                 onChange={e => setUsernameInput(e.target.value)}
+                style={{ textAlign:"center", padding:"10px"}}
             />
         
             <input type="password" 
@@ -71,6 +77,7 @@ export default function LogInForm() {
                 value={passwordInput} 
                 placeholder={wrongPassword === true ? "Wrong Password" : "Password"} 
                 onChange={e => setPasswordInput(e.target.value)}
+                style={{ textAlign:"center", padding:"10px"}}
             />
 
             <div className="button-container" style={{background:"linear-gradient(86deg,rgba(86, 128, 233, 1) 2%, rgba(193, 200, 228, 1) 100%)",  color:"white"}} onClick={() => auth(usernameInput, passwordInput)}>
